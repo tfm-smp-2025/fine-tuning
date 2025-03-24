@@ -1,0 +1,27 @@
+{
+    "qald-9": {
+        "all": "https://github.com/ag-sc/QALD/raw/7a43e2b99a523f74377c317630f5ec55a6d8c1cf/9/data/qald-9-train-multilingual.json"
+    },
+    "qald-10": {
+        "train": "https://github.com/KGQA/QALD-10/raw/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_9_plus/qald_9_plus_train_wikidata.json",
+        "test": "https://raw.githubusercontent.com/KGQA/QALD-10/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_10/qald_10.json"
+    },
+    "bestiary": {
+        "all": "https://github.com/danrd/sparqlgen/raw/1efd5bec491779a48ac46d4a75075106c565c10a/beastiary_with_qald_format.json.zip"
+    },
+    "VQuAnDA": {
+        "train": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/train.json",
+        "test": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/test.json"
+    },
+    "LC-QuAD 1.0": {
+        "train": "https://github.com/AskNowQA/LC-QuAD/raw/9b8c16a87091089001a3506e50ebafa68932a13f/train-data.json",
+        "test": "https://raw.githubusercontent.com/AskNowQA/LC-QuAD/refs/heads/data/test-data.json"
+    },
+    "LC-QuAD 2.0": {
+        "train": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/train.json",
+        "test": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/test.json"
+    },
+    "__todo__": {
+        "DBNQA": {"url": "https://github.com/AKSW/DBNQA"}
+    }
+}
