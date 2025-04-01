@@ -58,12 +58,16 @@ def pull_dataset(path: str, name: str, urls: dict[str, str]):
                 if "train_subpath" in urls and "test_subpath" in urls:
                     for key in ("train", "test"):
                         with zip_file.open(urls[key + "_subpath"], "r") as finner:
-                            with open(os.path.join(path, key + ".json"), "wt") as fouter:
+                            with open(
+                                os.path.join(path, key + ".json"), "wt"
+                            ) as fouter:
                                 fouter.write(finner.read().decode())
                 else:
                     assert (
                         len(inner_files) == 1
-                    ), "Expected a file inside the zip as no test_subpath and train_subpath were found. Keys: {}; files: {}".format(urls.keys(), inner_files)
+                    ), "Expected a file inside the zip as no test_subpath and train_subpath were found. Keys: {}; files: {}".format(
+                        urls.keys(), inner_files
+                    )
                     with zip_file.open(inner_files[0], "r") as finner:
                         with open(os.path.join(path, "all.json"), "wt") as fouter:
                             fouter.write(finner.read().decode())

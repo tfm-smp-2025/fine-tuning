@@ -2,4 +2,4 @@
 
 set -euo
 
-black scripts
+black scripts src

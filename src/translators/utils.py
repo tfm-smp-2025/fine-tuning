@@ -4,12 +4,11 @@ def deindent_text(text: str) -> str:
     """
     line_indentations = [
         len(line) - len(line.strip())
-        for line in text.split('\n')
+        for line in text.split("\n")
         if len(line.strip()) > 0
     ]
     min_line_indentation = min(line_indentations)
     reindented_lines = [
-        line[min(len(line), min_line_indentation):]
-        for line in text.split('\n')
+        line[min(len(line), min_line_indentation) :] for line in text.split("\n")
     ]
-    return '\n'.join(reindented_lines)
+    return "\n".join(reindented_lines)

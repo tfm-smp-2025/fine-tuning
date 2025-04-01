@@ -2,4 +2,4 @@
 
 set -euo
 
-black --check scripts
+black --check scripts src
