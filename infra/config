@@ -1,0 +1,142 @@
+MONGODB_URL="mongodb://mongodb:27017"
+HF_TOKEN=abc
+MODELS=`[
+ {
+   "name": "Ollama Gemma2 - 2B",
+   "parameters": {
+    "stop": [
+
+        "<start_of_turn>",
+        "<end_of_turn>"
+    ]
+   },
+   "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "gemma2:2b"
+    }
+   ]
+ },
+ {
+   "name": "Ollama Gemma2 - 9B",
+   "parameters": {
+    "stop": [
+
+        "<start_of_turn>",
+        "<end_of_turn>"
+    ]
+   },
+   "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "gemma2:9b"
+    }
+   ]
+ },
+ {
+   "name": "Ollama Gemma3 - 12B",
+   "parameters": {
+    "stop": [
+        "<start_of_turn>",
+        "<end_of_turn>"
+    ]
+   },
+   "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "gemma3:12b"
+    }
+   ]
+ },
+ {
+   "name": "Ollama Mistral - 7B",
+   "parameters":  {
+      "stop": [
+          "[INST]",
+          "[/INST]"
+      ]
+   },
+   "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "mistral:7b"
+    }
+   ]
+ },
+ {
+   "name": "Ollama Mixtral - 8x7B",
+   "parameters":  {
+      "stop": [
+          "[INST]",
+          "[/INST]"
+      ]
+   },
+   "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "mixtral:8x7b"
+    }
+   ]
+ },
+ {
+  "name": "Ollama Phi-2 - 2.7B",
+  "parameters": 
+  {
+      "stop": [
+          "User:",
+          "Assistant:",
+          "System:"
+      ]
+  },
+  "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "phi:2.7b"
+    }
+   ]
+ },
+ {
+  "name": "Ollama Phi-4 - 14B",
+  "parameters": 
+  {
+      "stop": [
+          "<|im_start|>",
+          "<|im_end|>",
+          "<|im_sep|>"
+      ]
+  },
+  "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "phi4:14b"
+    }
+   ]
+ },
+ {
+   "name": "Ollama DeepSeek - R1",
+   "chatPromptTemplate": "<s>{{#each messages}}{{#ifUser}}[INST] {{#if @first}}{{#if @root.preprompt}}{{@root.preprompt}}\n{{/if}}{{/if}} {{content}} [/INST]{{/ifUser}}{{#ifAssistant}}{{content}}</s> {{/ifAssistant}}{{/each}}",
+   "parameters": {
+    "temperature": 0.1,
+    "top_p": 0.95,
+    "repetition_penalty": 1.2,
+    "top_k": 50,
+    "truncate": 3072,
+    "max_new_tokens": 1024,
+    "stop": ["</s>"]
+   },
+   "endpoints": [
+    {
+     "type": "ollama",
+     "url" : "http://ollama-service:11434",
+     "ollamaName" : "deepseek-r1:7b"
+    }
+   ]
+ }
+]`
