@@ -17,6 +17,8 @@ The simplest way to instantiate the necessary infrastructure for these tests is 
 
 When you're done with the tests, you can stop the servers with `docker compose down` on the `infra` directory too.
 
+To follow Ollama's logs, run `docker-compose logs -f` on the `infra` directory.
+
 ## References
 
 ### Datasets used
