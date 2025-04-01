@@ -36,6 +36,7 @@ def pull_dataset(path: str, name: str, urls: dict[str, str]):
     """Download the files contained in a dataset."""
     os.makedirs(path, exist_ok=True)
     if "all" in urls:
+        print("{} | Unified dataset...".format(name))
         # All dataset in a single file
         if os.path.exists(
             os.path.join(
@@ -43,7 +44,7 @@ def pull_dataset(path: str, name: str, urls: dict[str, str]):
                 "all.json",
             )
         ):
-            print(f"✔ {name} unified dataset present")
+            print(f"  ✔ {name} unified dataset present")
         else:
             print(f"  ↓  Downloading {name} dataset")
             if urls["all"].endswith(".json"):
@@ -53,12 +54,19 @@ def pull_dataset(path: str, name: str, urls: dict[str, str]):
                 zip_file = download_temp_zip_file(urls["all"])
                 # Expect a single file inside
                 inner_files = zip_file.namelist()
-                assert (
-                    len(inner_files) == 1
-                ), "Expected a file inside the zip, found: {}".format(inner_files)
-                with zip_file.open(inner_files[0], "rt") as finner:
-                    with open(os.path.join(path, "all.json"), "wt") as fouter:
-                        fouter.write(finner.read())
+
+                if "train_subpath" in urls and "test_subpath" in urls:
+                    for key in ("train", "test"):
+                        with zip_file.open(urls[key + "_subpath"], "r") as finner:
+                            with open(os.path.join(path, key + ".json"), "wt") as fouter:
+                                fouter.write(finner.read().decode())
+                else:
+                    assert (
+                        len(inner_files) == 1
+                    ), "Expected a file inside the zip as no test_subpath and train_subpath were found. Keys: {}; files: {}".format(urls.keys(), inner_files)
+                    with zip_file.open(inner_files[0], "r") as finner:
+                        with open(os.path.join(path, "all.json"), "wt") as fouter:
+                            fouter.write(finner.read().decode())
 
             print(f"  ✔  {name} dataset ready")
 
@@ -77,6 +85,7 @@ def pull_dataset(path: str, name: str, urls: dict[str, str]):
                 print(f"  ↓  Downloading {key} file")
                 urllib.request.urlretrieve(urls[key], os.path.join(path, key + ".json"))
                 print(f"  ✔  {key.title()} file ready")
+    print()
 
 
 def download_temp_zip_file(url: str) -> zipfile.ZipFile:

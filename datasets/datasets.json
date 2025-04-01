@@ -4,7 +4,8 @@
     },
     "qald-10": {
         "train": "https://github.com/KGQA/QALD-10/raw/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_9_plus/qald_9_plus_train_wikidata.json",
-        "test": "https://raw.githubusercontent.com/KGQA/QALD-10/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_10/qald_10.json"
+        "test": "https://raw.githubusercontent.com/KGQA/QALD-10/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_10/qald_10.json",
+        "public_endpoint": "https://skynet.coypu.org/wikidata/"
     },
     "bestiary": {
         "all": "https://github.com/danrd/sparqlgen/raw/1efd5bec491779a48ac46d4a75075106c565c10a/beastiary_with_qald_format.json.zip"
@@ -21,7 +22,13 @@
         "train": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/train.json",
         "test": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/test.json"
     },
+    "WebQuestions SP": {
+        "all": "https://download.microsoft.com/download/f/5/0/f5012144-a4fb-4084-897f-cfda99c60bdf/WebQSP.zip",
+        "test_subpath": "WebQSP/data/WebQSP.test.json",
+        "train_subpath": "WebQSP/data/WebQSP.train.json"
+    },
     "__todo__": {
-        "DBNQA": {"url": "https://github.com/AKSW/DBNQA"}
+        "DBNQA": {"url": "https://github.com/AKSW/DBNQA"},
+        "Complex Web Questions": {"url": "https://www.tau-nlp.sites.tau.ac.il/compwebq"}
     }
 }
