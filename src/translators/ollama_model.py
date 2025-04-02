@@ -7,7 +7,7 @@ ROOT_DIR = os.path.join(
 
 MODELS_FILE = os.path.join(ROOT_DIR, "infra", "models.txt")
 with open(MODELS_FILE) as f:
-    MODELS_NAMES = f.read().split("\n")
+    MODELS_NAMES = f.read().strip().split("\n")
 
 
 class OllamaModel:

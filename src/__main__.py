@@ -3,11 +3,12 @@ import logging
 import random
 import sys
 from . import tester
-
+from .translators.ollama_model import all_models
 
 def get_argparser():
     parser = argparse.ArgumentParser("SPARQL LLM fine-tuner")
     parser.add_argument("--seed", type=int, help="Seed used to for random choices")
+
     subparser = parser.add_subparsers(help="subcommand help", required=True)
 
     test_subparser = subparser.add_parser("test")
@@ -18,6 +19,14 @@ def get_argparser():
     set_test.add_argument(
         "--full", action="store_true", help="Run the test with the full query set"
     )
+
+    test_subparser.add_argument(
+        "--models",
+        nargs='+',
+        type=str,
+        default=[model.model_name for model in all_models]
+    )
+
     test_subparser.set_defaults(func=tester.run_test)
     return parser
 
