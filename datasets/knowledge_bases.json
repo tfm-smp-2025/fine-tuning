@@ -1,0 +1,7 @@
+{
+    "DBpedia 2016-10": {
+        "url": "https://downloads.dbpedia.org/wiki-archive/downloads-2016-10.html",
+        "ontology": "http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl",
+        "links": "kb_links/dbpedia_2016_10.json"
+    }
+}

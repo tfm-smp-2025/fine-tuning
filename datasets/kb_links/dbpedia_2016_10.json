@@ -1,0 +1,2712 @@
+[
+    {
+        "dataset_name": "Anchor Texts",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/anchor_text_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/article_categories_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/article_categories_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/article_categories_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/article_categories_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/article_categories_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/article_categories_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/article_categories_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/article_categories_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/article_categories_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/article_categories_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/article_categories_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/article_categories_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/article_categories_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/article_categories_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/article_categories_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Categories",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/article_categories_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/article_templates_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/article_templates_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/article_templates_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/article_templates_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/article_templates_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/article_templates_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/article_templates_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Article Templates",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/article_templates_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/category_labels_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/category_labels_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/category_labels_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/category_labels_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/category_labels_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/category_labels_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/category_labels_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/category_labels_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/category_labels_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/category_labels_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/category_labels_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/category_labels_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/category_labels_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/category_labels_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/category_labels_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Category Labels.",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/category_labels_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Citation Data",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/citation_data_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Citation Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/citation_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/commons_page_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/commons_page_links_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/commons_page_links_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/commons_page_links_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/commons_page_links_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/commons_page_links_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Commons Page Links",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/commons_page_links_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/disambiguations_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/disambiguations_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/disambiguations_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/disambiguations_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/disambiguations_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/disambiguations_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/disambiguations_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/disambiguations_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/disambiguations_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/disambiguations_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/disambiguations_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/disambiguations_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/disambiguations_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/disambiguations_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/disambiguations_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Disambiguations",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/disambiguations_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/equations_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/equations_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/equations_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/equations_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/equations_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/equations_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/equations_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Equations in MathML",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/equations_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/external_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/external_links_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/external_links_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/external_links_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/external_links_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/external_links_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/external_links_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/external_links_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/external_links_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/external_links_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/external_links_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/external_links_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/external_links_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/external_links_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/external_links_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "External Links",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/external_links_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "French Population",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/french_population_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "French Population",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/french_population_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Genders",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/genders_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Genders",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/genders_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/geo_coordinates_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/geo_coordinates_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/geo_coordinates_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/geo_coordinates_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/geo_coordinates_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/geo_coordinates_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/geo_coordinates_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/geo_coordinates_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/geo_coordinates_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/geo_coordinates_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/geo_coordinates_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/geo_coordinates_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/geo_coordinates_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/geo_coordinates_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/geo_coordinates_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/geo_coordinates_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/geo_coordinates_mappingbased_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/geo_coordinates_mappingbased_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/geo_coordinates_mappingbased_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/geo_coordinates_mappingbased_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/geo_coordinates_mappingbased_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/geo_coordinates_mappingbased_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/geo_coordinates_mappingbased_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/geo_coordinates_mappingbased_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/geo_coordinates_mappingbased_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/geo_coordinates_mappingbased_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/geo_coordinates_mappingbased_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/geo_coordinates_mappingbased_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/geo_coordinates_mappingbased_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/geo_coordinates_mappingbased_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/geo_coordinates_mappingbased_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Geo Coordinates Mappingbased",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/geo_coordinates_mappingbased_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/homepages_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/homepages_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/homepages_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/homepages_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/homepages_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/homepages_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/homepages_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/homepages_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/homepages_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/homepages_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/homepages_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/homepages_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/homepages_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Homepages",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/homepages_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/images_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/images_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/images_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/images_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/images_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/images_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/images_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/images_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/images_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/images_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/images_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/images_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/images_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/images_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/images_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Images",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/images_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/infobox_properties_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/infobox_properties_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/infobox_properties_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/infobox_properties_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/infobox_properties_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/infobox_properties_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/infobox_properties_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/infobox_properties_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/infobox_properties_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/infobox_properties_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/infobox_properties_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/infobox_properties_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/infobox_properties_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/infobox_properties_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/infobox_properties_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/infobox_properties_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/infobox_properties_mapped_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/infobox_properties_mapped_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/infobox_properties_mapped_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/infobox_properties_mapped_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/infobox_properties_mapped_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/infobox_properties_mapped_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/infobox_properties_mapped_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Properties Mapped",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/infobox_properties_mapped_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/infobox_property_definitions_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/infobox_property_definitions_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/infobox_property_definitions_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/infobox_property_definitions_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/infobox_property_definitions_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/infobox_property_definitions_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/infobox_property_definitions_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/infobox_property_definitions_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/infobox_property_definitions_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/infobox_property_definitions_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/infobox_property_definitions_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/infobox_property_definitions_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/infobox_property_definitions_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/infobox_property_definitions_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/infobox_property_definitions_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Infobox Property Definitions",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/infobox_property_definitions_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/infobox_test_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/infobox_test_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/infobox_test_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/infobox_test_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/infobox_test_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/infobox_test_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/infobox_test_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "infobox test",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/infobox_test_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/instance_types_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/instance_types_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/instance_types_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/instance_types_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/instance_types_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/instance_types_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/instance_types_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/instance_types_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/instance_types_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/instance_types_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/instance_types_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/instance_types_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/instance_types_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/instance_types_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/instance_types_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/instance_types_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/instance_types_sdtyped_dbo_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/instance_types_sdtyped_dbo_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/instance_types_sdtyped_dbo_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/instance_types_sdtyped_dbo_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/instance_types_sdtyped_dbo_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/instance_types_sdtyped_dbo_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/instance_types_sdtyped_dbo_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Sdtyped Dbo",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/instance_types_sdtyped_dbo_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/instance_types_transitive_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/instance_types_transitive_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/instance_types_transitive_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/instance_types_transitive_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/instance_types_transitive_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/instance_types_transitive_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/instance_types_transitive_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/instance_types_transitive_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/instance_types_transitive_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/instance_types_transitive_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/instance_types_transitive_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/instance_types_transitive_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/instance_types_transitive_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/instance_types_transitive_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/instance_types_transitive_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Instance Types Transitive",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/instance_types_transitive_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/interlanguage_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/interlanguage_links_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/interlanguage_links_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/interlanguage_links_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/interlanguage_links_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/interlanguage_links_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/interlanguage_links_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/interlanguage_links_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/interlanguage_links_chapters_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/interlanguage_links_chapters_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/interlanguage_links_chapters_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/interlanguage_links_chapters_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/interlanguage_links_chapters_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/interlanguage_links_chapters_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Interlanguage Links between DBpedia Chapters",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/interlanguage_links_chapters_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/labels_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/labels_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/labels_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/labels_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/labels_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/labels_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/labels_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/labels_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/labels_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/labels_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/labels_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/labels_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/labels_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/labels_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/labels_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Labels",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/labels_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/long_abstracts_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/long_abstracts_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/long_abstracts_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/long_abstracts_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/long_abstracts_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/long_abstracts_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/long_abstracts_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/long_abstracts_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/long_abstracts_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/long_abstracts_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/long_abstracts_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/long_abstracts_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/long_abstracts_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/long_abstracts_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/long_abstracts_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Long Abstracts",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/long_abstracts_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_literals_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_literals_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_literals_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_literals_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_literals_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_literals_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_literals_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_literals_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_literals_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_literals_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_literals_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_literals_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_literals_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_literals_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_literals_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Literals",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_literals_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_objects_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_objects_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_objects_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_objects_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_objects_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_objects_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_objects_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_objects_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_objects_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_objects_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_objects_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_objects_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_objects_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_objects_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_objects_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_objects_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_objects_disjoint_domain_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_objects_disjoint_domain_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_objects_disjoint_domain_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_objects_disjoint_domain_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_objects_disjoint_domain_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_objects_disjoint_domain_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_objects_disjoint_domain_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Domain",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_objects_disjoint_domain_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_objects_disjoint_range_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_objects_disjoint_range_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_objects_disjoint_range_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_objects_disjoint_range_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_objects_disjoint_range_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_objects_disjoint_range_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_objects_disjoint_range_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Mappingbased Objects Disjoint Range",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_objects_disjoint_range_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/mappingbased_objects_uncleaned_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/mappingbased_objects_uncleaned_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/mappingbased_objects_uncleaned_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/mappingbased_objects_uncleaned_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/mappingbased_objects_uncleaned_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/mappingbased_objects_uncleaned_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/mappingbased_objects_uncleaned_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "mappingbased objects uncleaned",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/mappingbased_objects_uncleaned_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/article_templates_nested_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/article_templates_nested_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/article_templates_nested_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/article_templates_nested_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/article_templates_nested_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/article_templates_nested_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/article_templates_nested_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Nested Article Templates",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/article_templates_nested_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/nif_context_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/nif_context_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/nif_context_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/nif_context_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/nif_context_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/nif_context_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/nif_context_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Context",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/nif_context_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/nif_page_structure_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/nif_page_structure_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/nif_page_structure_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/nif_page_structure_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/nif_page_structure_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/nif_page_structure_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/nif_page_structure_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF page structure",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/nif_page_structure_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/nif_text_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/nif_text_links_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/nif_text_links_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/nif_text_links_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/nif_text_links_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/nif_text_links_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/nif_text_links_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "NIF Text Links",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/nif_text_links_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/out_degree_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/out_degree_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/out_degree_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/out_degree_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/out_degree_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/out_degree_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/out_degree_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Out Degree",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/out_degree_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/page_ids_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/page_ids_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/page_ids_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/page_ids_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/page_ids_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/page_ids_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/page_ids_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Ids",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/page_ids_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/page_length_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/page_length_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/page_length_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/page_length_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/page_length_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/page_length_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/page_length_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Length",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/page_length_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/page_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/page_links_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/page_links_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/page_links_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/page_links_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/page_links_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/page_links_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/page_links_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/page_links_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/page_links_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/page_links_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/page_links_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/page_links_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/page_links_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/page_links_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Page Links",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/page_links_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/persondata_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/persondata_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/persondata_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/persondata_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/persondata_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/persondata_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/persondata_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/persondata_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/persondata_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/persondata_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/persondata_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/persondata_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/persondata_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/persondata_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/persondata_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Person data",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/persondata_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "pnd",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/pnd_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "pnd",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/pnd_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "pnd",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/pnd_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "pnd",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/pnd_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "pnd",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/pnd_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "pnd",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/pnd_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/raw_tables_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/raw_tables_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/raw_tables_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/raw_tables_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/raw_tables_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/raw_tables_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/raw_tables_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Raw html tables",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/raw_tables_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/redirects_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/redirects_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/redirects_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/redirects_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/redirects_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/redirects_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/redirects_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Redirects",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/redirects_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/revision_ids_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/revision_ids_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/revision_ids_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/revision_ids_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/revision_ids_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/revision_ids_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/revision_ids_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Ids",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/revision_ids_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/revision_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/revision_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/revision_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/revision_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/revision_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/revision_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/revision_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Revision Uris",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/revision_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/short_abstracts_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/short_abstracts_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/short_abstracts_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/short_abstracts_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/short_abstracts_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/short_abstracts_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/short_abstracts_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/short_abstracts_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/short_abstracts_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/short_abstracts_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/short_abstracts_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/short_abstracts_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/short_abstracts_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/short_abstracts_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/short_abstracts_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Short Abstracts",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/short_abstracts_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/skos_categories_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/skos_categories_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/skos_categories_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/skos_categories_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/skos_categories_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/skos_categories_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/skos_categories_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/skos_categories_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/skos_categories_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/skos_categories_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/skos_categories_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/skos_categories_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/skos_categories_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/skos_categories_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/skos_categories_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "SKOS Categories",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/skos_categories_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/specific_mappingbased_properties_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/specific_mappingbased_properties_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/specific_mappingbased_properties_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "de_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/specific_mappingbased_properties_wkd_uris_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/specific_mappingbased_properties_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/specific_mappingbased_properties_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/specific_mappingbased_properties_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/specific_mappingbased_properties_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/specific_mappingbased_properties_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/specific_mappingbased_properties_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/specific_mappingbased_properties_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "nl_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/specific_mappingbased_properties_wkd_uris_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/specific_mappingbased_properties_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/specific_mappingbased_properties_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/specific_mappingbased_properties_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Specific Mappingbased Properties",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/specific_mappingbased_properties_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/topical_concepts_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "en_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/topical_concepts_wkd_uris_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/topical_concepts_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "es_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/topical_concepts_wkd_uris_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/topical_concepts_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "fr_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/topical_concepts_wkd_uris_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/topical_concepts_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "ja_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/topical_concepts_wkd_uris_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/topical_concepts_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "pt_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/topical_concepts_wkd_uris_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/topical_concepts_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Topical Concepts",
+        "lang": "ru_canon",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/topical_concepts_wkd_uris_ru.ttl.bz2"
+    },
+    {
+        "dataset_name": "Uri Same As Iri",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/uri_same_as_iri_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "en",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/en/wikipedia_links_en.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "de",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/de/wikipedia_links_de.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "es",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/es/wikipedia_links_es.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "fr",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/fr/wikipedia_links_fr.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "ja",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ja/wikipedia_links_ja.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "nl",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/nl/wikipedia_links_nl.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "pt",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/pt/wikipedia_links_pt.ttl.bz2"
+    },
+    {
+        "dataset_name": "Wikipedia Links",
+        "lang": "ru",
+        "url": "http://downloads.dbpedia.org/2016-10/core-i18n/ru/wikipedia_links_ru.ttl.bz2"
+    }
+]

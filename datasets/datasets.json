@@ -1,6 +1,7 @@
 {
     "qald-9": {
-        "all": "https://github.com/ag-sc/QALD/raw/7a43e2b99a523f74377c317630f5ec55a6d8c1cf/9/data/qald-9-train-multilingual.json"
+        "all": "https://github.com/ag-sc/QALD/raw/7a43e2b99a523f74377c317630f5ec55a6d8c1cf/9/data/qald-9-train-multilingual.json",
+        "knowledge_base": "DBpedia 2016-10"
     },
     "qald-10": {
         "train": "https://github.com/KGQA/QALD-10/raw/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_9_plus/qald_9_plus_train_wikidata.json",
