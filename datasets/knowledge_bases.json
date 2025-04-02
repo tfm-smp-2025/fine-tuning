@@ -3,5 +3,18 @@
         "url": "https://downloads.dbpedia.org/wiki-archive/downloads-2016-10.html",
         "ontology": "http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl",
         "links": "kb_links/dbpedia_2016_10.json"
+    },
+    "bestiary": {
+        "links": "kb_links/bestiary.json"
+    },
+    "DBpedia v04.16": {
+        "url": "https://downloads.dbpedia.org/wiki-archive/dbpedia-version-2016-04.html",
+        "ontology": "https://downloads.dbpedia.org/2016-04/dbpedia_2016-04.owl",
+        "links": "kb_links/dbpedia_v04_16.json"
+    },
+    "__Freebase 2015-08-09": {
+        "__comment": "Takes 30GB gzipped, >250GB uncompressed",
+        "url": "https://developers.google.com/freebase/",
+        "links": "kb_links/freebase_2015_08_09.json"
     }
 }
