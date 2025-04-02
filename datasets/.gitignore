@@ -1,3 +1,11 @@
-*
+# This contains a lot of caches, so probably we want to exclude most of it
+**/*
+
+# Do keep this file and the link indexes
 !.gitignore
 !datasets.json
+!knowledge_bases.json
+
+# Do also keep the kb_links folder
+!kb_links
+!kb_links/*

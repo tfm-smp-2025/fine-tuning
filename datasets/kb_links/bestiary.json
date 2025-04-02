@@ -1,0 +1,7 @@
+[
+    {
+        "dataset_name": "all",
+        "lang": "en",
+        "url": "https://github.com/danrd/sparqlgen/raw/refs/heads/main/beastiary_kg.rdf.zip"
+    }
+]

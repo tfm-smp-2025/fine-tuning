@@ -1,31 +1,38 @@
 {
     "qald-9": {
-        "all": "https://github.com/ag-sc/QALD/raw/7a43e2b99a523f74377c317630f5ec55a6d8c1cf/9/data/qald-9-train-multilingual.json"
+        "all": "https://github.com/ag-sc/QALD/raw/7a43e2b99a523f74377c317630f5ec55a6d8c1cf/9/data/qald-9-train-multilingual.json",
+        "knowledge_base": "DBpedia 2016-10"
     },
-    "qald-10": {
+    "__qald-10": {
         "train": "https://github.com/KGQA/QALD-10/raw/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_9_plus/qald_9_plus_train_wikidata.json",
         "test": "https://raw.githubusercontent.com/KGQA/QALD-10/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_10/qald_10.json",
-        "public_endpoint": "https://skynet.coypu.org/wikidata/"
+        "public_endpoint": "https://skynet.coypu.org/wikidata/",
+        "__knowledge_base_comment": "Unclear which version of wikidata"
     },
     "bestiary": {
-        "all": "https://github.com/danrd/sparqlgen/raw/1efd5bec491779a48ac46d4a75075106c565c10a/beastiary_with_qald_format.json.zip"
+        "all": "https://github.com/danrd/sparqlgen/raw/1efd5bec491779a48ac46d4a75075106c565c10a/beastiary_with_qald_format.json.zip",
+        "knowledge_base": "bestiary"
     },
     "VQuAnDA": {
         "train": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/train.json",
-        "test": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/test.json"
+        "test": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/test.json",
+        "knowledge_base": "DBpedia v04.16"
     },
     "LC-QuAD 1.0": {
         "train": "https://github.com/AskNowQA/LC-QuAD/raw/9b8c16a87091089001a3506e50ebafa68932a13f/train-data.json",
-        "test": "https://raw.githubusercontent.com/AskNowQA/LC-QuAD/refs/heads/data/test-data.json"
+        "test": "https://raw.githubusercontent.com/AskNowQA/LC-QuAD/refs/heads/data/test-data.json",
+        "knowledge_base": "DBpedia v04.16"
     },
     "LC-QuAD 2.0": {
         "train": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/train.json",
-        "test": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/test.json"
+        "test": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/test.json",
+        "__knowledge_base_comment": "Unclear which version of wikidata & cannot find DBPedia2018"
     },
     "WebQuestions SP": {
         "all": "https://download.microsoft.com/download/f/5/0/f5012144-a4fb-4084-897f-cfda99c60bdf/WebQSP.zip",
         "test_subpath": "WebQSP/data/WebQSP.test.json",
-        "train_subpath": "WebQSP/data/WebQSP.train.json"
+        "train_subpath": "WebQSP/data/WebQSP.train.json",
+        "knowledge_base": "Freebase 2015-08-09"
     },
     "__todo__": {
         "DBNQA": {"url": "https://github.com/AKSW/DBNQA"},

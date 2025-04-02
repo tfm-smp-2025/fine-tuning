@@ -1,0 +1,527 @@
+[
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/2016-04_dataid_core.ttl",
+        "dataset_name": "2016-04 Dataid Core",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/amsterdammuseum_links.ttl.bz2",
+        "dataset_name": "Amsterdammuseum Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/article_categories_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Article Categories En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/bbcwildlife_links.ttl.bz2",
+        "dataset_name": "Bbcwildlife Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/bookmashup_links.ttl.bz2",
+        "dataset_name": "Bookmashup Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/bricklink_links.ttl.bz2",
+        "dataset_name": "Bricklink Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/category_labels_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Category Labels En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/cordis_links.ttl.bz2",
+        "dataset_name": "Cordis Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/dblp_links.ttl.bz2",
+        "dataset_name": "Dblp Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/dbtune_links.ttl.bz2",
+        "dataset_name": "Dbtune Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/disambiguations_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Disambiguations En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/diseasome_links.ttl.bz2",
+        "dataset_name": "Diseasome Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/eunis_links.ttl.bz2",
+        "dataset_name": "Eunis Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/eurostat_linkedstatistics_links.ttl.bz2",
+        "dataset_name": "Eurostat Linkedstatistics Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/eurostat_wbsg_links.ttl.bz2",
+        "dataset_name": "Eurostat Wbsg Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/external_links_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "External Links En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/factbook_links.ttl.bz2",
+        "dataset_name": "Factbook Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/freebase_links_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Freebase Links En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/gadm_links.ttl.bz2",
+        "dataset_name": "Gadm Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/geo_coordinates_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Geo Coordinates En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/geo_coordinates_mappingbased_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Geo Coordinates Mappingbased En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/geonames_links_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Geonames Links En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/geospecies_links.ttl.bz2",
+        "dataset_name": "Geospecies Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/gho_links.ttl.bz2",
+        "dataset_name": "Gho Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/gutenberg_links.ttl.bz2",
+        "dataset_name": "Gutenberg Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/homepages_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Homepages En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/images_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Images En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/infobox_properties_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Infobox Properties En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/infobox_property_definitions_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Infobox Property Definitions En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/instance_types_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Instance Types En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/instance_types_transitive_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Instance Types Transitive En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/interlanguage_links_chapters_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Interlanguage Links Chapters En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/italian_public_schools_links.ttl.bz2",
+        "dataset_name": "Italian Public Schools Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/jrc_names_links.ttl.bz2",
+        "dataset_name": "Jrc Names Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Labels En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_ar.ttl.bz2",
+        "lang": "ar",
+        "dataset_name": "Labels En Uris Ar"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_de.ttl.bz2",
+        "lang": "de",
+        "dataset_name": "Labels En Uris De"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_es.ttl.bz2",
+        "lang": "es",
+        "dataset_name": "Labels En Uris Es"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_fr.ttl.bz2",
+        "lang": "fr",
+        "dataset_name": "Labels En Uris Fr"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_it.ttl.bz2",
+        "lang": "it",
+        "dataset_name": "Labels En Uris It"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_ja.ttl.bz2",
+        "lang": "ja",
+        "dataset_name": "Labels En Uris Ja"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_nl.ttl.bz2",
+        "lang": "nl",
+        "dataset_name": "Labels En Uris Nl"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_pl.ttl.bz2",
+        "lang": "pl",
+        "dataset_name": "Labels En Uris Pl"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_pt.ttl.bz2",
+        "lang": "pt",
+        "dataset_name": "Labels En Uris Pt"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_ru.ttl.bz2",
+        "lang": "ru",
+        "dataset_name": "Labels En Uris Ru"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/labels_en_uris_zh.ttl.bz2",
+        "lang": "zh",
+        "dataset_name": "Labels En Uris Zh"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/linked_web_apis_links.ttl.bz2",
+        "dataset_name": "Linked Web Apis Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/linkedgeodata_links.ttl.bz2",
+        "dataset_name": "Linkedgeodata Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/lmdb_links.ttl.bz2",
+        "dataset_name": "Lmdb Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/lobid.org_manifestation_links.ttl.bz2",
+        "dataset_name": "Lobid",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/lobid.org_organization_links.ttl.bz2",
+        "dataset_name": "Lobid",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Long Abstracts En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_ar.ttl.bz2",
+        "lang": "ar",
+        "dataset_name": "Long Abstracts En Uris Ar"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_de.ttl.bz2",
+        "lang": "de",
+        "dataset_name": "Long Abstracts En Uris De"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_es.ttl.bz2",
+        "lang": "es",
+        "dataset_name": "Long Abstracts En Uris Es"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_fr.ttl.bz2",
+        "lang": "fr",
+        "dataset_name": "Long Abstracts En Uris Fr"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_it.ttl.bz2",
+        "lang": "it",
+        "dataset_name": "Long Abstracts En Uris It"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_ja.ttl.bz2",
+        "lang": "ja",
+        "dataset_name": "Long Abstracts En Uris Ja"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_nl.ttl.bz2",
+        "lang": "nl",
+        "dataset_name": "Long Abstracts En Uris Nl"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_pl.ttl.bz2",
+        "lang": "pl",
+        "dataset_name": "Long Abstracts En Uris Pl"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_pt.ttl.bz2",
+        "lang": "pt",
+        "dataset_name": "Long Abstracts En Uris Pt"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_ru.ttl.bz2",
+        "lang": "ru",
+        "dataset_name": "Long Abstracts En Uris Ru"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/long_abstracts_en_uris_zh.ttl.bz2",
+        "lang": "zh",
+        "dataset_name": "Long Abstracts En Uris Zh"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/mappingbased_literals_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Mappingbased Literals En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/mappingbased_objects_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Mappingbased Objects En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/musicbrainz_links.ttl.bz2",
+        "dataset_name": "Musicbrainz Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/nuts_links.ttl.bz2",
+        "dataset_name": "Nuts Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/nytimes_links.ttl.bz2",
+        "dataset_name": "Nytimes Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/opencyc_links.ttl.bz2",
+        "dataset_name": "Opencyc Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/openei_links.ttl.bz2",
+        "dataset_name": "Openei Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/page_ids_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Page Ids En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/persondata_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Persondata En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/revision_ids_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Revision Ids En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/revision_uris_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Revision Uris En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/revyu_links.ttl.bz2",
+        "dataset_name": "Revyu Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Short Abstracts En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_ar.ttl.bz2",
+        "lang": "ar",
+        "dataset_name": "Short Abstracts En Uris Ar"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_de.ttl.bz2",
+        "lang": "de",
+        "dataset_name": "Short Abstracts En Uris De"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_es.ttl.bz2",
+        "lang": "es",
+        "dataset_name": "Short Abstracts En Uris Es"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_fr.ttl.bz2",
+        "lang": "fr",
+        "dataset_name": "Short Abstracts En Uris Fr"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_it.ttl.bz2",
+        "lang": "it",
+        "dataset_name": "Short Abstracts En Uris It"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_ja.ttl.bz2",
+        "lang": "ja",
+        "dataset_name": "Short Abstracts En Uris Ja"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_nl.ttl.bz2",
+        "lang": "nl",
+        "dataset_name": "Short Abstracts En Uris Nl"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_pl.ttl.bz2",
+        "lang": "pl",
+        "dataset_name": "Short Abstracts En Uris Pl"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_pt.ttl.bz2",
+        "lang": "pt",
+        "dataset_name": "Short Abstracts En Uris Pt"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_ru.ttl.bz2",
+        "lang": "ru",
+        "dataset_name": "Short Abstracts En Uris Ru"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/short_abstracts_en_uris_zh.ttl.bz2",
+        "lang": "zh",
+        "dataset_name": "Short Abstracts En Uris Zh"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/sider_links.ttl.bz2",
+        "dataset_name": "Sider Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/skos_categories_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Skos Categories En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/specific_mappingbased_properties_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Specific Mappingbased Properties En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/tcm_links.ttl.bz2",
+        "dataset_name": "Tcm Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/transitive_redirects_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Transitive Redirects En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/transparency_links.ttl.bz2",
+        "dataset_name": "Transparency Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/uk_university_links.ttl.bz2",
+        "dataset_name": "Uk University Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/umbel_links.ttl.bz2",
+        "dataset_name": "Umbel Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/uri_same_as_iri_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Uri Same As Iri En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/uscensus_links.ttl.bz2",
+        "dataset_name": "Uscensus Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/viaf_links.ttl.bz2",
+        "dataset_name": "Viaf Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/wikicompany_links.ttl.bz2",
+        "dataset_name": "Wikicompany Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/wikipedia_links_en.ttl.bz2",
+        "lang": "en",
+        "dataset_name": "Wikipedia Links En"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/wordnet_links.ttl.bz2",
+        "dataset_name": "Wordnet Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/yago_links.ttl.bz2",
+        "dataset_name": "Yago Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/yago_taxonomy.ttl.bz2",
+        "dataset_name": "Yago Taxonomy",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/yago_type_links.ttl.bz2",
+        "dataset_name": "Yago Type Links",
+        "lang": "??"
+    },
+    {
+        "url": "https://downloads.dbpedia.org/2016-04/core/yago_types.ttl.bz2",
+        "dataset_name": "Yago Types",
+        "lang": "??"
+    }
+]
