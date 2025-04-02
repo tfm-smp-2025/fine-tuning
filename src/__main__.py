@@ -3,6 +3,7 @@ import logging
 import random
 import sys
 from . import tester
+from . import fine_tune_generator
 from .translators.ollama_model import all_models
 
 def get_argparser():
@@ -33,8 +34,24 @@ def get_argparser():
         type=str,
         default=['bestiary']
     )
-
     test_subparser.set_defaults(func=tester.run_test)
+
+    fine_tune = subparser.add_parser("gen-fine-tuning-data")
+    fine_tune.add_argument(
+        "--datasets",
+        nargs='+',
+        type=str,
+        default=['bestiary']
+    )
+
+    fine_tune.add_argument(
+        "--output",
+        required=True,
+        help="Name of the `.jsonl` file to be generated",
+        type=argparse.FileType('w')
+    )
+
+    fine_tune.set_defaults(func=fine_tune_generator.generate)
     return parser
 
 
