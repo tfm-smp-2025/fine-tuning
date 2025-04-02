@@ -14,7 +14,7 @@ class PromptBasedTranslator:
     def translate(self, query: str) -> str:
         # Naïve test
         query_for_llm = deindent_text(
-            f"""
+        f"""
         Translate this natural language query into a SPARQL query:
         
         --- Natural language query ---

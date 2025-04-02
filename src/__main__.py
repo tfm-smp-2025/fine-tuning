@@ -27,6 +27,13 @@ def get_argparser():
         default=[model.model_name for model in all_models]
     )
 
+    test_subparser.add_argument(
+        "--datasets",
+        nargs='+',
+        type=str,
+        default=['bestiary']
+    )
+
     test_subparser.set_defaults(func=tester.run_test)
     return parser
 
