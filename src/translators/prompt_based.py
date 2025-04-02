@@ -1,33 +1,6 @@
 import logging
-import os
+from .ollama_model import OllamaModel, all_models
 from .utils import deindent_text
-from langchain_ollama import OllamaLLM
-
-ROOT_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
-
-MODELS_FILE = os.path.join(ROOT_DIR, "infra", "models.txt")
-with open(MODELS_FILE) as f:
-    MODELS_NAMES = f.read().split("\n")
-
-
-class OllamaModel:
-    """Class to unify invocation of models that are accessed through Ollama."""
-
-    def __init__(self, model_name: str):
-        self.model_name = model_name
-        self.model: Optional[OllamaLLM] = None
-
-    def invoke(self, text: str, verbose=False) -> str:
-        if self.model is None:
-            self.model = OllamaLLM(model=self.model_name, verbose=verbose)
-
-        return self.model.invoke(text)
-
-    def __repr__(self):
-        return "{} on Ollama".format(self.model_name)
-
 
 class PromptBasedTranslator:
     """
@@ -56,6 +29,4 @@ class PromptBasedTranslator:
         return "{} + prompt".format(self.model)
 
 
-models = [OllamaModel(model_name) for model_name in MODELS_NAMES]
-
-translators = [PromptBasedTranslator(model) for model in models]
+translators = [PromptBasedTranslator(model) for model in all_models]
