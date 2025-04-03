@@ -41,7 +41,7 @@ def get_argparser():
         "--datasets",
         nargs='+',
         type=str,
-        default=['bestiary']
+        default=['bestiary', 'qald-9']
     )
 
     fine_tune.add_argument(
