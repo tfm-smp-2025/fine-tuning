@@ -20,7 +20,7 @@ class UnifiedDatasetLoader:
     def __init__(self, name: str, train_split: float=0.8, rand_seed: Optional[int]=None):
         self.name = name
         self.train_split = train_split
-        self.rand_seed = rand_seed
+        self.rand_seed = rand_seed or random.randint()
 
         root_dir = os.path.join(DATASETS_DIR, dataset_name_to_slug(name))
         assert os.path.isdir(root_dir), "Expected {} to be a directory".format(root_dir)
@@ -31,39 +31,20 @@ class UnifiedDatasetLoader:
     def __repr__(self):
         return f"Dataset '{self.name}' ({'not loaded' if self.data is None else str(len(self.data)) + ' entries'})"
 
-    def __enter__(self):
-        self.__load()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.__unload()
-
     def __load(self):
         with open(self.file_path) as f:
-            self.data = json.load(f)['questions']
+            return json.load(f)['questions']
 
-    def __unload(self):
-        self.data = None
-
-    def get_test_data(self):
-        if self.data is None:
-            self.__load()
+    def get_split_dataset(self):
+        data = self.__load()
 
         random.seed(self.rand_seed)
-        for it in self.data:
-            if random.random() > self.train_split:
-                yield it
+        random.shuffle(data)
 
-    def get_train_data(self):
-        if self.data is None:
-            self.__load()
-
-        random.seed(self.rand_seed)
-        for it in self.data:
-            if random.random() <= self.train_split:
-                yield it
+        cutoff = int(len(data) * self.train_split)
+        return (data[:cutoff], data[cutoff:])
 
 
-def load_dataset(name):
+def load_dataset(name, rand_seed: Optional[int]=None):
     # @TODO@ Handle non-unified datasets
-    return UnifiedDatasetLoader(name)
+    return UnifiedDatasetLoader(name, rand_seed=rand_seed)

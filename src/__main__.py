@@ -47,8 +47,15 @@ def get_argparser():
     fine_tune.add_argument(
         "--output",
         required=True,
-        help="Name of the `.jsonl` file to be generated",
+        help="Name of the `.json` file to be generated",
         type=argparse.FileType('w')
+    )
+
+    fine_tune.add_argument(
+        "--split-test",
+        required=False,
+        help='Generate as two files, this argument will point to the one with the test set',
+        type=argparse.FileType('w'),
     )
 
     fine_tune.set_defaults(func=fine_tune_generator.generate)

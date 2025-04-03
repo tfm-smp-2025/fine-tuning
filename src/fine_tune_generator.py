@@ -25,14 +25,17 @@ def format_sparql_query(query: str) -> str:
 def generate(args):
     """Generate fine-tuning data."""
     for dataset_name in args.datasets:
-        with dataset_loader.load_dataset(dataset_name) as ds:
-            for item in tqdm.tqdm(ds.get_train_data()):
+        dataset = dataset_loader.load_dataset(dataset_name, rand_seed=args.seed)
+        data = {}
+        for ds_name, ds_data in zip(('train', 'test'), dataset.get_split_dataset()):
+            sub_dataset = []
+            for item in tqdm.tqdm(ds_data):
                 for variant in item['question']:
                     if variant['language'] != 'en':
                         logging.debug('SKIPPING question in non-english: {}'.format(variant['language']))
                         continue
 
-                    args.output.write(json.dumps({
+                    row = {
                         "user": deindent_text(f"""
                         Generate the SPARQL query for this natural language query:
 
@@ -42,4 +45,15 @@ def generate(args):
                         """).strip(),
                         # @TODO@: Properly format SPARQL query
                         "assistant": '```sparql\n' + format_sparql_query(item['query']['sparql']) + '\n```\n'
-                    }))
+                    }
+
+                    if args.split_test:
+                        out = args.output
+                        if ds_name == 'test':
+                            out = args.split_test
+                        out.write(json.dumps(row) + '\n')
+                    else:
+                        sub_dataset.append(row)
+            data[ds_name] = sub_dataset
+        if not args.split_test:
+            args.output.write(json.dumps(data, indent=4))
