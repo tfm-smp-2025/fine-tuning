@@ -32,7 +32,7 @@ def generate(args):
         data = {}
         for ds_name, ds_data in zip(('train', 'test'), dataset.get_split_dataset()):
             sub_dataset = []
-            for item in tqdm.tqdm(ds_data):
+            for item in tqdm.tqdm(ds_data, desc=f'{dataset_name} for {ds_name}'):
                 for variant in item['question']:
                     if variant['language'] != 'en':
                         logging.debug('SKIPPING question in non-english: {}'.format(variant['language']))
