@@ -19,7 +19,10 @@ def format_sparql_query(query: str) -> str:
             stdout=subprocess.PIPE,
         )
         result = proc.stdout.decode()
-        proc.check_returncode()
+        try:
+            proc.check_returncode()
+        except subprocess.CalledProcessError:
+            return query
     return result
 
 def generate(args):
