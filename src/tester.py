@@ -14,32 +14,35 @@ def run_test(args):
         sample_size is not None
     ) ^ is_full, "Expected either --sample SIZE or --full, found: {}".format(args)
 
+
     for translator in all_translators:
         if translator.model.model_name not in args.models:
             logging.debug("({}) SKIPPING, model not selected".format(translator))
             continue
 
         for dataset_name in args.datasets:
-            with dataset_loader.load_dataset(dataset_name) as ds:
-                logging.info("({}) DATASET: {}".format(translator, ds))
+            ds = dataset_loader.load_dataset(dataset_name)
+            logging.info("({}) DATASET: {}".format(translator, ds))
 
-                dataset_counter = 0
-                for question in tqdm.tqdm(ds.get_test_data()):
-                    for variant in question['question']:
+            dataset_counter = 0
+            for question in tqdm.tqdm(ds.get_test_data()):
+                if question.lang not in ('en', None):
+                    logging.debug('SKIPPING question in non-english: {}'.format(question.lang))
+                    continue
 
-                        if variant['language'] != 'en':
-                            logging.debug('SKIPPING question in non-english: {}'.format(variant['language']))
-                            continue
+                dataset_counter += 1
+                if sample_size is not None and dataset_counter > sample_size:
+                    logging.debug('Closing dataset after {} elements tested'.format(sample_size))
 
-                        dataset_counter += 1
-                        if sample_size is not None and dataset_counter > sample_size:
-                            logging.debug('Closing dataset after {} elements tested'.format(sample_size))
+                logging.info("({}) INPUT: {}".format(translator, question.question))
 
-                        logging.info("({}) INPUT: {}".format(translator, variant['string']))
-                        try:
-                            result = translator.translate(variant['string'])
-                            logging.info("({}) RESULT: {}".format(translator, result))
-                        except KeyboardInterrupt:
-                            raise
-                        except:
-                            logging.exception("({}) EXCEPTION".format(translator))
+                try:
+                    result = translator.translate(question.question)
+
+                    logging.info("({}) RESULT query: {}".format(translator, result))
+
+                except KeyboardInterrupt:
+                    raise
+                except:
+                    raise
+                    logging.exception("({}) EXCEPTION".format(translator))

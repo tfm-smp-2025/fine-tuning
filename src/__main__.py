@@ -41,7 +41,15 @@ def get_argparser():
         "--datasets",
         nargs='+',
         type=str,
-        default=['bestiary', 'qald-9']
+        default=[
+            'bestiary',
+            'qald-9',
+            'qald-10',
+            'lc-quad_1.0',
+            'vquanda',
+            'lc-quad_2.0',
+            'webquestions_sp',
+        ]
     )
 
     fine_tune.add_argument(

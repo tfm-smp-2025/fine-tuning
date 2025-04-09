@@ -33,30 +33,29 @@ def generate(args):
         for ds_name, ds_data in zip(('train', 'test'), dataset.get_split_dataset()):
             sub_dataset = []
             for item in tqdm.tqdm(ds_data, desc=f'{dataset_name} for {ds_name}'):
-                for variant in item['question']:
-                    if variant['language'] != 'en':
-                        logging.debug('SKIPPING question in non-english: {}'.format(variant['language']))
-                        continue
+                if item.lang not in (None, 'en'):
+                    logging.debug('SKIPPING question in non-english: {}'.format(item.lang))
+                    continue
 
-                    row = {
-                        "user": deindent_text(f"""
-                        Generate the SPARQL query for this natural language query:
+                row = {
+                    "user": deindent_text(f"""
+                    Generate the SPARQL query for this natural language query:
 
-                        --- Natural language query
-                        {variant['string']}
-                        --- End of natural language query
-                        """).strip(),
-                        # @TODO@: Properly format SPARQL query
-                        "assistant": '```sparql\n' + format_sparql_query(item['query']['sparql']) + '\n```\n'
-                    }
+                    --- Natural language query
+                    {item.question}
+                    --- End of natural language query
+                    """).strip(),
+                    # @TODO@: Properly format SPARQL query
+                    "assistant": '```sparql\n' + format_sparql_query(item.answer) + '\n```\n'
+                }
 
-                    if args.split_test:
-                        out = args.output
-                        if ds_name == 'test':
-                            out = args.split_test
-                        out.write(json.dumps(row) + '\n')
-                    else:
-                        sub_dataset.append(row)
+                if args.split_test:
+                    out = args.output
+                    if ds_name == 'test':
+                        out = args.split_test
+                    out.write(json.dumps(row) + '\n')
+                else:
+                    sub_dataset.append(row)
             data[ds_name] = sub_dataset
         if not args.split_test:
             args.output.write(json.dumps(data, indent=4))
