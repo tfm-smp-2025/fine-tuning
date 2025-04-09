@@ -34,6 +34,12 @@ def get_argparser():
         type=str,
         default=['bestiary']
     )
+    test_subparser.add_argument(
+        '--sparql-server',
+        required=False,
+        type=str,
+        help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
+    )
     test_subparser.set_defaults(func=tester.run_test)
 
     fine_tune = subparser.add_parser("gen-fine-tuning-data")
