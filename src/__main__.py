@@ -74,7 +74,12 @@ def main() -> int:
     parser = get_argparser()
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
+
     if args.seed is not None:
         random.seed(args.seed)
 
