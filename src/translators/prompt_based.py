@@ -1,6 +1,6 @@
 import logging
+from .ollama_model import OllamaModel, all_models
 from .utils import deindent_text
-from .ollama_model import all_models, OllamaModel
 
 class PromptBasedTranslator:
     """
@@ -14,7 +14,7 @@ class PromptBasedTranslator:
     def translate(self, query: str) -> str:
         # Naïve test
         query_for_llm = deindent_text(
-            f"""
+        f"""
         Translate this natural language query into a SPARQL query:
         
         --- Natural language query ---
@@ -25,6 +25,8 @@ class PromptBasedTranslator:
         logging.debug("Query for LLM: {}".format(query_for_llm))
         return self.model.invoke(query_for_llm)
 
-translators = [
-    PromptBasedTranslator(model) for model in all_models
-]
+    def __repr__(self):
+        return "{} + prompt".format(self.model)
+
+
+translators = [PromptBasedTranslator(model) for model in all_models]

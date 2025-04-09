@@ -3,6 +3,7 @@ import logging
 import random
 import sys
 from . import tester
+from . import fine_tune_generator
 from .translators.ollama_model import all_models
 
 def get_argparser():
@@ -27,7 +28,45 @@ def get_argparser():
         default=[model.model_name for model in all_models]
     )
 
+    test_subparser.add_argument(
+        "--datasets",
+        nargs='+',
+        type=str,
+        default=['bestiary']
+    )
     test_subparser.set_defaults(func=tester.run_test)
+
+    fine_tune = subparser.add_parser("gen-fine-tuning-data")
+    fine_tune.add_argument(
+        "--datasets",
+        nargs='+',
+        type=str,
+        default=[
+            'bestiary',
+            'qald-9',
+            'qald-10',
+            'lc-quad_1.0',
+            'vquanda',
+            'lc-quad_2.0',
+            'webquestions_sp',
+        ]
+    )
+
+    fine_tune.add_argument(
+        "--output",
+        required=True,
+        help="Name of the `.json` file to be generated",
+        type=argparse.FileType('w')
+    )
+
+    fine_tune.add_argument(
+        "--split-test",
+        required=False,
+        help='Generate as two files, this argument will point to the one with the test set',
+        type=argparse.FileType('w'),
+    )
+
+    fine_tune.set_defaults(func=fine_tune_generator.generate)
     return parser
 
 
@@ -35,7 +74,12 @@ def main() -> int:
     parser = get_argparser()
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
+
     if args.seed is not None:
         random.seed(args.seed)
 
