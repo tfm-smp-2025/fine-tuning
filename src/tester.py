@@ -1,8 +1,25 @@
 import logging
+
 import tqdm
+import SPARQLWrapper
 
 from .translators import all_translators
 from .datasets import dataset_loader
+
+
+def run_query(args, query):
+    sparql = SPARQLWrapper.SPARQLWrapper(
+        "http://localhost:3031/beastiary/sparql"
+    )
+    sparql.setReturnFormat(SPARQLWrapper.JSON)
+    sparql.setQuery(query)
+
+    ret = sparql.queryAndConvert()
+
+    return [
+        binding
+        for binding in ret['results']['bindings']
+    ]
 
 
 def run_test(args):
@@ -36,10 +53,16 @@ def run_test(args):
 
                 logging.info("({}) INPUT: {}".format(translator, question.question))
 
+                expected_result = run_query(args, question.answer)
+                logging.info("({}) EXPECTED RESULT: {}".format(translator, expected_result))
+
                 try:
                     result = translator.translate(question.question)
 
                     logging.info("({}) RESULT query: {}".format(translator, result))
+
+                    translator_result = run_query(args, result)
+                    logging.info("({}) TRANSLATOR RESULT: {}".format(translator, translator_result))
 
                 except KeyboardInterrupt:
                     raise
