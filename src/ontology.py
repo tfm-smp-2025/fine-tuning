@@ -243,3 +243,8 @@ def property_graph_to_rdf(pg: PropertyGraph):
         _fill_properties(class_uri, class_data['properties'])
 
     return g
+
+def extract_ontology_to_file(args):
+    pg = get_all_properties_in_graph(args)
+    rdf = property_graph_to_rdf(pg)
+    args.output.write(rdf.serialize(format='pretty-xml'))
