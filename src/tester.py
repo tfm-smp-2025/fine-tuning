@@ -1,27 +1,11 @@
 import logging
 
 import tqdm
-import SPARQLWrapper
 
 from .translators import all_translators
 from .datasets import dataset_loader
 from .translators.utils import extract_code_blocks
-
-
-def run_query(args, query):
-    sparql = SPARQLWrapper.SPARQLWrapper(
-        f"{args.sparql_server.strip('/')}/beastiary/sparql"
-    )
-    sparql.setReturnFormat(SPARQLWrapper.JSON)
-    sparql.setQuery(query)
-
-    ret = sparql.queryAndConvert()
-
-    return [
-        binding
-        for binding in ret['results']['bindings']
-    ]
-
+from .ontology import run_query, get_all_properties_in_graph, property_graph_to_rdf
 
 def run_test(args):
     """Run some tests over the configured models."""
@@ -32,8 +16,15 @@ def run_test(args):
         sample_size is not None
     ) ^ is_full, "Expected either --sample SIZE or --full, found: {}".format(args)
 
+    ontology = None
+    if args.sparql_server:
+        ontology = property_graph_to_rdf(get_all_properties_in_graph(args)).serialize(format='pretty-xml')
+
 
     for translator in all_translators:
+        if ontology:
+            translator.set_ontology(ontology)
+
         if translator.model.model_name not in args.models:
             logging.debug("({}) SKIPPING, model not selected".format(translator))
             continue

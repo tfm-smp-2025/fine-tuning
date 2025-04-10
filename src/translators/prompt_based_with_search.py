@@ -15,15 +15,24 @@ class PromptWithSearchTranslator:
     by using prompts + searches on a Knowledge Base.
     """
 
-    def __init__(self, base_model: OllamaModel, kb_url: str):
+    def __init__(self, base_model: LLMModel, kb_url: str):
         self.model = base_model
         self.kb_url = kb_url
+        self.ontology = None
+
+    def set_ontology(self, ontology):
+        self.ontology = ontology
 
     def translate(self, query: str) -> str:
         entities = self._get_entities_in_query(query)
         print("Entities:", entities)
 
     def _get_entities_in_query(self, query: str) -> list[CodeBlock]:
+        prefix = ''
+        if self.ontology:
+            prefix = 'Consider this RDF ontology:\n\n'
+            prefix += self.ontology
+
         query_for_llm = deindent_text(
         f"""
         You will have to translate a natural language query into SPARQL. We'll do this in 3 steps:
