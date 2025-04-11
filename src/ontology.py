@@ -126,13 +126,6 @@ WHERE {
 }
     ''')
 
-    concepts = run_query(args, '''
-SELECT DISTINCT ?Concept
-WHERE {
-  [] a ?Concept
-}
-''')
-
     annotation_properties = run_query(args, '''
 SELECT DISTINCT ?prop
 WHERE {
@@ -155,7 +148,6 @@ WHERE {
 ''')
 
     graph = {
-        'concepts': [ concept['Concept']['value'] for concept in concepts ],
         'annotation_properties': {prop['prop']['value']: {} for prop in annotation_properties },
         'object_properties': {prop['prop']['value']: {} for prop in object_properties },
         'datatype_properties': {prop['prop']['value']: {} for prop in datatype_properties },
