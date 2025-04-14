@@ -1,8 +1,10 @@
 import logging
 from .utils import deindent_text, extract_code_blocks, CodeBlock
-from .ollama_model import all_models, OllamaModel
+from .types import LLMModel
 from pydantic import BaseModel
 
+from .ollama_model import all_models as ollama_models
+from .mistral_model import all_models as mistral_models
 class Entity(BaseModel):
     label: str
 
@@ -69,5 +71,5 @@ class PromptWithSearchTranslator:
 
 
 translators = [
-    PromptWithSearchTranslator(model, None) for model in all_models
+    PromptWithSearchTranslator(model, None) for model in ollama_models + mistral_models
 ]

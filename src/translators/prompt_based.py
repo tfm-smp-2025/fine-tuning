@@ -1,6 +1,9 @@
 import logging
-from .ollama_model import OllamaModel, all_models
+from .types import LLMModel
 from .utils import deindent_text
+
+from .ollama_model import all_models as ollama_models
+from .mistral_model import all_models as mistral_models
 
 class PromptBasedTranslator:
     """
@@ -8,14 +11,14 @@ class PromptBasedTranslator:
     by using prompts on unmodified LLMs.
     """
 
-    def __init__(self, base_model: OllamaModel):
+    def __init__(self, base_model: LLMModel):
         self.model = base_model
         self.ontology = None
 
     def set_ontology(self, ontology):
         self.ontology = ontology
 
-    def translate(self, query: str) -> str:
+    def translate(self, nl_query: str) -> str:
         # Naïve test
         prefix = ''
         if self.ontology:
@@ -29,7 +32,7 @@ class PromptBasedTranslator:
 Considering those properties, translate this natural language query into a SPARQL query:
 
 --- Natural language query ---
-{query}
+{nl_query}
 --- End of natural language query ---
         """
         )
@@ -40,4 +43,4 @@ Considering those properties, translate this natural language query into a SPARQ
         return "{} + prompt".format(self.model)
 
 
-translators = [PromptBasedTranslator(model) for model in all_models]
+translators = [PromptBasedTranslator(model) for model in ollama_models + mistral_models]

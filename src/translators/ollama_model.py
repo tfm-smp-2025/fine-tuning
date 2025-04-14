@@ -1,5 +1,6 @@
 import os
 from langchain_ollama import OllamaLLM
+from .types import LLMModel
 
 ROOT_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,7 +11,7 @@ with open(MODELS_FILE) as f:
     MODELS_NAMES = f.read().strip().split("\n")
 
 
-class OllamaModel:
+class OllamaModel(LLMModel):
     """Class to unify invocation of models that are accessed through Ollama."""
 
     def __init__(self, model_name: str):

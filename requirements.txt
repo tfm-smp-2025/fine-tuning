@@ -1,6 +1,8 @@
-langchain-ollama
 pydantic
 tqdm
+
+langchain-ollama
+langchain_mistralai
 
 rdflib
 SPARQLWrapper
