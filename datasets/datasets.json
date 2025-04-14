@@ -9,9 +9,9 @@
         "public_endpoint": "https://skynet.coypu.org/wikidata/",
         "__knowledge_base_comment": "Unclear which version of wikidata"
     },
-    "bestiary": {
+    "beastiary": {
         "all": "https://github.com/danrd/sparqlgen/raw/1efd5bec491779a48ac46d4a75075106c565c10a/beastiary_with_qald_format.json.zip",
-        "knowledge_base": "bestiary"
+        "knowledge_base": "beastiary"
     },
     "VQuAnDA": {
         "train": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/train.json",

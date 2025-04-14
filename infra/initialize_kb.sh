@@ -91,7 +91,7 @@ load_dir_in_dataset() {
 }
 
 # Beastiary dataset
-printf '\e[1m== Loading bestiary...\e[0m\n'
+printf '\e[1m== Loading beastiary...\e[0m\n'
 
 # Allow for errors when deleting this dataset, just in 
 #  case it doesn't exist previsouly.
