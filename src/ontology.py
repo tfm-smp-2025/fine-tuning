@@ -6,7 +6,10 @@ from typing import Any, TypedDict, Union
 import SPARQLWrapper
 import rdflib
 
+from . import caching
+
 RDFProperty = Union[str, list[tuple[str, 'RDFProperty']]]
+CACHE_DIR = 'src/ontology'
 
 class PropertyGraphClass(TypedDict):
     properties: list[tuple[str, RDFProperty]]
@@ -117,16 +120,27 @@ class Ontology:
                 subresults = list(self.get_data_in_blank_node(item_uri, [prop['prop']['value']]))
                 yield (prop['prop']['value'], subresults)
 
-
-    def get_all_properties_in_graph(self) -> PropertyGraph:
-        # List all classes
-        print("\r\x1b[0K Reading classes...", end='\r', flush=True)
-        classes = self.run_query('''
+    def get_classes_in_kg(self):
+        res = self.run_query('''
     SELECT DISTINCT ?class
     WHERE {
     ?class a <http://www.w3.org/2002/07/owl#Class>
     }
         ''')
+        return [
+            _class['class']['value']
+            for _class in res
+            if ':' in _class['class']['value']
+        ]
+
+
+    def get_all_properties_in_graph(self) -> PropertyGraph:
+        # List all classes
+        if caching.in_cache(CACHE_DIR, self.sparql_endpoint):
+            return caching.get_from_cache(CACHE_DIR, self.sparql_endpoint)
+
+        print("\r\x1b[0K Reading classes...", end='\r', flush=True)
+        classes = self.get_classes_in_kg()
 
         print("\r\x1b[0K Reading types...", end='\r', flush=True)
         types = self.run_query('''
@@ -181,7 +195,7 @@ class Ontology:
                 graph[col][prop_name] = list(self.get_all_data_in_item(prop_name))
 
         print("\r\x1b[0K Introspecting classes...", end='\r', flush=True)
-        for class_uri in [ _class['class']['value'] for _class in classes ]:
+        for class_uri in classes:
             if ':' not in class_uri:
                 # Just a placeholder class, not directly implemented
                 continue
@@ -191,6 +205,8 @@ class Ontology:
                 'properties': list(self.get_all_data_in_item(class_uri)),
                 'subclass_of': self.get_superclass_of_class(class_uri),
             }
+
+        caching.put_in_cache(CACHE_DIR, self.sparql_endpoint, graph)
 
         return graph
 
