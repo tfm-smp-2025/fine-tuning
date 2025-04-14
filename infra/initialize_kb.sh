@@ -5,6 +5,7 @@ set -eu
 DOCKER_CONTAINER_NAME='apache_jena_fuseki'
 ADMIN_SPARQL_PASSWORD="$ADMIN_SPARQL_PASSWORD"
 SPARQL_HOST="http://127.0.0.1:3030"
+TMPDIR=${TMPDIR:-/tmp}
 
 cd "$(dirname "$0")"
 
@@ -44,12 +45,12 @@ prepare_file() {
 
     if echo "$fname" | grep -q '.bz2$';then
         echo "Unpacking..." >&2
-        tmpname=$(mktemp -t "tmp_XXXXXXXXXX_$name")
+        tmpname=$(mktemp -p "$TMPDIR" -t "tmp_XXXXXXXXXX_$name")
         $PV "$fname" | bzcat > "$tmpname"
         echo "$tmpname"
     elif echo "$fname" | grep -q '.gz$';then
         echo "Unpacking..." >&2
-        tmpname=$(mktemp -t "tmp_XXXXXXXXXX_$name")
+        tmpname=$(mktemp -p "$TMPDIR" -t "tmp_XXXXXXXXXX_$name")
         $PV "$fname" | gunzip > "$tmpname"
         echo "$tmpname"
     else
@@ -77,7 +78,7 @@ load_file_in_dataset() {
     # Cleanup
     if [ "$unpacked_file" != "$file" ];then
         # Assert that it's on /tmp/
-        echo "$unpacked_file"| grep '^/tmp/'
+        echo "$unpacked_file"| grep '/tmp/'
         rm -f "$unpacked_file"
     fi
 }
