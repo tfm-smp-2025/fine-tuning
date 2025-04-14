@@ -40,6 +40,9 @@ class Ontology:
 
         ret = sparql.queryAndConvert()
 
+        if 'boolean' in ret:
+            return ret['boolean']
+
         return [
             binding
             for binding in ret['results']['bindings']

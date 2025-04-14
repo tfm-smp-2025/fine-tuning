@@ -45,11 +45,11 @@ def run_test(args):
 
                 logging.info("({}) INPUT: {}".format(translator, question.question))
 
-                if ontology:
-                    expected_result = ontology.run_query(question.answer)
-                    logging.info("({}) EXPECTED RESULT: {}".format(translator, expected_result))
-
                 try:
+                    if ontology:
+                        expected_result = ontology.run_query(question.answer)
+                        logging.info("({}) EXPECTED RESULT: {}".format(translator, expected_result))
+
                     result = translator.translate(question.question)
 
                     logging.info("({}) RESULT query: {}".format(translator, result))
@@ -68,7 +68,8 @@ def run_test(args):
                         logging.info("({}) TRANSLATOR RESULT: {}".format(translator, translator_result))
 
                 except KeyboardInterrupt:
+                    logging.error("Stopping due to Keyboard Interrupt")
                     raise
                 except:
-                    raise
                     logging.exception("({}) EXCEPTION".format(translator))
+                    # raise
