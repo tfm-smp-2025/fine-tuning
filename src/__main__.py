@@ -83,6 +83,12 @@ def get_argparser():
         help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
     )
     extract_ontology_subparser.add_argument(
+        '--sparql-endpoint',
+        required=True,
+        type=str,
+        help='The address of the SPARQL server to test the queries on. In the format "beastiary".',
+    )
+    extract_ontology_subparser.add_argument(
         "--output",
         required=True,
         help="Name of the `.rdf` file to be generated",

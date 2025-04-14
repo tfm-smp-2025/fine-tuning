@@ -5,7 +5,7 @@ import tqdm
 from .translators import all_translators
 from .datasets import dataset_loader
 from .translators.utils import extract_code_blocks
-from .ontology import run_query, get_all_properties_in_graph, property_graph_to_rdf
+from .ontology import Ontology, property_graph_to_rdf
 
 def run_test(args):
     """Run some tests over the configured models."""
@@ -16,21 +16,21 @@ def run_test(args):
         sample_size is not None
     ) ^ is_full, "Expected either --sample SIZE or --full, found: {}".format(args)
 
-    ontology = None
-    if args.sparql_server:
-        ontology = property_graph_to_rdf(get_all_properties_in_graph(args)).serialize(format='pretty-xml')
+    for dataset_name in args.datasets:
+        ds = dataset_loader.load_dataset(dataset_name)
 
+        ontology = None
+        if args.sparql_server:
+            ontology = Ontology(args.sparql_server, ds.sparql_endpoint)
 
-    for translator in all_translators:
-        if ontology:
-            translator.set_ontology(ontology)
+        for translator in all_translators:
+            if translator.model.model_name not in args.models:
+                logging.debug("({}) SKIPPING, model not selected".format(translator))
+                continue
 
-        if translator.model.model_name not in args.models:
-            logging.debug("({}) SKIPPING, model not selected".format(translator))
-            continue
+            if ontology:
+                translator.set_ontology(ontology)
 
-        for dataset_name in args.datasets:
-            ds = dataset_loader.load_dataset(dataset_name)
             logging.info("({}) DATASET: {}".format(translator, ds))
 
             dataset_counter = 0
@@ -45,8 +45,8 @@ def run_test(args):
 
                 logging.info("({}) INPUT: {}".format(translator, question.question))
 
-                if args.sparql_server:
-                    expected_result = run_query(args, question.answer)
+                if ontology:
+                    expected_result = ontology.run_query(question.answer)
                     logging.info("({}) EXPECTED RESULT: {}".format(translator, expected_result))
 
                 try:
@@ -60,9 +60,9 @@ def run_test(args):
                         if block.language.lower() == 'sparql'
                     ]
 
-                    if args.sparql_server:
+                    if ontology:
                         logging.info("({}) TESTING query: {}".format(translator, sparql_code_blocks[-1]))
-                        translator_result = run_query(args, sparql_code_blocks[-1])
+                        translator_result = ontology.run_query(sparql_code_blocks[-1])
                         logging.info("({}) TRANSLATOR RESULT: {}".format(translator, translator_result))
 
                 except KeyboardInterrupt:

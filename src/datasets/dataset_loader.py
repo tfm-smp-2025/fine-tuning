@@ -91,6 +91,7 @@ class UnifiedDatasetLoader(DatasetLoader):
         self.name = name
         self.train_split = train_split
         self.rand_seed = rand_seed or random.random()
+        self.sparql_endpoint = dataset_name_to_slug(name)
 
         root_dir = os.path.join(DATASETS_DIR, dataset_name_to_slug(name))
         assert os.path.isdir(root_dir), "Expected {} to be a directory".format(root_dir)
@@ -118,6 +119,7 @@ class UnifiedDatasetLoader(DatasetLoader):
 class SplitDatasetLoader(DatasetLoader):
     def __init__(self, name: str):
         self.name = name
+        self.sparql_endpoint = dataset_name_to_slug(name)
         root_dir = os.path.join(DATASETS_DIR, dataset_name_to_slug(name))
         assert os.path.isdir(root_dir), "Expected {} to be a directory".format(root_dir)
         self.test_path = os.path.join(root_dir, 'test.json')

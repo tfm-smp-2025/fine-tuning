@@ -6,46 +6,6 @@ from typing import Any, TypedDict, Union
 import SPARQLWrapper
 import rdflib
 
-
-def run_query(args, query):
-    sparql = SPARQLWrapper.SPARQLWrapper(
-        f"{args.sparql_server.strip('/')}/beastiary/sparql"
-    )
-    sparql.setReturnFormat(SPARQLWrapper.JSON)
-    sparql.setQuery(query)
-
-    ret = sparql.queryAndConvert()
-
-    return [
-        binding
-        for binding in ret['results']['bindings']
-    ]
-
-
-def get_properties_for_class(args, class_uri):
-    props = run_query(args, f'''
-SELECT DISTINCT ?prop
-WHERE {{
-  ?s a <{class_uri}> .
-  ?s ?prop []
-}}''')
-    return [
-        prop['prop']['value']
-        for prop in props
-    ]
-
-def get_superclass_of_class(args, class_uri) -> str:
-    superclasses = run_query(args, f'''
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT DISTINCT ?superclass
-WHERE {{
-  <{class_uri}> rdfs:subClassOf ?superclass
-}}''')
-    assert len(superclasses) == 1
-    return superclasses[0]['superclass']['value']
-
-
 RDFProperty = Union[str, list[tuple[str, 'RDFProperty']]]
 
 class PropertyGraphClass(TypedDict):
@@ -61,120 +21,178 @@ class PropertyGraph(TypedDict):
     object_properties: dict[str, list[tuple[str, str]]]
 
 
-def get_data_in_blank_node(args, item_uri, path):
-    print(
-        f"\r\x1b[0K Inspecting {item_uri.split('#')[-1]} ({' > '.join([sp.split('#')[-1] for sp in path])})...",
-        end='\r',
-        flush=True,
-        file=sys.stderr
-    )
-    last = f'<{item_uri}>'
-    path_filter = []
-    for idx, step in enumerate(path):
-        nxt = '?' + string.ascii_lowercase[idx]
-        if ':' in step:
-            step = f'<{step}>'
-        path_filter.append(f'    {last} {step} {nxt}.')
-        last = nxt
+class Ontology:
+    def __init__(self, sparql_server, sparql_endpoint):
+        self.sparql_server = sparql_server
+        self.sparql_endpoint = sparql_endpoint
 
-    comb_path_filter = '\n'.join(path_filter)
+    def run_query(self, query):
+        sparql = SPARQLWrapper.SPARQLWrapper(
+            f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
+        )
+        sparql.setReturnFormat(SPARQLWrapper.JSON)
+        sparql.setQuery(query)
 
-    query = f'''SELECT DISTINCT ?subprop ?subobj
-WHERE {{
-{comb_path_filter}
-    {last} ?subprop ?subobj
-}}'''
+        ret = sparql.queryAndConvert()
 
-    logging.debug(f'''--------
-{query}
-------''')
+        return [
+            binding
+            for binding in ret['results']['bindings']
+        ]
 
-    results = run_query(args, query)
-    for prop in results:
-        if ':' in prop['subobj']['value']:
-            yield (prop['subprop']['value'], prop['subobj']['value'])
-        else:
-            subresults = list(get_data_in_blank_node(args, item_uri, path + [prop['subprop']['value']]))
-            yield (prop['subprop']['value'], subresults)
+    def get_properties_for_class(self, class_uri):
+        props = self.run_query(f'''
+    SELECT DISTINCT ?prop
+    WHERE {{
+    ?s a <{class_uri}> .
+    ?s ?prop []
+    }}''')
+        return [
+            prop['prop']['value']
+            for prop in props
+        ]
+
+    def get_superclass_of_class(self, class_uri) -> str:
+        superclasses = self.run_query(f'''
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    SELECT DISTINCT ?superclass
+    WHERE {{
+    <{class_uri}> rdfs:subClassOf ?superclass
+    }}''')
+        assert len(superclasses) == 1
+        return superclasses[0]['superclass']['value']
+
+    def get_data_in_blank_node(self, item_uri, path):
+        print(
+            f"\r\x1b[0K Inspecting {item_uri.split('#')[-1]} ({' > '.join([sp.split('#')[-1] for sp in path])})...",
+            end='\r',
+            flush=True,
+            file=sys.stderr
+        )
+        last = f'<{item_uri}>'
+        path_filter = []
+        for idx, step in enumerate(path):
+            nxt = '?' + string.ascii_lowercase[idx]
+            if ':' in step:
+                step = f'<{step}>'
+            path_filter.append(f'    {last} {step} {nxt}.')
+            last = nxt
+
+        comb_path_filter = '\n'.join(path_filter)
+
+        query = f'''SELECT DISTINCT ?subprop ?subobj
+    WHERE {{
+    {comb_path_filter}
+        {last} ?subprop ?subobj
+    }}'''
+
+        logging.debug(f'''--------
+    {query}
+    ------''')
+
+        results = self.run_query(query)
+        for prop in results:
+            if ':' in prop['subobj']['value']:
+                yield (prop['subprop']['value'], prop['subobj']['value'])
+            else:
+                subresults = list(self.get_data_in_blank_node(item_uri, path + [prop['subprop']['value']]))
+                yield (prop['subprop']['value'], subresults)
+
+    def get_all_data_in_item(self, item_uri) -> list[tuple[str, RDFProperty]]:
+        print(
+            f"\r\x1b[0K Inspecting {item_uri.split('#')[-1]}...",
+            end='\r',
+            flush=True,
+            file=sys.stderr
+        )
+        results = self.run_query(f'''SELECT DISTINCT ?prop ?obj
+    WHERE {{
+    <{item_uri}> ?prop ?obj
+    }}''')
+        for prop in results:
+            if ':' in prop['obj']['value']:
+                yield (prop['prop']['value'], prop['obj']['value'])
+            else:
+                subresults = list(self.get_data_in_blank_node(item_uri, [prop['prop']['value']]))
+                yield (prop['prop']['value'], subresults)
 
 
-def get_all_data_in_item(args, item_uri) -> list[tuple[str, RDFProperty]]:
-    print(
-        f"\r\x1b[0K Inspecting {item_uri.split('#')[-1]}...",
-        end='\r',
-        flush=True,
-        file=sys.stderr
-    )
-    results = run_query(args, f'''SELECT DISTINCT ?prop ?obj
-WHERE {{
-  <{item_uri}> ?prop ?obj
-}}''')
-    for prop in results:
-        if ':' in prop['obj']['value']:
-            yield (prop['prop']['value'], prop['obj']['value'])
-        else:
-            subresults = list(get_data_in_blank_node(args, item_uri, [prop['prop']['value']]))
-            yield (prop['prop']['value'], subresults)
+    def get_all_properties_in_graph(self) -> PropertyGraph:
+        # List all classes
+        print("\r\x1b[0K Reading classes...", end='\r', flush=True)
+        classes = self.run_query('''
+    SELECT DISTINCT ?class
+    WHERE {
+    ?class a <http://www.w3.org/2002/07/owl#Class>
+    }
+        ''')
 
+        print("\r\x1b[0K Reading types...", end='\r', flush=True)
+        types = self.run_query('''
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-def get_all_properties_in_graph(args) -> PropertyGraph:
-    # List all classes
-    classes = run_query(args, '''
-SELECT DISTINCT ?class
-WHERE {
-  ?class a <http://www.w3.org/2002/07/owl#Class>
-}
+    SELECT DISTINCT ?type
+    WHERE {
+        [] rdf:type ?type
+        FILTER (!strstarts(str(?type), "http://dbpedia.org/class/yago/Wikicat")) # Skip internal DBPedia listings
+    }
     ''')
 
-    annotation_properties = run_query(args, '''
-SELECT DISTINCT ?prop
-WHERE {
-  ?prop a <http://www.w3.org/2002/07/owl#AnnotationProperty>
-}
-''')
-
-    object_properties = run_query(args, '''
-SELECT DISTINCT ?prop
-WHERE {
-  ?prop a <http://www.w3.org/2002/07/owl#ObjectProperty>
-}
-''')
-
-    datatype_properties = run_query(args, '''
-SELECT DISTINCT ?prop
-WHERE {
-  ?prop a <http://www.w3.org/2002/07/owl#DatatypeProperty>
-}
-''')
-
-    graph = {
-        'annotation_properties': {prop['prop']['value']: {} for prop in annotation_properties },
-        'object_properties': {prop['prop']['value']: {} for prop in object_properties },
-        'datatype_properties': {prop['prop']['value']: {} for prop in datatype_properties },
-        'classes': {},
+        print("\r\x1b[0K Reading annotation properties...", end='\r', flush=True)
+        annotation_properties = self.run_query('''
+    SELECT DISTINCT ?prop
+    WHERE {
+    ?prop a <http://www.w3.org/2002/07/owl#AnnotationProperty>
     }
+    ''')
 
-    for col in (
-        'annotation_properties',
-        'object_properties',
-        'datatype_properties',
-    ):
-        for prop_name, prop_data in graph[col].items():
-            graph[col][prop_name] = list(get_all_data_in_item(args, prop_name))
+        print("\r\x1b[0K Reading object properties...", end='\r', flush=True)
+        object_properties = self.run_query('''
+    SELECT DISTINCT ?prop
+    WHERE {
+    ?prop a <http://www.w3.org/2002/07/owl#ObjectProperty>
+    }
+    ''')
 
-    for class_uri in [ _class['class']['value'] for _class in classes ]:
-        if ':' not in class_uri:
-            # Just a placeholder class, not directly implemented
-            continue
+        print("\r\x1b[0K Reading datatype properties...", end='\r', flush=True)
+        datatype_properties = self.run_query('''
+    SELECT DISTINCT ?prop
+    WHERE {
+    ?prop a <http://www.w3.org/2002/07/owl#DatatypeProperty>
+    }
+    ''')
 
-        graph['classes'][class_uri] = {
-            'obj_properties': get_properties_for_class(args, class_uri),
-            'properties': list(get_all_data_in_item(args, class_uri)),
-            'subclass_of': get_superclass_of_class(args, class_uri),
+        graph = {
+            'annotation_properties': {prop['prop']['value']: {} for prop in annotation_properties },
+            'object_properties': {prop['prop']['value']: {} for prop in object_properties },
+            'datatype_properties': {prop['prop']['value']: {} for prop in datatype_properties },
+            'classes': {},
+            'types': { t['type']['value']: {} for t in types }
         }
 
-    return graph
+        for col in (
+            'annotation_properties',
+            'object_properties',
+            'datatype_properties',
+            'types'
+        ):
+            for prop_name, prop_data in graph[col].items():
+                graph[col][prop_name] = list(self.get_all_data_in_item(prop_name))
 
+        print("\r\x1b[0K Introspecting classes...", end='\r', flush=True)
+        for class_uri in [ _class['class']['value'] for _class in classes ]:
+            if ':' not in class_uri:
+                # Just a placeholder class, not directly implemented
+                continue
+
+            graph['classes'][class_uri] = {
+                'obj_properties': self.get_properties_for_class(class_uri),
+                'properties': list(self.get_all_data_in_item(class_uri)),
+                'subclass_of': self.get_superclass_of_class(class_uri),
+            }
+
+        return graph
 
 def property_graph_to_rdf(pg: PropertyGraph):
     g = rdflib.Graph()
@@ -200,6 +218,15 @@ def property_graph_to_rdf(pg: PropertyGraph):
                 rdflib.URIRef(rdf_type),
             ))
             _fill_properties(item_uri, item_props)
+
+    for type_name, type_props in pg['types'].items():
+        type_uri = rdflib.URIRef(type_name)
+        g.add((
+            type_uri,
+            rdflib.namespace.RDF.type,
+            rdflib.namespace.RDF.type,
+        ))
+        _fill_properties(type_uri, type_props)
 
     for nsname, nsuri in (
         ('owl', 'http://www.w3.org/2002/07/owl#'),
@@ -236,7 +263,9 @@ def property_graph_to_rdf(pg: PropertyGraph):
 
     return g
 
+
 def extract_ontology_to_file(args):
-    pg = get_all_properties_in_graph(args)
+    ont = Ontology(args.sparql_server, args.sparql_endpoint)
+    pg = ont.get_all_properties_in_graph()
     rdf = property_graph_to_rdf(pg)
     args.output.write(rdf.serialize(format='pretty-xml'))
