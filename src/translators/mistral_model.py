@@ -17,13 +17,18 @@ class MistralModel(LLMModel):
         self.model_name = model_name
         self.model: Optional[ChatMistralAI] = None
 
-    def invoke(self, text: str, verbose=True) -> str:
+    def invoke(self, messages: list[str], verbose=True) -> str:
         if self.model is None:
             self.model = ChatMistralAI(model=self.model_name, verbose=verbose)
 
-        return self.model.invoke([
-            ("human", text),
-        ]).content
+        input = []
+        has_system = False
+
+        for idx, msg in enumerate(messages):
+            actor = "user" if idx % 2 == int(has_system) else "ai"
+            input.append((actor, msg))
+
+        return self.model.invoke(input=input).content
 
     def __repr__(self):
         return "{} on API".format(self.model_name)

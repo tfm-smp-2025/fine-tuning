@@ -40,7 +40,7 @@ Considering those properties, translate this natural language query into a SPARQ
         """
         )
         logging.debug("Query for LLM: {}".format(query_for_llm))
-        return self.model.invoke(query_for_llm)
+        return self.model.invoke([query_for_llm])
 
     def __repr__(self):
         return "{} + prompt".format(self.model)

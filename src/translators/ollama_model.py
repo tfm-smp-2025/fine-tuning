@@ -18,11 +18,11 @@ class OllamaModel(LLMModel):
         self.model_name = model_name
         self.model: Optional[OllamaLLM] = None
 
-    def invoke(self, text: str, verbose=True) -> str:
+    def invoke(self, messages: list[str], verbose=True) -> str:
         if self.model is None:
             self.model = OllamaLLM(model=self.model_name, verbose=verbose)
 
-        return self.model.invoke(text)
+        return self.model.invoke(input=messages)
 
     def __repr__(self):
         return "{} on Ollama".format(self.model_name)

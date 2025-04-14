@@ -33,6 +33,8 @@ class Ontology:
         sparql = SPARQLWrapper.SPARQLWrapper(
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
         )
+
+        logging.info("[SPARQL] {}".format(query))
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
 
@@ -90,10 +92,6 @@ class Ontology:
         {last} ?subprop ?subobj
     }}'''
 
-        logging.debug(f'''--------
-    {query}
-    ------''')
-
         results = self.run_query(query)
         for prop in results:
             if ':' in prop['subobj']['value']:
@@ -131,6 +129,33 @@ class Ontology:
             _class['class']['value']
             for _class in res
             if ':' in _class['class']['value']
+        ]
+
+    def find_instances_of(self, _class):
+        res = self.run_query(f'''
+    SELECT DISTINCT ?value
+    WHERE {{
+    ?value a <{_class}>
+    }}
+        ''')
+        return [
+            value['value']['value']
+            for value in res
+            if ':' in value['value']['value']
+        ]
+
+    def find_relations_between_class_objects(self, from_class, to_class) -> list[str]:
+        res = self.run_query(f'''
+    SELECT DISTINCT ?pred
+    WHERE {{
+    ?o1 a <{from_class}> .
+    ?o2 a <{to_class}> .
+    ?o1 ?pred ?o2 .
+    }}
+        ''')
+        return [
+            pred['pred']['value']
+            for pred in res
         ]
 
 

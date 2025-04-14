@@ -4,7 +4,7 @@ import tqdm
 
 from .translators import all_translators
 from .datasets import dataset_loader
-from .translators.utils import extract_code_blocks
+from .translators.utils import extract_code_blocks, CodeBlock
 from .ontology import Ontology, property_graph_to_rdf
 
 def run_test(args):
@@ -53,16 +53,18 @@ def run_test(args):
                     result = translator.translate(question.question)
 
                     logging.info("({}) RESULT query: {}".format(translator, result))
-
-                    sparql_code_blocks = [
-                        block.content
-                        for block in extract_code_blocks(text=result)
-                        if block.language.lower() == 'sparql'
-                    ]
+                    if isinstance(result, CodeBlock):
+                        sparql_code_blocks = [result]
+                    else:
+                        sparql_code_blocks = [
+                            block.content
+                            for block in extract_code_blocks(text=result)
+                            if block.language.lower() == 'sparql'
+                        ]
 
                     if ontology:
                         logging.info("({}) TESTING query: {}".format(translator, sparql_code_blocks[-1]))
-                        translator_result = ontology.run_query(sparql_code_blocks[-1])
+                        translator_result = ontology.run_query(sparql_code_blocks[-1].content)
                         logging.info("({}) TRANSLATOR RESULT: {}".format(translator, translator_result))
 
                 except KeyboardInterrupt:

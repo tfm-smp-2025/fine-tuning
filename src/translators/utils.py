@@ -31,3 +31,6 @@ def extract_code_blocks(text: str) -> list[CodeBlock]:
         result.append(CodeBlock(language=block[0], content=block[1]))
 
     return result
+
+def url_to_value(url: str) -> str:
+    return url.split('#')[-1].split('/')[-1]
