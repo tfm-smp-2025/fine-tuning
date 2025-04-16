@@ -16,7 +16,6 @@ class StructuredLoggerContext:
         self.level = 0
 
     def __enter__(self):
-        print("Inserting handler")
         # Add itself as handler
         assert len(self.root_logger.handlers) in (0, 1)
         if len(self.root_logger.handlers) == 1:
@@ -24,11 +23,12 @@ class StructuredLoggerContext:
             self.root_logger.removeHandler(self.previous_handler)
 
         self.root_logger.addHandler(self)
+        logging.info("Entering context")
         return self
 
     def __exit__(self, exc_type, exc_val, tb):
-        print("Removing handler")
         # Restore handler
+        logging.info("Leaving context")
         self.root_logger.removeHandler(self)
         if self.previous_handler is not None:
             self.root_logger.addHandler(self.previous_handler)
@@ -57,6 +57,7 @@ class StructuredLogger:
     def __init__(self):
         self.output_path = os.path.abspath("log-" + str(datetime.datetime.now()) + ".jsonl")
         self.output = None
+        self.info("Starting operation")
 
     def context(self, context_name=None):
         return StructuredLoggerContext(parent=self, context_name=context_name)
