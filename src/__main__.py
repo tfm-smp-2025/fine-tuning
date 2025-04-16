@@ -33,7 +33,7 @@ def get_argparser():
         "--datasets",
         nargs='+',
         type=str,
-        default=['beastiary']
+        default=['beastiary', 'LC-QuAD 1.0']
     )
     test_subparser.add_argument(
         '--sparql-server',

@@ -10,6 +10,10 @@ ROOT_DIR = os.path.join(
 )
 
 DATASETS_DIR = os.path.join(ROOT_DIR, 'datasets')
+DATASET_METADATA_PATH = os.path.join(DATASETS_DIR, 'datasets.json')
+
+with open(DATASET_METADATA_PATH) as f:
+    DATASET_METADATA = json.load(f)
 
 QA = collections.namedtuple('QA', ('question', 'answer', 'lang'))
 
@@ -77,6 +81,11 @@ def to_qa_list(dataset: list | dict) -> list[QA]:
         else:
             raise NotImplemented('Unknown item type: {}'.format(row))
 
+
+def get_sparql_endpoint_for_dataset(name: str) -> str:
+    return dataset_name_to_slug(DATASET_METADATA[name]['knowledge_base'])
+
+
 class DatasetLoader:
     def get_split_dataset(self) -> tuple[list[QA], list[QA]]:
         raise NotImplemented('This is an abstract class. You should use UnifiedDatasetLoader or SplitDatasetLoader.')
@@ -91,7 +100,7 @@ class UnifiedDatasetLoader(DatasetLoader):
         self.name = name
         self.train_split = train_split
         self.rand_seed = rand_seed or random.random()
-        self.sparql_endpoint = dataset_name_to_slug(name)
+        self.sparql_endpoint = get_sparql_endpoint_for_dataset(name)
 
         root_dir = os.path.join(DATASETS_DIR, dataset_name_to_slug(name))
         assert os.path.isdir(root_dir), "Expected {} to be a directory".format(root_dir)
@@ -119,7 +128,7 @@ class UnifiedDatasetLoader(DatasetLoader):
 class SplitDatasetLoader(DatasetLoader):
     def __init__(self, name: str):
         self.name = name
-        self.sparql_endpoint = dataset_name_to_slug(name)
+        self.sparql_endpoint = get_sparql_endpoint_for_dataset(name)
         root_dir = os.path.join(DATASETS_DIR, dataset_name_to_slug(name))
         assert os.path.isdir(root_dir), "Expected {} to be a directory".format(root_dir)
         self.test_path = os.path.join(root_dir, 'test.json')

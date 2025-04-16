@@ -1,7 +1,7 @@
 {
     "qald-9": {
         "all": "https://github.com/ag-sc/QALD/raw/7a43e2b99a523f74377c317630f5ec55a6d8c1cf/9/data/qald-9-train-multilingual.json",
-        "knowledge_base": "DBpedia 2016-10"
+        "knowledge_base": "DBpedia 2016_10"
     },
     "__qald-10": {
         "train": "https://github.com/KGQA/QALD-10/raw/89caa86371c7a65c6c87a64e0eeaa0e247ff5fe5/data/qald_9_plus/qald_9_plus_train_wikidata.json",
@@ -16,12 +16,12 @@
     "VQuAnDA": {
         "train": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/train.json",
         "test": "https://raw.githubusercontent.com/AskNowQA/VQUANDA/4a4269b5093d81da9349aeddc238258be45f5f81/dataset/test.json",
-        "knowledge_base": "DBpedia v04.16"
+        "knowledge_base": "DBpedia 2016_04"
     },
     "LC-QuAD 1.0": {
         "train": "https://github.com/AskNowQA/LC-QuAD/raw/9b8c16a87091089001a3506e50ebafa68932a13f/train-data.json",
         "test": "https://raw.githubusercontent.com/AskNowQA/LC-QuAD/refs/heads/data/test-data.json",
-        "knowledge_base": "DBpedia v04.16"
+        "knowledge_base": "DBpedia 2016_04"
     },
     "LC-QuAD 2.0": {
         "train": "https://github.com/AskNowQA/LC-QuAD2.0/raw/0a5f8f85b6f863c3b80f0fa02839e25d438af3ae/dataset/train.json",
