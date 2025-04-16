@@ -4,6 +4,7 @@ import random
 import sys
 from . import tester
 from . import fine_tune_generator
+from . import ontology
 from .translators.ollama_model import all_models
 
 def get_argparser():
@@ -32,7 +33,13 @@ def get_argparser():
         "--datasets",
         nargs='+',
         type=str,
-        default=['bestiary']
+        default=['beastiary']
+    )
+    test_subparser.add_argument(
+        '--sparql-server',
+        required=False,
+        type=str,
+        help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
     )
     test_subparser.set_defaults(func=tester.run_test)
 
@@ -42,7 +49,7 @@ def get_argparser():
         nargs='+',
         type=str,
         default=[
-            'bestiary',
+            'beastiary',
             'qald-9',
             'qald-10',
             'lc-quad_1.0',
@@ -67,6 +74,28 @@ def get_argparser():
     )
 
     fine_tune.set_defaults(func=fine_tune_generator.generate)
+
+    extract_ontology_subparser = subparser.add_parser("extract-ontology")
+    extract_ontology_subparser.add_argument(
+        '--sparql-server',
+        required=True,
+        type=str,
+        help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
+    )
+    extract_ontology_subparser.add_argument(
+        '--sparql-endpoint',
+        required=True,
+        type=str,
+        help='The address of the SPARQL server to test the queries on. In the format "beastiary".',
+    )
+    extract_ontology_subparser.add_argument(
+        "--output",
+        required=True,
+        help="Name of the `.rdf` file to be generated",
+        type=argparse.FileType('w')
+    )
+    extract_ontology_subparser.set_defaults(func=ontology.extract_ontology_to_file)
+
     return parser
 
 

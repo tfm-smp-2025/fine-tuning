@@ -1,3 +1,17 @@
-langchain-ollama
-pydantic
+# Progress bars
 tqdm
+
+# Data validation
+pydantic
+
+# LLM usage
+langchain-ollama
+langchain_mistralai
+
+# Embeddings
+scipy
+sentence-transformers
+
+# SPARQL querying
+rdflib
+SPARQLWrapper

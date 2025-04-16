@@ -4,8 +4,8 @@
         "ontology": "http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl",
         "links": "kb_links/dbpedia_2016_10.json"
     },
-    "bestiary": {
-        "links": "kb_links/bestiary.json"
+    "beastiary": {
+        "links": "kb_links/beastiary.json"
     },
     "DBpedia v04.16": {
         "url": "https://downloads.dbpedia.org/wiki-archive/dbpedia-version-2016-04.html",
