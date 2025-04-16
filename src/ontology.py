@@ -7,6 +7,7 @@ import SPARQLWrapper
 import rdflib
 
 from . import caching
+from .structured_logger import get_context
 
 RDFProperty = Union[str, list[tuple[str, 'RDFProperty']]]
 CACHE_DIR = 'src/ontology'
@@ -34,11 +35,20 @@ class Ontology:
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
         )
 
-        logging.info("[SPARQL] {}".format(query))
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
 
         ret = sparql.queryAndConvert()
+
+        get_context().log_operation(
+            level='DEBUG',
+            message='Running SPARQL query: {}'.format(query),
+            operation='run_sparql',
+            data={
+                'query': query,
+                'result': ret,
+            }
+        )
 
         if 'boolean' in ret:
             return ret['boolean']

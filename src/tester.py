@@ -27,9 +27,9 @@ def run_test(args):
             ontology = Ontology(args.sparql_server, ds.sparql_endpoint)
 
         for translator in all_translators:
-            with logger.context("({}) DATASET: {}".format(translator, ds)) as ctxt:
+            with logger.context("({}) DATASET: {}".format(translator, ds.name)) as ctxt:
                 if translator.model.model_name not in args.models:
-                    logging.debug("({}) SKIPPING, model not selected".format(translator))
+                    logging.debug("SKIPPING, model not selected")
                     continue
 
                 if ontology:
@@ -45,16 +45,34 @@ def run_test(args):
                     if sample_size is not None and dataset_counter > sample_size:
                         logging.debug('Closing dataset after {} elements tested'.format(sample_size))
 
-                    logging.info("({}) INPUT: {}".format(translator, question.question))
+                    ctxt.log_operation(
+                        level='INFO',
+                        message='Input: {}'.format(question.question),
+                        operation='input_question',
+                        data=question.question,
+                    )
 
                     try:
                         if ontology:
                             expected_result = ontology.run_query(question.answer)
-                            logging.info("({}) EXPECTED RESULT: {}".format(translator, expected_result))
+                            ctxt.log_operation(
+                                level='INFO',
+                                message='Expected query result: {}'.format(expected_result),
+                                operation='expected_result',
+                                data=expected_result,
+                            )
+                        else:
+                            expected_result = None
 
                         result = translator.translate(question.question)
 
-                        logging.info("({}) RESULT query: {}".format(translator, result))
+                        ctxt.log_operation(
+                            level='INFO',
+                            message='Translated query: {}'.format(result),
+                            operation='translated_query',
+                            data=result,
+                        )
+
                         if isinstance(result, CodeBlock):
                             sparql_code_blocks = [result]
                         else:
@@ -65,12 +83,65 @@ def run_test(args):
                             ]
 
                         if ontology:
-                            logging.info("({}) TESTING query: {}".format(translator, sparql_code_blocks[-1]))
+                            logging.info("TESTING query: {}".format(sparql_code_blocks[-1]))
                             translator_result = ontology.run_query(sparql_code_blocks[-1].content)
-                            logging.info("({}) TRANSLATOR RESULT: {}".format(translator, translator_result))
+                            ctxt.log_operation(
+                                level='INFO',
+                                message='Translated query result: {}'.format(translator_result),
+                                operation='translated_query_result',
+                                data=translator_result,
+                            )
+
+                            ctxt.log_operation(
+                                level='INFO',
+                                message="Test result: {}".format(translator_result == expected_result),
+                                operation='test_result',
+                                data={
+                                    'input': question.question,
+                                    'expected_query': question.answer,
+                                    'expected_result': expected_result,
+                                    'found_answer': result,
+                                    'found_result': translator_result,
+                                    'result': translator_result == expected_result,
+                                }
+                            )
+                        else:
+                            ctxt.log_operation(
+                                level='INFO',
+                                message="Test result: -unknown-",
+                                operation='test_result',
+                                data={
+                                    'input': question.question,
+                                    'expected_query': question.answer,
+                                    'found_answer': result,
+                                    'result': None,
+                                }
+                            )
 
                     except KeyboardInterrupt:
                         logging.fatal("Stopping due to Keyboard Interrupt")
+                        ctxt.log_operation(
+                            level='INFO',
+                            message="Test result: cancelled",
+                            operation='test_result',
+                            data={
+                                'input': question.question,
+                                'expected_query': question.answer,
+                                'expected_result': expected_result,
+                                'result': 'cancelled',
+                            }
+                        )
                         raise
                     except:
-                        logging.exception("({}) EXCEPTION".format(translator))
+                        logging.exception("EXCEPTION".format(translator))
+                        ctxt.log_operation(
+                            level='INFO',
+                            message="Test result: error",
+                            operation='test_result',
+                            data={
+                                'input': question.question,
+                                'expected_query': question.answer,
+                                'expected_result': expected_result,
+                                'result': 'error',
+                            }
+                        )
