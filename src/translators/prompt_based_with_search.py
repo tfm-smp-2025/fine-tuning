@@ -21,7 +21,8 @@ from . import text_embeddings
 from .types import LLMModel
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
-from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value
+from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value, deduplicate
+from ..structured_logger import get_context
 
 
 class Entity(BaseModel):
@@ -57,7 +58,14 @@ class PromptWithSearchTranslator:
 
         # 2. Map entities to potential classes
         entity_mapping = {}
-        classes_on_kg = self.ontology.get_classes_in_kg()
+        classes_on_kg = deduplicate(self.ontology.get_classes_in_kg())
+        classes_are_types = len(classes_on_kg) == 0
+        classes_on_kg = deduplicate([
+                type['type']['value']
+                for type in self.ontology.get_types_in_kg()
+                if ':' in type['type']['value']
+            ])
+
         cleaned_classes = [
             url_to_value(_class)
             for _class in classes_on_kg
@@ -154,10 +162,16 @@ class PromptWithSearchTranslator:
                     continue
 
                 # Find relations
-                c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
+                if classes_are_types:
+                    c1_to_c2 = self.ontology.find_relations_between_type_objects(c1, c2)
+                else:
+                    c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
                 class_relations[(c1, c2)] = c1_to_c2
 
-                c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
+                if classes_are_types:
+                    c2_to_c1 = self.ontology.find_relations_between_type_objects(c2, c1)
+                else:
+                    c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
                 class_relations[(c2, c1)] = c2_to_c1
 
         logging.info("Class relations: {}".format(class_relations))
@@ -212,7 +226,26 @@ Given that the entities being referenced are:
 
         logging.info("Query for LLM: {}".format(query_for_llm))
 
+        get_context().log_operation(
+            level='INFO',
+            message='Query LLM: {}'.format(query_for_llm),
+            operation='query_llm_in',
+            data={
+                'type': 'generate_sparql_query',
+                'input': query_for_llm,
+            }
+        )
         result = self.model.invoke(messages + [query_for_llm])
+        get_context().log_operation(
+            level='INFO',
+            message='LLM response: {}'.format(result),
+            operation='query_llm',
+            data={
+                'type': 'generate_sparql_query',
+                'input': query_for_llm,
+                'output': result,
+            }
+        )
 
         logging.info("Result: {}".format(result))
         code_blocks = extract_code_blocks(result)
@@ -244,8 +277,28 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
     "entityN"
 ]
 ```""")
-        logging.debug("Query for LLM: {}".format(query_for_llm))
+
+        get_context().log_operation(
+            level='INFO',
+            message='Query LLM: {}'.format(query_for_llm),
+            operation='query_llm_in',
+            data={
+                'type': 'get_entities_in_query',
+                'input': query_for_llm,
+            }
+        )
         result = self.model.invoke([query_for_llm])
+        get_context().log_operation(
+            level='INFO',
+            message='LLM response: {}'.format(result),
+            operation='query_llm',
+            data={
+                'type': 'get_entities_in_query',
+                'input': query_for_llm,
+                'output': result,
+            }
+        )
+
         code_blocks = extract_code_blocks(result)
         return [
             query_for_llm, result,
@@ -283,9 +336,26 @@ Format the result as JSON, for example:
     ]
 }}
 ```''')
-        print("Query:", query_for_llm)
+        get_context().log_operation(
+            level='INFO',
+            message='Query LLM: {}'.format(query_for_llm),
+            operation='query_llm_in',
+            data={
+                'type': 'split_singular_and_plural',
+                'input': query_for_llm,
+            }
+        )
         result = self.model.invoke(messages + [query_for_llm])
-        print("Result:", result)
+        get_context().log_operation(
+            level='INFO',
+            message='LLM response: {}'.format(result),
+            operation='query_llm',
+            data={
+                'type': 'split_singular_and_plural',
+                'input': query_for_llm,
+                'output': result,
+            }
+        )
 
         json_result = json.loads([
             cb

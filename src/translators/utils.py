@@ -1,6 +1,8 @@
 import collections
 import re
 
+from ..structured_logger import get_context
+
 def deindent_text(text: str) -> str:
     """
     Given a block of text removes the indentation that is common to all non-empty lines.
@@ -19,18 +21,28 @@ def deindent_text(text: str) -> str:
 
 CodeBlock = collections.namedtuple('CodeBlock', ('language', 'content'))
 CODE_BLOCK_RE = re.compile(
-    r'^```([^\n]*)\n((.|\n)*?)^```$',
+    r'^```([^\n]*)\s*\n((.|\n)*?)^```\s*$',
     re.DOTALL | re.MULTILINE
 )
 
 def extract_code_blocks(text: str) -> list[CodeBlock]:
-    print(f"TXT: {text}")
     result = []
     for block in CODE_BLOCK_RE.findall(text):
-        print(f"BLOCK: {block}")
         result.append(CodeBlock(language=block[0], content=block[1]))
+    get_context().log_operation(
+        level='DEBUG',
+        message='',
+        operation='extract_code_blocks',
+        data={
+            'input': text,
+            'blocks': result,
+        }
+    )
 
     return result
 
 def url_to_value(url: str) -> str:
     return url.split('#')[-1].split('/')[-1]
+
+def deduplicate(l: list[str]) -> list[str]:
+    return list(set(l))

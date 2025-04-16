@@ -29,6 +29,7 @@ class Ontology:
     def __init__(self, sparql_server, sparql_endpoint):
         self.sparql_server = sparql_server
         self.sparql_endpoint = sparql_endpoint
+        self.class_list_cache = None
 
     def run_query(self, query):
         sparql = SPARQLWrapper.SPARQLWrapper(
@@ -132,23 +133,42 @@ class Ontology:
                 yield (prop['prop']['value'], subresults)
 
     def get_classes_in_kg(self):
-        res = self.run_query('''
-    SELECT DISTINCT ?class
-    WHERE {
-    ?class a <http://www.w3.org/2002/07/owl#Class>
-    }
+        if self.class_list_cache is None:
+            res = self.run_query('''
+        SELECT DISTINCT ?class
+        WHERE {
+        ?class a <http://www.w3.org/2002/07/owl#Class>
+        }
+            ''')
+            self.class_list_cache = [
+                _class['class']['value']
+                for _class in res
+                if ':' in _class['class']['value']
+            ]
+        return list(self.class_list_cache)
+
+    def get_types_in_kg(self):
+        cache_key = self.sparql_endpoint + '-types'
+        if caching.in_cache(CACHE_DIR, cache_key):
+            return caching.get_from_cache(CACHE_DIR, cache_key)
+
+        result = self.run_query('''
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+        SELECT DISTINCT ?type
+        WHERE {
+            [] rdf:type ?type
+            FILTER (!strstarts(str(?type), "http://dbpedia.org/class/yago/Wikicat")) # Skip internal DBPedia listings
+        }
         ''')
-        return [
-            _class['class']['value']
-            for _class in res
-            if ':' in _class['class']['value']
-        ]
+        caching.put_in_cache(CACHE_DIR, cache_key, result)
+        return result
 
     def find_instances_of(self, _class):
         res = self.run_query(f'''
     SELECT DISTINCT ?value
     WHERE {{
-    ?value a <{_class}>
+        ?value a <{_class}>
     }}
         ''')
         return [
@@ -161,9 +181,9 @@ class Ontology:
         res = self.run_query(f'''
     SELECT DISTINCT ?pred
     WHERE {{
-    ?o1 a <{from_class}> .
-    ?o2 a <{to_class}> .
-    ?o1 ?pred ?o2 .
+        ?o1 rdf:type <{from_class}> .
+        ?o2 rdf:type <{to_class}> .
+        ?o1 ?pred ?o2 .
     }}
         ''')
         return [
@@ -181,15 +201,7 @@ class Ontology:
         classes = self.get_classes_in_kg()
 
         print("\r\x1b[0K Reading types...", end='\r', flush=True)
-        types = self.run_query('''
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-
-    SELECT DISTINCT ?type
-    WHERE {
-        [] rdf:type ?type
-        FILTER (!strstarts(str(?type), "http://dbpedia.org/class/yago/Wikicat")) # Skip internal DBPedia listings
-    }
-    ''')
+        types = self.get_types_in_kg()
 
         print("\r\x1b[0K Reading annotation properties...", end='\r', flush=True)
         annotation_properties = self.run_query('''
