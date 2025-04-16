@@ -7,6 +7,9 @@ import traceback
 
 from typing import Optional, Union
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOGGING_DIR = os.path.join(ROOT_DIR, 'experiment-viewer', 'logs')
+
 class StructuredLoggerContext:
     def __init__(self, parent: 'StructuredLogger', context_name=None):
         self.name = context_name
@@ -74,7 +77,10 @@ class StructuredLoggerContext:
 
 class StructuredLogger:
     def __init__(self):
-        self.output_path = os.path.abspath("log-" + str(datetime.datetime.now()) + ".jsonl")
+        self.output_path = os.path.join(
+            LOGGING_DIR,
+            "log-" + str(datetime.datetime.now()) + ".jsonl"
+        )
         self.output = None
         self.info("Starting operation")
 

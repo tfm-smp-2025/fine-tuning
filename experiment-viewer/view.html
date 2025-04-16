@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>Experiment viewer</title>
+    </head>
+    <body>
+       <h1><a href='index.html'>Index</a> &gt; Result</h1>
+       <table id="results-table">
+          <tr class="header">
+            <th>Time</th><th>Message</th><th>Operation</th>
+          </tr>
+       </table>
+    </body>
+
+    <script>
+        async function poll_experiment_data() {
+            const path = window.location.search.match('[?&]exp=([^&]+)')[1];
+            const lines = (await (await fetch(path)).text()).split('\n');
+            return lines;
+        }
+
+        function pad2z(num) {
+            let str = num + '';
+            while (str.length < 2) {
+                str = '0' + str;
+            }
+            return str;
+        }
+
+        async function update_experiment_data() {
+            const lines = await poll_experiment_data();
+            const table = document.getElementById('results-table');
+            for (let tr of table.querySelectorAll('tr')) {
+                if (!tr.classList.contains('header')) {
+                    table.removeChild(tr);
+                }
+            }
+
+            for (const line of lines) {
+                if (line.trim().length == 0) {
+                    continue;
+                }
+
+                const decoded = JSON.parse(line);
+                const date = new Date(decoded.time);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="time"></td><td class="message"></td><td class="operation"></td>`;
+                const trtime = tr.querySelector('.time');
+                trtime.innerHTML = `<time>
+                    ${date.getFullYear()}-${pad2z(date.getMonth())}-${pad2z(date.getDay())} ${pad2z(date.getHours())}:${pad2z(date.getMinutes())}:${pad2z(date.getSeconds())}
+                </time>`;
+                
+                // tr.querySelector('.message').textContent = decoded.message;
+                tr.querySelector('.operation').textContent = decoded.operation;
+
+                table.appendChild(tr);
+            }
+        }
+        
+        update_experiment_data().then(() => console.log('Load complete'));
+    </script>
+</html>
