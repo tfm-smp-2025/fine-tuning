@@ -1,0 +1,41 @@
+table {
+    table-layout: auto;
+    width: 100%;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.3);
+    border-collapse: collapse;
+    border-radius: 2px;
+}
+
+th, td {
+    border: 1px solid rgb(160 160 160);
+}
+
+th.time, td.time {
+    width: 25ex;
+    text-align: center;
+}
+
+td {
+    max-width: 100ex;
+    max-height: 40ex;
+}
+
+td details pre {
+    overflow: auto;
+    background-color: #eee;
+    padding: 0.5ex;
+}
+
+.operation_test_result.result_error {
+    background-color: #faa;
+}
+
+.operation_test_result.result_cancelled {
+    background-color: #aaa;
+}
+
+.message_str {
+    background-color: #ddd;
+    padding: 0 0.25ex;
+    font-family: monospace;
+  }
