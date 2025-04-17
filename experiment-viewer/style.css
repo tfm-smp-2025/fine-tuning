@@ -26,11 +26,11 @@ td details pre {
     padding: 0.5ex;
 }
 
-.operation_test_result.result_error {
+.result_error {
     background-color: #faa;
 }
 
-.operation_test_result.result_cancelled {
+.result_cancelled {
     background-color: #aaa;
 }
 

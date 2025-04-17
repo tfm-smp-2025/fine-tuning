@@ -5,7 +5,7 @@
         <link href="style.css" rel="stylesheet"/>
     </head>
     <body>
-        <h1><a href='index.html'>Index</a> &gt; Operations</h1>
+        <h1><a href='index.html'>Index</a> &gt; <a class='results_link'>Results</a> &gt; Operations</h1>
         <div class="searchbar">
             Showing operations: 
             <select id="operation-selector">
@@ -23,6 +23,11 @@
     <script>
         async function poll_experiment_data() {
             const path = window.location.search.match('[?&]exp=([^&]+)')[1];
+
+            if (path) {
+                document.querySelector('.results_link').href = `results.html?exp=${path}`;
+            }
+
             const lines = (await (await fetch(path)).text()).split('\n');
             return lines;
         }
@@ -44,16 +49,30 @@
                 }
             }
 
+            const context_match = window.location.search.match('[?&]ctxt=([^&]+)');
+            const context = context_match ? context_match[1] : null;
+            console.log("Context:", context);
             const selected_operation = document.getElementById('operation-selector').value;
             const known_operations = {};
 
             let last_exception = null;
+
+            let in_context = context == null; // If we're given a context start outside of it
             for (const line of lines) {
                 if (line.trim().length == 0) {
                     continue;
                 }
 
                 const decoded = JSON.parse(line);
+                if (decoded.operation == 'enter_context') {
+                    if (context) {
+                        in_context = decoded.data.parameters.id == context;
+                    }
+                }
+
+                if (!in_context) {
+                    continue;
+                }
 
                 if (decoded.level == 'exception' || decoded.message == 'EXCEPTION') {
                     last_exception = decoded;

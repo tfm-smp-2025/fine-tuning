@@ -4,6 +4,7 @@ import logging
 import time
 import json
 import traceback
+import uuid
 
 from typing import Optional, Union
 
@@ -15,7 +16,10 @@ class StructuredLoggerContext:
         self.name = context_name
         self.parent = parent
         self.root_logger = logging.getLogger()
-        self.context_params = context_params
+        self.context_params = dict(
+            **context_params,
+            id=str(uuid.uuid4())
+        )
         self.previous_handler = None
         self.level = 0
 

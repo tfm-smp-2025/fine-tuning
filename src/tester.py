@@ -27,27 +27,28 @@ def run_test(args):
             ontology = Ontology(args.sparql_server, ds.sparql_endpoint)
 
         for translator in all_translators:
-            with logger.context(
-                "({}) DATASET: {}".format(translator, ds.name),
-                { 
-                    "translator": {
-                        "model_name": translator.model.model_name,
-                    },
-                    "dataset": {
-                        "name": ds.name,
-                        "sparql_endpoint": ontology.sparql_endpoint if ontology is not None else None,
+            if translator.model.model_name not in args.models:
+                logging.debug("SKIPPING, model not selected")
+                continue
+
+            if ontology:
+                translator.set_ontology(ontology)
+
+            dataset_counter = 0
+            for question in tqdm.tqdm(ds.get_test_data()):
+                with logger.context(
+                    "({}) DATASET: {}".format(translator, ds.name),
+                    {
+                        "translator": {
+                            "model_name": translator.model.model_name,
+                        },
+                        "question": question,
+                        "dataset": {
+                            "name": ds.name,
+                            "sparql_endpoint": ontology.sparql_endpoint if ontology is not None else None,
+                        }
                     }
-                }
-            ) as ctxt:
-                if translator.model.model_name not in args.models:
-                    logging.debug("SKIPPING, model not selected")
-                    continue
-
-                if ontology:
-                    translator.set_ontology(ontology)
-
-                dataset_counter = 0
-                for question in tqdm.tqdm(ds.get_test_data()):
+                ) as ctxt:
                     if question.lang not in ('en', None):
                         logging.debug('SKIPPING question in non-english: {}'.format(question.lang))
                         continue

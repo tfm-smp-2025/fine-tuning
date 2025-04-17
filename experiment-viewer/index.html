@@ -56,7 +56,7 @@
 
             for (const exp of experiments) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td><a href="view.html?exp=logs/${encodeURI(exp.filename)}">${exp.filename}</></td><td><time>${exp.year}-${pad2z(exp.month)}-${pad2z(exp.day)} ${pad2z(exp.hour)}:${pad2z(exp.minute)}:${pad2z(exp.second)}</time></td>`;
+                tr.innerHTML = `<td><a href="results.html?exp=logs/${encodeURI(exp.filename)}">${exp.filename}</></td><td><time>${exp.year}-${pad2z(exp.month)}-${pad2z(exp.day)} ${pad2z(exp.hour)}:${pad2z(exp.minute)}:${pad2z(exp.second)}</time></td>`;
 
                 table.appendChild(tr);
             }
