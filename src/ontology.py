@@ -1,6 +1,7 @@
 import string
 import sys
 import logging
+import traceback
 from typing import Any, TypedDict, Union
 
 import SPARQLWrapper
@@ -39,7 +40,20 @@ class Ontology:
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
 
-        ret = sparql.queryAndConvert()
+        try:
+            ret = sparql.queryAndConvert()
+        except Exception:
+            get_context().log_operation(
+                level='ERROR',
+                message='Error SPARQL query: {}'.format(query),
+                operation='run_sparql',
+                data={
+                    'query': query,
+                },
+                exception = traceback.format_exc(),
+            )
+            raise
+
 
         get_context().log_operation(
             level='DEBUG',
