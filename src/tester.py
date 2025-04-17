@@ -27,7 +27,18 @@ def run_test(args):
             ontology = Ontology(args.sparql_server, ds.sparql_endpoint)
 
         for translator in all_translators:
-            with logger.context("({}) DATASET: {}".format(translator, ds.name)) as ctxt:
+            with logger.context(
+                "({}) DATASET: {}".format(translator, ds.name),
+                { 
+                    "translator": {
+                        "model_name": translator.model.model_name,
+                    },
+                    "dataset": {
+                        "name": ds.name,
+                        "sparql_endpoint": ontology.sparql_endpoint if ontology is not None else None,
+                    }
+                }
+            ) as ctxt:
                 if translator.model.model_name not in args.models:
                     logging.debug("SKIPPING, model not selected")
                     continue

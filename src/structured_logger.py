@@ -11,10 +11,11 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGGING_DIR = os.path.join(ROOT_DIR, 'experiment-viewer', 'logs')
 
 class StructuredLoggerContext:
-    def __init__(self, parent: 'StructuredLogger', context_name=None):
+    def __init__(self, parent: 'StructuredLogger', context_name=None, context_params={}):
         self.name = context_name
         self.parent = parent
         self.root_logger = logging.getLogger()
+        self.context_params = context_params
         self.previous_handler = None
         self.level = 0
 
@@ -26,12 +27,28 @@ class StructuredLoggerContext:
             self.root_logger.removeHandler(self.previous_handler)
 
         self.root_logger.addHandler(self)
-        logging.info("Entering context")
+        self.log_operation(
+            "INFO",
+            "Entering context: {}".format(self.name),
+            operation='enter_context',
+            data={
+                "parent": self.parent.name,
+                "parameters": self.context_params,
+            }
+        )
         return self
 
     def __exit__(self, exc_type, exc_val, tb):
         # Restore handler
-        logging.info("Leaving context")
+        self.log_operation(
+            "INFO",
+            "Leaving context: {}".format(self.name),
+            operation='leave_context',
+            data={
+                "parent": self.parent.name,
+                "parameters": self.context_params,
+            }
+        )
         self.root_logger.removeHandler(self)
         if self.previous_handler is not None:
             self.root_logger.addHandler(self.previous_handler)
@@ -81,11 +98,16 @@ class StructuredLogger:
             LOGGING_DIR,
             "log-" + str(datetime.datetime.now()) + ".jsonl"
         )
+        self.name = 'Root context'
         self.output = None
         self.info("Starting operation")
 
-    def context(self, context_name=None):
-        return StructuredLoggerContext(parent=self, context_name=context_name)
+    def context(self, context_name=None, context_params={}):
+        return StructuredLoggerContext(
+            parent=self,
+            context_name=context_name,
+            context_params=context_params,
+        )
 
     def debug(self, message, context=None):
         self._log('debug', message, operation='log', context=context)
