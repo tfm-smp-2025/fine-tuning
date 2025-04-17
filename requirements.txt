@@ -8,6 +8,9 @@ pydantic
 langchain-ollama
 langchain_mistralai
 
+# NLP
+spacy
+
 # Embeddings
 scipy
 sentence-transformers

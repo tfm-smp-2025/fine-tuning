@@ -17,7 +17,7 @@ from pydantic import BaseModel
 
 from ..ontology import property_graph_to_rdf, Ontology
 
-from . import text_embeddings
+from . import text_embeddings, nlp_utils
 from .types import LLMModel
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
@@ -309,70 +309,25 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         ]
 
     def _split_singular_and_plural(self, messages, entity_mapping, nl_query):
-        query_for_llm = deindent_text(
-            f'''
-These are the classes that can be used to solve this query:
-
-```json
-{json.dumps(list(entity_mapping.keys()), indent=4)}
-```
-
-Given the following natural language query:
-
-> {nl_query}
-
-Classify those entities in two groups, `singular` and `plural`.
-
-Format the result as JSON, for example:
-```json
-{{
-    "singular": [
-        "tree",
-        ...
-    ],
-    "plural": [
-        "rocks",
-        ...
-    ]
-}}
-```''')
-        get_context().log_operation(
-            level='INFO',
-            message='Query LLM: {}'.format(query_for_llm),
-            operation='query_llm_in',
-            data={
-                'type': 'split_singular_and_plural',
-                'input': query_for_llm,
-            }
-        )
-        result = self.model.invoke(messages + [query_for_llm])
-        get_context().log_operation(
-            level='INFO',
-            message='LLM response: {}'.format(result),
-            operation='query_llm',
-            data={
-                'type': 'split_singular_and_plural',
-                'input': query_for_llm,
-                'output': result,
-            }
-        )
-
-        json_result = json.loads([
-            cb
-            for cb in extract_code_blocks(result)
-            if cb.language=='json'
-        ][0].content)
-
-        expected_count = len(entity_mapping.keys())
-
-        assert expected_count == len(json_result['singular']) + len(json_result['plural']), \
-            'Expected {} elements (like input), found {}: {}'.format(
-                expected_count,
-                len(json_result['singular']) + len(json_result['plural']),
-                json_result,
+        singulars = []
+        plurals = []
+        for item in entity_mapping.keys():
+            sing = nlp_utils.is_singular(item)    
+            get_context().log_operation(
+                level='INFO',
+                message='Checking if "{}" is singular'.format(item),
+                operation='checking_singular_plural',
+                data={
+                    'input': item,
+                    'singular': sing,
+                }
             )
+            if sing:
+                singulars.append(item)
+            else:
+                plurals.append(item)
 
-        return messages + [query_for_llm, result], json_result
+        return messages, {'singular': singulars, 'plural': plurals}
 
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
