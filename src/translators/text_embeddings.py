@@ -13,7 +13,7 @@ model_name = "BAAI/bge-large-en-v1.5"
 
 RankedTerm = collections.namedtuple('RankedTerm', ('text', 'original_index', 'distance'))
 
-CACHE_DIR = 'src/text_embeddings'
+CACHE_DIR = 'src/text_embeddings/' + model_name
 
 def rank_by_similarity(reference: str, texts: list[str]) -> list[RankedTerm]:
     """
