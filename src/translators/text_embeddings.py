@@ -84,8 +84,12 @@ def rank_by_similarity(reference: str, texts: list[str]) -> list[RankedTerm]:
 
 
 def cutoff_on_max_difference(terms: list[RankedTerm]) -> list[RankedTerm]:
+    if len(terms) in (0, 1):
+        return terms
+
     distance_differences_proportional_max = None
     distance_differences_proportional_idx = None
+
     for idx in range(len(terms) - 1):
         distance_difference = terms[idx + 1].distance - terms[idx].distance
         if distance_difference == 0:
