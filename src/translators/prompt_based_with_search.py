@@ -109,32 +109,37 @@ class PromptWithSearchTranslator:
         singular_mapping = {}
         for _class in singulars:
             mapping = entity_mapping[_class]
-            if 'alternatives' in mapping:
-                raise NotImplemented('Alternatives in entity mapping')
+            cutoffs = []
+            if 'alternatives' not in mapping:
+                alts = [mapping]
+            else:
+                alts = entity_mapping[_class]['alternatives']
 
-            print("Checking instances of:", mapping)
+            for alt in alts:
+                print("Checking instances of:", alt)
 
-            listing = self.ontology.find_instances_of(mapping['url'])
-            cleaned_listing = [
-                url_to_value(value)
-                for value in listing
-            ]
-            ranking = text_embeddings.rank_by_similarity(
-                _class,
-                cleaned_listing,
-            )
-            cutoff = text_embeddings.cutoff_on_max_difference(
-                ranking,
-            )
-            assert len(cutoff) > 0
+                listing = self.ontology.find_instances_of(alt['url'])
+                cleaned_listing = [
+                    url_to_value(value)
+                    for value in listing
+                ]
+                ranking = text_embeddings.rank_by_similarity(
+                    _class,
+                    cleaned_listing,
+                )
+                cutoff = text_embeddings.cutoff_on_max_difference(
+                    ranking,
+                )
+                assert len(cutoff) > 0
+                cutoffs.extend(cutoff)
 
-            logging.info("Found {} close value for class “{}”: “{}”".format(
-                len(cutoff), _class, cutoff))
+                logging.info("Found {} close value for class “{}”: “{}”".format(
+                    len(cutoff), _class, cutoff))
 
-            if len(cutoff) == 1:
+            if len(cutoffs) == 1:
                 singular_mapping[_class] = {
-                    'url': listing[cutoff[0].original_index],
-                    'name': cutoff[0].text,
+                    'url': listing[cutoffs[0].original_index],
+                    'name': cutoffs[0].text,
                 }
             else:
                 # TODO: Query LLM?
@@ -143,7 +148,7 @@ class PromptWithSearchTranslator:
                         'url': listing[alt.original_index],
                         'name': alt.text,
                     }
-                    for alt in cutoff
+                    for alt in cutoffs
                 ]}
         
         # 4. Find relations
