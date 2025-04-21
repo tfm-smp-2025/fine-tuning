@@ -119,6 +119,8 @@ class PromptWithSearchTranslator:
                 print("Checking instances of:", alt)
 
                 listing = self.ontology.find_instances_of(alt['url'])
+                base_index = len(full_listing)
+                full_listing.extend(listing)
                 cleaned_listing = [
                     url_to_value(value)
                     for value in listing
@@ -131,21 +133,30 @@ class PromptWithSearchTranslator:
                     ranking,
                 )
                 assert len(cutoff) > 0
-                cutoffs.extend(cutoff)
+                cutoffs.extend([
+                        text_embeddings.RankedTerm(
+                            text=term.text,
+                            original_index=base_index + term.original_index,
+                            distance=term.distance
+                        )
+                        for term in cutoff
+                    ]
+                )
 
                 logging.info("Found {} close value for class “{}”: “{}”".format(
                     len(cutoff), _class, cutoff))
+                del listing
 
             if len(cutoffs) == 1:
                 singular_mapping[_class] = {
-                    'url': listing[cutoffs[0].original_index],
+                    'url': full_listing[cutoffs[0].original_index],
                     'name': cutoffs[0].text,
                 }
             else:
                 # TODO: Query LLM?
                 singular_mapping[_class] = { 'alternatives': [
                     {
-                        'url': listing[alt.original_index],
+                        'url': full_listing[alt.original_index],
                         'name': alt.text,
                     }
                     for alt in cutoffs
@@ -155,29 +166,41 @@ class PromptWithSearchTranslator:
         logging.info("Checking relations...")
         class_combinations = set()
         class_relations = {}
-        for k1 in entity_mapping.keys():
-            for k2 in entity_mapping.keys():
-                c1 = entity_mapping[k1]['url']
-                c2 = entity_mapping[k2]['url']
-
-                if c1 == c2:
-                    continue
-
-                if (c1, c2) in class_combinations:
-                    continue
-
-                # Find relations
-                if classes_are_types:
-                    c1_to_c2 = self.ontology.find_relations_between_type_objects(c1, c2)
+        for k1_entities in tqdm.tqdm(entity_mapping.keys(), desc='Checking relations'):
+            for k2_entities in entity_mapping.keys():
+                if 'alternatives' not in entity_mapping[k1_entities]:
+                    k1_alts = [entity_mapping[k1_entities]]
                 else:
-                    c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
-                class_relations[(c1, c2)] = c1_to_c2
+                    k1_alts = entity_mapping[k1_entities]['alternatives']
 
-                if classes_are_types:
-                    c2_to_c1 = self.ontology.find_relations_between_type_objects(c2, c1)
+                if 'alternatives' not in entity_mapping[k2_entities]:
+                    k2_alts = [entity_mapping[k2_entities]]
                 else:
-                    c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
-                class_relations[(c2, c1)] = c2_to_c1
+                    k2_alts = entity_mapping[k2_entities]['alternatives']
+
+                for k1 in k1_alts:
+                    for k2 in k2_alts:
+                        c1 = k1['url']
+                        c2 = k2['url']
+
+                        if c1 == c2:
+                            continue
+
+                        if (c1, c2) in class_combinations:
+                            continue
+
+                        # Find relations
+                        if classes_are_types:
+                            c1_to_c2 = self.ontology.find_relations_between_type_objects(c1, c2)
+                        else:
+                            c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
+                        class_relations[(c1, c2)] = c1_to_c2
+
+                        if classes_are_types:
+                            c2_to_c1 = self.ontology.find_relations_between_type_objects(c2, c1)
+                        else:
+                            c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
+                        class_relations[(c2, c1)] = c2_to_c1
 
         logging.info("Class relations: {}".format(class_relations))
 
@@ -214,6 +237,7 @@ Given that the entities being referenced are:
         else:
             query_for_llm += '\nAnd knowing that the following classes are related:\n'
 
+            known_combinations = set()
             for classes, relations in class_relations.items():
                 c1, c2 = classes
 
@@ -224,7 +248,10 @@ Given that the entities being referenced are:
                 else:
                     via = '", "'.format(relations[:-1]) + '" and "' + relations[-1] + '"'
 
-                query_for_llm += f'- ":{url_to_value(c1)}" to ":{url_to_value(c2)}" via "{via}"'
+                combination = (url_to_value(c1), url_to_value(c2), via)
+                if combination not in known_combinations:
+                    known_combinations.add(combination)
+                    query_for_llm += f'- ":{url_to_value(c1)}" to ":{url_to_value(c2)}" via "{via}"\n'
 
         query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConstruct a SPARQL to solve it on a single query, keep it simple:\n\n"
         query_for_llm += '> ' + nl_query
