@@ -114,7 +114,18 @@
                 show_context();
             }
         }
-        
+
         update_results_data().then(() => console.log('Load complete'));
+
+        const prepare_update = () => {
+            setTimeout(
+                () => {
+                    update_results_data().then(() => console.log('Update complete'));
+                    prepare_update();
+                },
+                30 * 1000, // Every 30s
+            )
+        };
+        prepare_update();
     </script>
 </html>

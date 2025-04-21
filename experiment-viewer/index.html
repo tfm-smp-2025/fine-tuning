@@ -61,7 +61,18 @@
                 table.appendChild(tr);
             }
         }
-        
+
         update_experiment_index();
+
+        const prepare_update = () => {
+            setTimeout(
+                () => {
+                    update_experiment_index().then(() => console.log('Update complete'));
+                    prepare_update();
+                },
+                5 * 1000, // Every 5s
+            )
+        };
+        prepare_update();
     </script>
 </html>
