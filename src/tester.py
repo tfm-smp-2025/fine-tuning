@@ -64,6 +64,7 @@ def run_test(args):
                         data=question.question,
                     )
 
+                    expected_result = None
                     try:
                         if ontology:
                             expected_result = ontology.run_query(question.answer)
