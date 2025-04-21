@@ -34,7 +34,6 @@ class Ontology:
     def __init__(self, sparql_server, sparql_endpoint):
         self.sparql_server = sparql_server
         self.sparql_endpoint = sparql_endpoint
-        self.class_list_cache = None
 
     def run_query(self, query, quiet=False):
         sparql = SPARQLWrapper.SPARQLWrapper(
@@ -240,19 +239,23 @@ class Ontology:
                 yield (prop['prop']['value'], subresults)
 
     def get_classes_in_kg(self):
-        if self.class_list_cache is None:
-            res = self.run_query('''
-        SELECT DISTINCT ?class
-        WHERE {
-        ?class a <http://www.w3.org/2002/07/owl#Class>
-        }
-            ''')
-            self.class_list_cache = [
-                _class['class']['value']
-                for _class in res
-                if ':' in _class['class']['value']
-            ]
-        return list(self.class_list_cache)
+        cache_key = self.sparql_endpoint + '-classes'
+        if caching.in_cache(CACHE_DIR, cache_key):
+            result = caching.get_from_cache(CACHE_DIR, cache_key)
+        else:
+            result = self.run_query('''
+            SELECT DISTINCT ?class
+            WHERE {
+            ?class a <http://www.w3.org/2002/07/owl#Class>
+            }
+                ''')
+            caching.put_in_cache(CACHE_DIR, cache_key, result)
+
+        return [
+            _class['class']['value']
+            for _class in result
+            if ':' in _class['class']['value']
+        ]
 
     def get_types_in_kg(self):
         cache_key = self.sparql_endpoint + '-types'
