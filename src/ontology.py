@@ -305,15 +305,29 @@ class Ontology:
         return result
 
     def find_instances_of(self, _class):
-        res = self.run_query(f'''
-    SELECT DISTINCT ?value
-    WHERE {{
-        ?value a <{_class}>
-    }}
-        ''')
+        cache_key = self.sparql_endpoint + '-instances-of-' + _class
+        if caching.in_cache(CACHE_DIR, cache_key):
+            result = caching.get_from_cache(CACHE_DIR, cache_key)
+        else:
+            result = self.run_query(f'''
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        
+        SELECT DISTINCT ?value
+        WHERE {{
+            {{
+            ?value a <{_class}>
+            }}
+            UNION 
+            {{
+                ?value rdf:type <{_class}>
+            }}
+        }}
+            ''')
+            caching.put_in_cache(CACHE_DIR, cache_key, result)
+
         return [
             value['value']['value']
-            for value in res
+            for value in result
             if ':' in value['value']['value']
         ]
 
