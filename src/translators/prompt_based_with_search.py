@@ -5,8 +5,9 @@ This conversation follows these steps:
 1. Given natural language query, extract the relevant entities.
 2. (Accessing the KG data with word vector embedding distances) find the classes that can be used to resolve each entity.
 3. For each class, find the elements in them that are referred to in the conversation.
-4. (Via KG) find relevant relationships between the classes or instances.
-5. Ask the LLM to generate the SPARQL query.
+4. (Accessing the KG data with word vector embedding distances) find the relations that can be used to resolve each entity.
+5. (Via KG) find relevant relationships between the classes or instances.
+6. Ask the LLM to generate the SPARQL query.
 """
 
 import tqdm
@@ -149,6 +150,15 @@ class PromptWithSearchTranslator:
                     len(cutoff), _class, cutoff))
                 del listing
 
+            # 3.5 Apply cutoff across all alternatives
+            cutoffs_ranking = sorted(cutoffs, key=lambda t: t.distance)
+            prev_cutoffs = cutoffs
+            cutoffs = text_embeddings.cutoff_on_max_difference(
+                cutoffs_ranking,
+            )
+
+            logging.info(f"Reduced cutoffs for class={_class}? {len(cutoffs)} - {len(prev_cutoffs)} = {len(cutoffs) - len(prev_cutoffs)}")
+
             if len(cutoffs) == 1:
                 singular_mapping[_class] = {
                     'url': full_listing[cutoffs[0].original_index],
@@ -163,54 +173,94 @@ class PromptWithSearchTranslator:
                     }
                     for alt in cutoffs
                 ]}
-        
+
         # 4. Find relations
         logging.info("Checking relations...")
+        relation_mapping = {}
+        relations_on_kg = [
+            r['rel']['value']
+            for r in self.ontology.get_relation_types_in_kg()
+        ]
+        cleaned_relations = [
+            url_to_value(relation)
+            for relation in relations_on_kg
+        ]
+        for entity in tqdm.tqdm(entities, desc='Finding potential relations'):
+            relation_ranking = text_embeddings.rank_by_similarity(
+                entity,
+                cleaned_relations,
+            )
+            cutoff = text_embeddings.cutoff_on_max_difference(
+                relation_ranking,
+            )
+            assert len(cutoff) > 0
+
+            logging.info("Found {} close classes for entity “{}”: “{}”".format(
+                len(cutoff), entity, cutoff))
+
+            if len(cutoff) == 1:
+                relation_mapping[entity] = {
+                    'url': relations_on_kg[cutoff[0].original_index],
+                    'name': cutoff[0].text,
+                }
+            else:
+                # TODO: Query LLM?
+                relation_mapping[entity] = { 'alternatives': [
+                    {
+                        'url': relations_on_kg[alt.original_index],
+                        'name': alt.text,
+                    }
+                    for alt in cutoff
+                ]}
+
+
+        # 5. Find relations between classes
+        logging.info("Checking relations between classes...")
         class_combinations = set()
         class_relations = {}
-        for k1_entities in tqdm.tqdm(entity_mapping.keys(), desc='Checking relations'):
-            for k2_entities in entity_mapping.keys():
-                if 'alternatives' not in entity_mapping[k1_entities]:
-                    k1_alts = [entity_mapping[k1_entities]]
-                else:
-                    k1_alts = entity_mapping[k1_entities]['alternatives']
+        # for k1_entities in tqdm.tqdm(entity_mapping.keys(), desc='Checking relations'):
+        #     for k2_entities in entity_mapping.keys():
+        #         if 'alternatives' not in entity_mapping[k1_entities]:
+        #             k1_alts = [entity_mapping[k1_entities]]
+        #         else:
+        #             k1_alts = entity_mapping[k1_entities]['alternatives']
 
-                if 'alternatives' not in entity_mapping[k2_entities]:
-                    k2_alts = [entity_mapping[k2_entities]]
-                else:
-                    k2_alts = entity_mapping[k2_entities]['alternatives']
+        #         if 'alternatives' not in entity_mapping[k2_entities]:
+        #             k2_alts = [entity_mapping[k2_entities]]
+        #         else:
+        #             k2_alts = entity_mapping[k2_entities]['alternatives']
 
-                for k1 in k1_alts:
-                    for k2 in k2_alts:
-                        c1 = k1['url']
-                        c2 = k2['url']
+        #         for k1 in k1_alts:
+        #             for k2 in k2_alts:
+        #                 c1 = k1['url']
+        #                 c2 = k2['url']
 
-                        if c1 == c2:
-                            continue
+        #                 if c1 == c2:
+        #                     continue
 
-                        if (c1, c2) in class_combinations:
-                            continue
+        #                 if (c1, c2) in class_combinations:
+        #                     continue
 
-                        # Find relations
-                        if classes_are_types:
-                            c1_to_c2 = self.ontology.find_relations_between_type_objects(c1, c2)
-                        else:
-                            c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
-                        class_relations[(c1, c2)] = c1_to_c2
+        #                 # Find relations
+        #                 if classes_are_types:
+        #                     c1_to_c2 = self.ontology.find_relations_between_type_objects(c1, c2)
+        #                 else:
+        #                     c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
+        #                 class_relations[(c1, c2)] = c1_to_c2
 
-                        if classes_are_types:
-                            c2_to_c1 = self.ontology.find_relations_between_type_objects(c2, c1)
-                        else:
-                            c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
-                        class_relations[(c2, c1)] = c2_to_c1
+        #                 if classes_are_types:
+        #                     c2_to_c1 = self.ontology.find_relations_between_type_objects(c2, c1)
+        #                 else:
+        #                     c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
+        #                 class_relations[(c2, c1)] = c2_to_c1
 
         logging.info("Class relations: {}".format(class_relations))
 
-        # 5. Generate SPARQL query
+        # 6. Generate SPARQL query
         final_query = self._generate_sparql_query(
             messages,
             nl_query,
-            singular_mapping,
+            mix_mapping(singular_mapping, relation_mapping),
             class_relations,
         )
 
@@ -223,14 +273,14 @@ class PromptWithSearchTranslator:
         self,
         messages,
         nl_query, 
-        singular_mapping,
+        mixed_mapping,
         class_relations,
     ):
         query_for_llm = f'''
 Given that the entities being referenced are:
 
 ```json
-{json.dumps(singular_mapping, indent=4)}
+{json.dumps(mixed_mapping, indent=4)}
 ```
 '''
         if sum([len(relations) for relations in class_relations.values()]) == 0:
@@ -255,17 +305,16 @@ Given that the entities being referenced are:
                     known_combinations.add(combination)
                     query_for_llm += f'- ":{url_to_value(c1)}" to ":{url_to_value(c2)}" via "{via}"\n'
 
-        query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConstruct a SPARQL to solve it on a single query, keep it simple:\n\n"
-        query_for_llm += '> ' + nl_query
+        query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConsider what are the necessary relations to solve this query and what are their directions."
 
-        logging.info("Query for LLM: {}".format(query_for_llm))
+        logging.info("Query for LLM (chain of though 1/2): {}".format(query_for_llm))
 
         get_context().log_operation(
             level='INFO',
             message='Query LLM: {}'.format(query_for_llm),
             operation='query_llm_in',
             data={
-                'type': 'generate_sparql_query',
+                'type': 'generate_sparql_query_cot_1_of_2',
                 'input': query_for_llm,
             }
         )
@@ -275,7 +324,34 @@ Given that the entities being referenced are:
             message='LLM response: {}'.format(result),
             operation='query_llm',
             data={
-                'type': 'generate_sparql_query',
+                'type': 'generate_sparql_query_cot_1_of_2',
+                'input': query_for_llm,
+                'output': result,
+            }
+        )
+
+        messages = messages + [query_for_llm, result]
+
+        query_for_llm = 'Construct a SPARQL to solve it on a single query, keep it simple:\n\n'
+        query_for_llm += f'> {nl_query}'
+
+        get_context().log_operation(
+            level='INFO',
+            message='Query LLM: {}'.format(query_for_llm),
+            operation='query_llm_in',
+            data={
+                'type': 'generate_sparql_query_cot_2_of_2',
+                'input': query_for_llm,
+            }
+        )
+        
+        result = self.model.invoke(messages + [query_for_llm])
+        get_context().log_operation(
+            level='INFO',
+            message='LLM response: {}'.format(result),
+            operation='query_llm',
+            data={
+                'type': 'generate_sparql_query_cot_2_of_2',
                 'input': query_for_llm,
                 'output': result,
             }
@@ -365,6 +441,27 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
 
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
+
+
+def mix_mapping(node_mapping, relation_mapping):
+    mix = {}
+    for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
+        options = {'relations': [], 'nodes': []}
+        if k in node_mapping:
+            if 'alternatives' in node_mapping[k]:
+                options['nodes'] = node_mapping[k]['alternatives']
+            else:
+                options['nodes'] = [node_mapping[k]]
+
+        if k in relation_mapping:
+            if 'alternatives' in relation_mapping[k]:
+                options['relations'] = relation_mapping[k]['alternatives']
+            else:
+                options['relations'] = [relation_mapping[k]]
+
+        mix[k] = options
+
+    return mix
 
 
 translators = [
