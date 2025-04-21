@@ -2,6 +2,7 @@ import collections
 import logging
 
 import numpy
+import tqdm
 from scipy.spatial import distance
 from sentence_transformers import SentenceTransformer
 
@@ -17,35 +18,21 @@ RankedTerm = collections.namedtuple('RankedTerm', ('text', 'original_index', 'di
 CACHE_DIR = 'src/text_embeddings/' + model_name
 MAX_TERMS_ON_CUTOFF = 10
 
-def rank_by_similarity(reference: str, texts: list[str]) -> list[RankedTerm]:
-    """
-    Sort a list of strings by their embedding distance to a `reference` one.ReferenceError
+MODEL = None
 
-    Return a sorted list of tuples (string, original_index, cosine distance).
-    """
-    model = SentenceTransformer(
-        model_name,
-    )
+def _init_model():
+    global MODEL
+    if MODEL is None:
+        MODEL = SentenceTransformer(
+            model_name,
+        )
 
-    get_context().log_operation(
-        level='DEBUG',
-        message='Ranking by similarity {} terms'.format(len(texts)),
-        operation='rank_by_similarity',
-        data={
-            'reference': reference,
-            # 'texts': texts,
-        }
-    )
 
-    ref_embed = model.encode(
-        [reference],
-        # normalize_embeddings=True,
-        show_progress_bar=False,
-    )[0]
-
+def load_text_embeddings(texts: list[str]):
+    _init_model()
     text_embeddings = []
     texts_to_embed = []
-    for text in texts:
+    for text in tqdm.tqdm(texts, desc='Loading cached embeds'):
         if not caching.in_cache(CACHE_DIR, text):
             texts_to_embed.append(text)
             text_embeddings.append(None)
@@ -53,7 +40,7 @@ def rank_by_similarity(reference: str, texts: list[str]) -> list[RankedTerm]:
             text_embeddings.append(numpy.array(caching.get_from_cache(CACHE_DIR, text)))
 
     if len(texts_to_embed) > 0:
-        new_text_embeddings = model.encode(
+        new_text_embeddings = MODEL.encode(
             texts_to_embed,
             # normalize_embeddings=True,
             show_progress_bar=True,
@@ -69,7 +56,40 @@ def rank_by_similarity(reference: str, texts: list[str]) -> list[RankedTerm]:
 
             new_values_idx += 1
 
-    del new_text_embeddings
+    return text_embeddings
+
+def rank_by_similarity(reference: str, texts: list[str], embeddings=None) -> list[RankedTerm]:
+    """
+    Sort a list of strings by their embedding distance to a `reference` one.ReferenceError
+
+    Return a sorted list of tuples (string, original_index, cosine distance).
+    """
+    print("\r Ranking...", end='\r', flush=True)
+    _init_model()
+
+
+    get_context().log_operation(
+        level='DEBUG',
+        message='Ranking by similarity {} terms'.format(len(texts)),
+        operation='rank_by_similarity',
+        data={
+            'reference': reference,
+            # 'texts': texts,
+        }
+    )
+
+    ref_embed = MODEL.encode(
+        [reference],
+        # normalize_embeddings=True,
+        show_progress_bar=False,
+    )[0]
+
+    if embeddings is None:
+        text_embeddings = load_text_embeddings(texts)
+    else:
+        assert len(embeddings) == len(texts)
+        text_embeddings = embeddings
+
     items = []
     for idx, text in enumerate(texts):
         embedding = text_embeddings[idx]

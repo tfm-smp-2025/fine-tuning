@@ -18,7 +18,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from ..ontology import property_graph_to_rdf, Ontology
-
+from .. import class_embeddings_caching
 from . import text_embeddings, nlp_utils
 from .types import LLMModel
 from .ollama_model import all_models as ollama_models
@@ -128,9 +128,21 @@ class PromptWithSearchTranslator:
                     url_to_value(value)
                     for value in listing
                 ]
+
+                # These might be huge classes which takes a lot to handle the embeddings
+                #  for, so they are managed in a more specific way.
+                # We rely on the previous step being cached so it has the same order 
+                #  so this has it too.
+                if class_embeddings_caching.in_cache(self.ontology.sparql_endpoint, alt['url']):
+                    preloaded_embeddings = class_embeddings_caching.get_from_cache(self.ontology.sparql_endpoint, alt['url'])
+                else:
+                    preloaded_embeddings = text_embeddings.load_text_embeddings(cleaned_listing)
+                    class_embeddings_caching.put_in_cache(self.ontology.sparql_endpoint, alt['url'], preloaded_embeddings)
+
                 ranking = text_embeddings.rank_by_similarity(
                     _class,
                     cleaned_listing,
+                    embeddings=preloaded_embeddings,
                 )
                 cutoff = text_embeddings.cutoff_on_max_difference(
                     ranking,
