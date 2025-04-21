@@ -27,6 +27,8 @@ from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value, 
 from ..structured_logger import get_context
 
 
+THINGS_URL = "http://www.w3.org/2002/07/owl#Thing"
+
 class Entity(BaseModel):
     label: str
 
@@ -118,10 +120,13 @@ class PromptWithSearchTranslator:
             else:
                 alts = entity_mapping[_class]['alternatives']
 
+            alts.append({ "url": THINGS_URL })
+
             for alt in alts:
                 print("Checking instances of:", alt)
 
                 listing = self.ontology.find_instances_of(alt['url'])
+
                 base_index = len(full_listing)
                 full_listing.extend(listing)
                 cleaned_listing = [
