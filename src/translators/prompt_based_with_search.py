@@ -9,6 +9,7 @@ This conversation follows these steps:
 5. Ask the LLM to generate the SPARQL query.
 """
 
+import tqdm
 import json
 import logging
 from typing import Optional
@@ -70,7 +71,7 @@ class PromptWithSearchTranslator:
             url_to_value(_class)
             for _class in classes_on_kg
         ]
-        for entity in entities:
+        for entity in tqdm.tqdm(entities, desc='Finding potential classes'):
             entity_ranking = text_embeddings.rank_by_similarity(
                 entity,
                 cleaned_classes,
@@ -107,7 +108,8 @@ class PromptWithSearchTranslator:
         
         singulars = elements_in_kg['singular']
         singular_mapping = {}
-        for _class in singulars:
+        full_listing = []
+        for _class in tqdm.tqdm(singulars, desc='Finding singular elements'):
             mapping = entity_mapping[_class]
             cutoffs = []
             if 'alternatives' not in mapping:
