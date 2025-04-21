@@ -287,12 +287,28 @@ class Ontology:
             if ':' in value['value']['value']
         ]
 
+    def find_relations_between_type_objects(self, from_class, to_class) -> list[str]:
+        res = self.run_query(f'''
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT ?pred
+WHERE {{
+    ?o1 rdf:type <{from_class}> .
+    ?o2 rdf:type <{to_class}> .
+    ?o1 ?pred ?o2 .
+}}
+        ''')
+        return [
+            pred['pred']['value']
+            for pred in res
+        ]
+
     def find_relations_between_class_objects(self, from_class, to_class) -> list[str]:
         res = self.run_query(f'''
     SELECT DISTINCT ?pred
     WHERE {{
-        ?o1 rdf:type <{from_class}> .
-        ?o2 rdf:type <{to_class}> .
+        ?o1 a <{from_class}> .
+        ?o2 a <{to_class}> .
         ?o1 ?pred ?o2 .
     }}
         ''')
