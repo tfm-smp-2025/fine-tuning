@@ -40,7 +40,9 @@ class Ontology:
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
         )
 
-        print("[Querying] {}".format(re.sub(r'\s+', ' ', query)[:40]), end='', flush=True)
+        print("Querying: {}".format(
+            re.sub('.*?SELECT ', 'SELECT ', re.sub(r'\s+', ' ', query))[:70]
+        ), end='', flush=True)
 
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
