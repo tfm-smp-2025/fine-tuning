@@ -2,6 +2,7 @@ import datetime
 import time
 import string
 import sys
+import re
 import logging
 import traceback
 from typing import Any, TypedDict, Union
@@ -40,12 +41,15 @@ class Ontology:
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
         )
 
+        print("[Querying] {}".format(re.sub(r'\s+', ' ', query)[:40]), end='', flush=True)
+
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
 
         try:
             ret = sparql.queryAndConvert()
         except Exception:
+            print("\r\x1b[0K", end='')
             get_context().log_operation(
                 level='ERROR',
                 message='Error SPARQL query: {}'.format(query),
