@@ -274,6 +274,34 @@ class Ontology:
         caching.put_in_cache(CACHE_DIR, cache_key, result)
         return result
 
+    def get_relation_types_in_kg(self):
+        cache_key = self.sparql_endpoint + '-relation-types'
+        if caching.in_cache(CACHE_DIR, cache_key):
+            return caching.get_from_cache(CACHE_DIR, cache_key)
+
+        result = self.run_query('''
+        SELECT DISTINCT ?rel
+        WHERE {
+            [] ?rel []
+        }
+        ''')
+
+        # result = self.iterative_listing('''
+        # SELECT ?rel
+        # WHERE {{
+        #     [] ?rel []
+        # }} OFFSET {offset} LIMIT {limit}
+        # ''',
+        #     distinct_key='rel',
+        #     save_partial=lambda partial: caching.put_in_cache(
+        #         CACHE_DIR,
+        #         cache_key + '-partial-' + str(time.time()),
+        #         partial
+        #     ))
+
+        caching.put_in_cache(CACHE_DIR, cache_key, result)
+        return result
+
     def find_instances_of(self, _class):
         res = self.run_query(f'''
     SELECT DISTINCT ?value
@@ -326,6 +354,9 @@ WHERE {{
         print("\r\x1b[0K Reading classes...", end='\r', flush=True)
         classes = self.get_classes_in_kg()
 
+        print("\r\x1b[0K Reading relation types...", end='\r', flush=True)
+        relations = self.get_relation_types_in_kg()
+
         print("\r\x1b[0K Reading types...", end='\r', flush=True)
         types = self.get_types_in_kg()
 
@@ -358,7 +389,8 @@ WHERE {{
             'object_properties': {prop['prop']['value']: {} for prop in object_properties },
             'datatype_properties': {prop['prop']['value']: {} for prop in datatype_properties },
             'classes': {},
-            'types': { t['type']['value']: {} for t in types }
+            'types': { t['type']['value']: {} for t in types },
+            'relations': { r['rel']['value']: {} for r in relations },
         }
 
         for col in (
