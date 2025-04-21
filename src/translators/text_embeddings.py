@@ -8,8 +8,9 @@ from sentence_transformers import SentenceTransformer
 from .. import caching
 from ..structured_logger import get_context
 
-# Using BAAI/bge-large-en-v1.5, like the following paper: https://arxiv.org/abs/2410.06062
-model_name = "BAAI/bge-large-en-v1.5"
+# Originally used BAAI/bge-large-en-v1.5, like the following paper: https://arxiv.org/abs/2410.06062
+# Moved to BAAI/bge-small-en-v1.5 for faster tests
+model_name = "BAAI/bge-small-en-v1.5"
 
 RankedTerm = collections.namedtuple('RankedTerm', ('text', 'original_index', 'distance'))
 
