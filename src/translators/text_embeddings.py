@@ -1,137 +1,187 @@
 import collections
 import logging
+import os
+import re
+from typing import TypedDict
 
 import numpy
 import tqdm
-from scipy.spatial import distance
-from sentence_transformers import SentenceTransformer
+import weaviate
+from weaviate.classes.config import Configure, Property, DataType
+from weaviate.classes.query import MetadataQuery
+from weaviate.classes.init import Auth
+
 
 from .. import caching
 from ..structured_logger import get_context
 
 # Originally used BAAI/bge-large-en-v1.5, like the following paper: https://arxiv.org/abs/2410.06062
 # Moved to BAAI/bge-small-en-v1.5 for faster tests
-model_name = "BAAI/bge-small-en-v1.5"
+MODEL_NAME = "BAAI/bge-small-en-v1.5"
 
-RankedTerm = collections.namedtuple('RankedTerm', ('text', 'original_index', 'distance'))
+RankedTerm = collections.namedtuple('RankedTerm', ('clean', 'raw', 'distance'))
 
-CACHE_DIR = 'src/text_embeddings/' + model_name
-MAX_TERMS_ON_CUTOFF = 10
+MAX_TERMS_IN_CUTOFF = 10
+MAX_ERRORS_IN_IMPORT_BY_BATCH = 10
 
-MODEL = None
+WEAVIATE_API_KEY = os.getenv('WEAVIATE_API_KEY', 'adminkey')
+WEAVIATE_HOST = os.getenv('WEAVIATE_HOST', 'localhost')
+WEAVIATE_HTTP_PORT = int(os.getenv('WEAVIATE_HTTP_PORT', 8080))
+WEAVIATE_GRPC_PORT = int(os.getenv('WEAVIATE_GRPC_PORT', 50051))
 
-def _init_model():
-    global MODEL
-    if MODEL is None:
-        MODEL = SentenceTransformer(
-            model_name,
+class IndexedEntries(TypedDict):
+    raw: str
+    clean: str
+
+class Connection:
+    def __init__(self):
+        pass
+
+    def _connect(self):
+        self.connection = weaviate.connect_to_local(
+            host=WEAVIATE_HOST,
+            port=WEAVIATE_HTTP_PORT,
+            grpc_port=WEAVIATE_GRPC_PORT,
+            auth_credentials=Auth.api_key(WEAVIATE_API_KEY),
+        )
+
+    def _disconnect(self):
+        self.connection.close()
+
+    def __enter__(self) -> weaviate.client.WeaviateClient:
+        self._connect()
+        return self.connection
+
+    def __exit__(self, exc, exc_type, tb):
+        self._disconnect()
+
+
+def _serialize_name(name: str):
+    """Convert name to one acceptable for Weaviate."""
+    assert len(name) < 64, \
+        'Max size for a Weaviate name is 64'
+    return re.sub(r'[^a-zA-Z0-9_-]', '_', name)
+
+
+def exists_collection(collection_group: str, collection_name: str) -> bool:
+    with Connection() as client:
+        if not client.collections.exists(_serialize_name(collection_group)):
+            return False
+
+        return client.collections.get(
+            _serialize_name(collection_group)
+        ).tenants.exists(
+            _serialize_name(collection_name)
         )
 
 
-def load_text_embeddings(texts: list[str]):
-    _init_model()
-    text_embeddings = []
-    texts_to_embed = []
-    for text in tqdm.tqdm(texts, desc='Loading cached embeds'):
-        if not caching.in_cache(CACHE_DIR, text):
-            texts_to_embed.append(text)
-            text_embeddings.append(None)
+def _create_weaviate_collection(client: weaviate.client.WeaviateClient, name: str):
+    client.collections.create(
+        _serialize_name(name),
+        vectorizer_config=[
+            Configure.NamedVectors.text2vec_transformers(
+                name="clean_vector",
+                source_properties=["clean"],
+            ),
+            Configure.NamedVectors.text2vec_transformers(
+                name="raw_vector",
+                source_properties=["raw"],
+            ),
+        ],
+        multi_tenancy_config=Configure.multi_tenancy(
+            enabled=True,
+            auto_tenant_creation=False,
+        ),
+        properties=[
+            Property(name="clean", data_type=DataType.TEXT),
+            Property(name="raw", data_type=DataType.TEXT),
+        ]
+    )
+
+
+def load_collection(collection_group: str, collection_name: str, texts: IndexedEntries):
+    with Connection() as client:
+        if not client.collections.exists(_serialize_name(collection_group)):
+            _create_weaviate_collection(client, _serialize_name(collection_group))
+
+        get_context().log_operation(
+            level='INFO',
+            message='Loading collection {} with {} elements'.format((collection_group, collection_name), len(texts)),
+            operation='load_collection',
+            data={
+                'collection_group': collection_group,
+                'collection_name': collection_name,
+                'len_texts': len(texts),
+            }
+        )
+
+        collection = client.collections.get(_serialize_name(collection_group))
+
+        # Create tenant
+        if not collection.tenants.exists(_serialize_name(collection_name)):
+            collection.tenants.create(_serialize_name(collection_name))
+
+        collection = collection.with_tenant(_serialize_name(collection_name))
+
+        for _ in collection.iterator():
+            # Some element found
+            raise Exception(
+                'The collection ({}) has already been loaded. Maybe there was a problem building it?'.format(
+                    (collection_group, _serialize_name(collection_name)),
+            ))
+
+        # Load data
+        with collection.batch.dynamic() as batch:
+            for data_row in tqdm.tqdm(texts):
+                batch.add_object(
+                    properties=data_row,
+                )
+                if batch.number_errors > MAX_ERRORS_IN_IMPORT_BY_BATCH:
+                    logging.error("Batch import stopped due to excessive errors.")
+                    break
+
+        failed_objects = collection.batch.failed_objects
+        if failed_objects:
+            error_msg = f"Number of failed imports: {len(failed_objects)}"
+            error_msg += f"\nFirst failed object: {failed_objects[0]}"
+            raise Exception(error_msg)
         else:
-            text_embeddings.append(numpy.array(caching.get_from_cache(CACHE_DIR, text)))
+            print("No failed objects")
 
-    if len(texts_to_embed) > 0:
-        new_text_embeddings = MODEL.encode(
-            texts_to_embed,
-            # normalize_embeddings=True,
-            show_progress_bar=True,
-        )
-    else:
-        new_text_embeddings = None
 
-    new_values_idx = 0
-    for idx in range(len(texts)):
-        if text_embeddings[idx] is None:
-            text_embeddings[idx] = new_text_embeddings[new_values_idx]
-            caching.put_in_cache(CACHE_DIR, texts[idx], new_text_embeddings[new_values_idx].tolist())
-
-            new_values_idx += 1
-
-    return text_embeddings
-
-def rank_by_similarity(reference: str, texts: list[str], embeddings=None) -> list[RankedTerm]:
+def find_close_in_collection(collection_group: str, collection_name: str, reference: str) -> list[RankedTerm]:
     """
     Sort a list of strings by their embedding distance to a `reference` one.ReferenceError
 
     Return a sorted list of tuples (string, original_index, cosine distance).
     """
-    print("\r Ranking...", end='\r', flush=True)
-    _init_model()
-
-
     get_context().log_operation(
         level='DEBUG',
-        message='Ranking by similarity {} terms'.format(len(texts)),
+        message='Ranking by similarity to {}'.format(len(reference)),
         operation='rank_by_similarity',
         data={
             'reference': reference,
-            # 'texts': texts,
         }
     )
+    with Connection() as client:
+        collection = client.collections.get(
+            _serialize_name(collection_group)
+        ).with_tenant(
+            _serialize_name(collection_name)
+        )
 
-    ref_embed = MODEL.encode(
-        [reference],
-        # normalize_embeddings=True,
-        show_progress_bar=False,
-    )[0]
+        response = collection.query.near_text(
+            query=reference,
+            limit=MAX_TERMS_IN_CUTOFF,
+            target_vector="clean_vector",
+            return_metadata=MetadataQuery(distance=True)
+        )
 
-    if embeddings is None:
-        text_embeddings = load_text_embeddings(texts)
-    else:
-        assert len(embeddings) == len(texts)
-        text_embeddings = embeddings
-
-    items = []
-    for idx, text in enumerate(texts):
-        embedding = text_embeddings[idx]
-        items.append(RankedTerm(
-            text=text,
-            original_index=idx,
-            distance=distance.cosine(embedding, ref_embed),
-        ))
-
-    return sorted(
-        items,
-        key=lambda x: x.distance,
-    )
-
-
-def cutoff_on_max_difference(terms: list[RankedTerm]) -> list[RankedTerm]:
-    if len(terms) in (0, 1):
-        return terms
-
-    distance_differences_proportional_max = None
-    distance_differences_proportional_idx = None
-
-    for idx in range(len(terms) - 1):
-        distance_difference = terms[idx + 1].distance - terms[idx].distance
-        if distance_difference == 0:
-            logging.warn('Duplicated terms? {} vs {}'.format(terms[idx], terms[idx + 1]))
-        proportion = distance_difference / terms[idx].distance
-        
-        if (
-            (distance_differences_proportional_idx is None)
-            or (proportion > distance_differences_proportional_max)
-        ):
-            distance_differences_proportional_idx = idx
-            distance_differences_proportional_max = proportion
-
-    selected_terms = terms[:distance_differences_proportional_idx + 1]
-
-    if len(selected_terms) > MAX_TERMS_ON_CUTOFF:
-        logging.warn('Selected {} terms, max cutoff: {}, artificially removing more of them'.format(
-            len(selected_terms),
-            MAX_TERMS_ON_CUTOFF,
-        ))
-        selected_terms = selected_terms[:MAX_TERMS_ON_CUTOFF]
-
-    return selected_terms
+        return [
+            RankedTerm(
+                raw=o.properties['raw'],
+                clean=o.properties['clean'],
+                distance=o.metadata.distance,
+            )
+            for o in response.objects
+        ]

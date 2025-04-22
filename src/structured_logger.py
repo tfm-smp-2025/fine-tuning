@@ -65,6 +65,9 @@ class StructuredLoggerContext:
                     record.exc_info[0], record.exc_info[1], record.exc_info[2]
                 )
             )
+        elif record.levelname == 'INFO' and record.getMessage().startswith('HTTP Request: GET '):
+            # We can ignore these
+            return
 
         self._log(
             record.levelname,

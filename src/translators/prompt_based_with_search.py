@@ -23,7 +23,7 @@ from . import text_embeddings, nlp_utils
 from .types import LLMModel
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
-from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value, deduplicate
+from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value, deduplicate, deduplicate_on_key
 from ..structured_logger import get_context
 
 
@@ -62,44 +62,43 @@ class PromptWithSearchTranslator:
 
         # 2. Map entities to potential classes
         entity_mapping = {}
-        classes_on_kg = deduplicate(self.ontology.get_classes_in_kg())
-        classes_are_types = len(classes_on_kg) == 0
-        classes_on_kg = deduplicate([
-                type['type']['value']
-                for type in self.ontology.get_types_in_kg()
-                if ':' in type['type']['value']
-            ])
 
-        cleaned_classes = [
-            url_to_value(_class)
-            for _class in classes_on_kg
-        ]
+        if not text_embeddings.exists_collection(self.ontology.sparql_endpoint, 'classes'):
+            classes_on_kg = self.ontology.get_classes_in_kg()
+            classes_on_kg = deduplicate_on_key([
+                    {
+                        'raw': type['type']['value'],
+                        'clean': url_to_value(type['type']['value'],),
+                    }
+                    for type in self.ontology.get_types_in_kg()
+                    if ':' in type['type']['value']
+                ], key='raw')
+            text_embeddings.load_collection(self.ontology.sparql_endpoint, 'classes', classes_on_kg)
+            del classes_on_kg
+
         for entity in tqdm.tqdm(entities, desc='Finding potential classes'):
-            entity_ranking = text_embeddings.rank_by_similarity(
-                entity,
-                cleaned_classes,
+            candidate_classes = text_embeddings.find_close_in_collection(
+                collection_group=self.ontology.sparql_endpoint,
+                collection_name='classes',
+                reference=entity,
             )
-            cutoff = text_embeddings.cutoff_on_max_difference(
-                entity_ranking,
-            )
-            assert len(cutoff) > 0
+            assert len(candidate_classes) > 0
 
             logging.info("Found {} close classes for entity “{}”: “{}”".format(
-                len(cutoff), entity, cutoff))
+                len(candidate_classes), entity, candidate_classes))
 
-            if len(cutoff) == 1:
+            if len(candidate_classes) == 1:
                 entity_mapping[entity] = {
-                    'url': classes_on_kg[cutoff[0].original_index],
-                    'name': cutoff[0].text,
+                    'url': candidate_classes[0].raw,
+                    'name': candidate_classes[0].clean,
                 }
             else:
-                # TODO: Query LLM?
                 entity_mapping[entity] = { 'alternatives': [
                     {
-                        'url': classes_on_kg[alt.original_index],
-                        'name': alt.text,
+                        'url': alt.raw,
+                        'name': alt.clean,
                     }
-                    for alt in cutoff
+                    for alt in candidate_classes
                 ]}
 
         # 3. Find singular elements that are inside classes
@@ -128,33 +127,25 @@ class PromptWithSearchTranslator:
             for alt in alts:
                 print("Checking instances of:", alt)
 
-                listing = self.ontology.find_instances_of(alt['url'])
+                if not text_embeddings.exists_collection(self.ontology.sparql_endpoint, alt['url']):
+                    instances_of = self.ontology.find_instances_of(alt['url'])
+                    instances_of = deduplicate_on_key([
+                        {
+                            'raw': instance,
+                            'clean': url_to_value(instance,),
+                        }
+                        for instance in instances_of
+                    ], key='raw')
+                    text_embeddings.load_collection(self.ontology.sparql_endpoint, alt['url'], instances_of)
+                    del instances_of
 
+                continue
                 base_index = len(full_listing)
                 full_listing.extend(listing)
                 cleaned_listing = [
                     url_to_value(value)
                     for value in listing
                 ]
-
-                # These might be huge classes which takes a lot to handle the embeddings
-                #  for, so they are managed in a more specific way.
-                # We rely on the previous step being cached so it has the same order 
-                #  so this has it too.
-                if class_embeddings_caching.in_cache(self.ontology.sparql_endpoint, alt['url']):
-                    # Special case for things embeddings, keep them on memory for this part of the process
-                    if alt['url'] == THINGS_URL:
-                        if things_embeddings is None:
-                            things_embeddings = preloaded_embeddings = class_embeddings_caching.get_from_cache(
-                                self.ontology.sparql_endpoint, alt['url'],
-                            )
-                        else:
-                            preloaded_embeddings = things_embeddings
-                    else:
-                        preloaded_embeddings = class_embeddings_caching.get_from_cache(self.ontology.sparql_endpoint, alt['url'])
-                else:
-                    preloaded_embeddings = text_embeddings.load_text_embeddings(cleaned_listing)
-                    class_embeddings_caching.put_in_cache(self.ontology.sparql_endpoint, alt['url'], preloaded_embeddings)
 
                 ranking = text_embeddings.rank_by_similarity(
                     _class,

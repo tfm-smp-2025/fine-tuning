@@ -1,6 +1,8 @@
 import collections
 import re
 
+from typing import Any
+
 from ..structured_logger import get_context
 
 def deindent_text(text: str) -> str:
@@ -46,3 +48,14 @@ def url_to_value(url: str) -> str:
 
 def deduplicate(l: list[str]) -> list[str]:
     return list(set(l))
+
+def deduplicate_on_key(l: list[dict[str, Any]], key: str) -> list[dict[str, Any]]:
+    known_keys = set()
+    results = []
+
+    for val in l:
+        if val[key] not in known_keys:
+            known_keys.add(val[key])
+            results.append(val)
+
+    return results
