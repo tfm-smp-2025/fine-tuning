@@ -397,14 +397,9 @@ Given that the entities being referenced are:
 
 
     def _get_entities_in_query(self, query: str) -> list[CodeBlock]:
-        prefix = ''
-        if self.ontology_description:
-            prefix = 'Consider this RDF ontology:\n\n'
-            prefix += self.ontology_description
-
         query_for_llm = deindent_text(
         f"""
-Considering those properties, extract the nouns from this natural language query.
+Extract the nouns from this natural language query.
 
 > {query}
 
