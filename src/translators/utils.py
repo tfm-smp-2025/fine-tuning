@@ -16,7 +16,7 @@ def deindent_text(text: str) -> str:
     reindented_lines = [
         line[min(len(line), min_line_indentation) :] for line in text.split("\n")
     ]
-    return "\n".join(reindented_lines)
+    return "\n".join(reindented_lines).strip('\n')
 
 
 CodeBlock = collections.namedtuple('CodeBlock', ('language', 'content'))
