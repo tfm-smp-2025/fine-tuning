@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Experiment viewer</title>
+        <link href="style.css" rel="stylesheet"/>
+    </head>
+    <body>
+       <h1>Experiments</h1>
+       <table id="experiment-table">
+          <tr class="header">
+            <th>ID</th><th class="time">Start time</th>
+          </tr>
+       </table>
+    </body>
+
+    <script>
+        async function poll_experiment_index() {
+            const index = await(await fetch('logs/')).text();
+
+            const EXPERIMENT_LOG_RE = /<li><a href="([^"]+)">(log-(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)(\.\d+)?.jsonl)<\/a><\/li>/g;
+
+            const matches = [...index.matchAll(EXPERIMENT_LOG_RE)];
+
+            return matches.map(
+                v => {
+                    return {
+                        url: 'logs/' + v[1],
+                        filename: v[2],
+                        year: parseInt(v[3]),
+                        month: parseInt(v[4]),
+                        day: parseInt(v[5]),
+                        hour: parseInt(v[6]),
+                        minute: parseInt(v[7]),
+                        second: parseInt(v[8]),
+                    };
+                }
+            );
+        }
+
+        function pad2z(num) {
+            let str = num + '';
+            while (str.length < 2) {
+                str = '0' + str;
+            }
+            return str;
+        }
+
+        async function update_experiment_index() {
+            const experiments = await poll_experiment_index();
+            const table = document.getElementById('experiment-table');
+            for (let tr of table.querySelectorAll('tr')) {
+                if (!tr.classList.contains('header')) {
+                    table.removeChild(tr);
+                }
+            }
+
+            for (const exp of experiments) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td><a href="results.html?exp=logs/${encodeURI(exp.filename)}">${exp.filename}</></td><td><time>${exp.year}-${pad2z(exp.month)}-${pad2z(exp.day)} ${pad2z(exp.hour)}:${pad2z(exp.minute)}:${pad2z(exp.second)}</time></td>`;
+
+                table.appendChild(tr);
+            }
+        }
+
+        update_experiment_index();
+
+        const prepare_update = () => {
+            setTimeout(
+                () => {
+                    update_experiment_index().then(() => console.log('Update complete'));
+                    prepare_update();
+                },
+                5 * 1000, // Every 5s
+            )
+        };
+        prepare_update();
+    </script>
+</html>

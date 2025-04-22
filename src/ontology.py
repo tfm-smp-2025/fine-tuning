@@ -1,15 +1,21 @@
+import datetime
+import time
 import string
 import sys
+import re
 import logging
+import traceback
 from typing import Any, TypedDict, Union
 
 import SPARQLWrapper
 import rdflib
 
 from . import caching
+from .structured_logger import get_context
 
 RDFProperty = Union[str, list[tuple[str, 'RDFProperty']]]
 CACHE_DIR = 'src/ontology'
+WAIT_BETWEEN_REMOTE_RETRIES = 3
 
 class PropertyGraphClass(TypedDict):
     properties: list[tuple[str, RDFProperty]]
@@ -29,16 +35,44 @@ class Ontology:
         self.sparql_server = sparql_server
         self.sparql_endpoint = sparql_endpoint
 
-    def run_query(self, query):
+    def run_query(self, query, quiet=False):
         sparql = SPARQLWrapper.SPARQLWrapper(
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
         )
 
-        logging.info("[SPARQL] {}".format(query))
+        print("Querying: {}".format(
+            re.sub('.*?SELECT ', 'SELECT ', re.sub(r'\s+', ' ', query))[:70]
+        ), end='', flush=True)
+
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
 
-        ret = sparql.queryAndConvert()
+        try:
+            ret = sparql.queryAndConvert()
+        except Exception:
+            print("\r\x1b[0K", end='')
+            get_context().log_operation(
+                level='ERROR',
+                message='Error SPARQL query: {}'.format(query),
+                operation='run_sparql',
+                data={
+                    'query': query,
+                },
+                exception = traceback.format_exc(),
+            )
+            raise
+
+        if not quiet:
+            print("\r\x1b[0K", end='')
+            get_context().log_operation(
+                level='DEBUG',
+                message='Running SPARQL query: {}'.format(query),
+                operation='run_sparql',
+                data={
+                    'query': query,
+                    'result': ret,
+                }
+            )
 
         if 'boolean' in ret:
             return ret['boolean']
@@ -47,6 +81,91 @@ class Ontology:
             binding
             for binding in ret['results']['bindings']
         ]
+
+    def iterative_listing(
+        self,
+        query,
+        limit=1000*100,
+        offset=0,
+        max_retries=5,
+        distinct_key=None,
+        save_partial=None,
+    ):
+        known_results = set()
+        total_count = 0
+        all_results = []
+        get_context().log_operation(
+            level='DEBUG',
+            message='Running long SPARQL query: {}'.format(query),
+            operation='run_sparql_iterative_in',
+            data={
+                'query': query,
+            }
+        )
+
+        all_times = []
+        while True:
+            if len(all_times) == 0:
+                time_info = '-- no time info --'
+            else:
+                time_until_now = sum([
+                    td.total_seconds() for td in all_times
+                ])
+                mean_time = datetime.timedelta(seconds=time_until_now / len(all_times))
+                by_element = datetime.timedelta(seconds=time_until_now / total_count)
+                by_thousand = datetime.timedelta(seconds=(time_until_now * 1000) / total_count)
+                by_million = datetime.timedelta(seconds=(time_until_now * 1000 * 1000) / total_count)
+                time_info = f'last time: {all_times[-1]}; mean: {mean_time}; {by_element}/item; {by_thousand}/k; {by_million}/M; {len(known_results)} uniques'
+            print("\r\x1b[0K {} -> {} ({})".format(offset, offset + limit, time_info), end='\r', flush=True)
+
+            t0 = datetime.datetime.now()
+
+            for retry in range(max_retries):
+                try:
+                    results = self.run_query(query.format(
+                        limit=limit,
+                        offset=offset,
+                    ), quiet=True)
+                    break
+                except Exception:
+                    msg = 'Error on query {}/{}'.format(retry + 1, max_retries)
+                    if retry == max_retries - 1:
+                        logging.error(msg)
+                        if save_partial is not None:
+                            save_partial(all_results)
+                        raise
+                    else:
+                        logging.warn(msg)
+                    time.sleep(WAIT_BETWEEN_REMOTE_RETRIES)
+
+            if len(results) == 0:
+                break
+
+            if distinct_key is None:
+                all_results.extend(results)
+            else:
+                for r in results:
+                    val = r[distinct_key]['value']
+                    if val not in known_results:
+                        all_results.append(val)
+                        known_results.add(val)
+
+            offset += len(results)
+            total_count += len(results)
+            all_times.append(datetime.datetime.now() - t0)
+
+        get_context().log_operation(
+            level='DEBUG',
+            message='Completed iterative SPARQL query with {} results: {}'.format(len(all_results), query),
+            operation='run_sparql_iterative',
+            data={
+                'query': query,
+                'count': len(all_results),
+            }
+        )
+
+        return all_results
+        
 
     def get_properties_for_class(self, class_uri):
         props = self.run_query(f'''
@@ -122,38 +241,119 @@ class Ontology:
                 yield (prop['prop']['value'], subresults)
 
     def get_classes_in_kg(self):
-        res = self.run_query('''
-    SELECT DISTINCT ?class
-    WHERE {
-    ?class a <http://www.w3.org/2002/07/owl#Class>
-    }
-        ''')
+        cache_key = self.sparql_endpoint + '-classes'
+        if caching.in_cache(CACHE_DIR, cache_key):
+            result = caching.get_from_cache(CACHE_DIR, cache_key)
+        else:
+            result = self.run_query('''
+            SELECT DISTINCT ?class
+            WHERE {
+            ?class a <http://www.w3.org/2002/07/owl#Class>
+            }
+                ''')
+            caching.put_in_cache(CACHE_DIR, cache_key, result)
+
         return [
             _class['class']['value']
-            for _class in res
+            for _class in result
             if ':' in _class['class']['value']
         ]
 
-    def find_instances_of(self, _class):
-        res = self.run_query(f'''
-    SELECT DISTINCT ?value
-    WHERE {{
-    ?value a <{_class}>
-    }}
+    def get_types_in_kg(self):
+        cache_key = self.sparql_endpoint + '-types'
+        if caching.in_cache(CACHE_DIR, cache_key):
+            return caching.get_from_cache(CACHE_DIR, cache_key)
+
+        result = self.run_query('''
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+        SELECT DISTINCT ?type
+        WHERE {
+            [] rdf:type ?type
+            FILTER (!strstarts(str(?type), "http://dbpedia.org/class/yago/Wikicat")) # Skip internal DBPedia listings
+        }
         ''')
+        caching.put_in_cache(CACHE_DIR, cache_key, result)
+        return result
+
+    def get_relation_types_in_kg(self):
+        cache_key = self.sparql_endpoint + '-relation-types'
+        if caching.in_cache(CACHE_DIR, cache_key):
+            return caching.get_from_cache(CACHE_DIR, cache_key)
+
+        result = self.run_query('''
+        SELECT DISTINCT ?rel
+        WHERE {
+            [] ?rel []
+        }
+        ''')
+
+        # result = self.iterative_listing('''
+        # SELECT ?rel
+        # WHERE {{
+        #     [] ?rel []
+        # }} OFFSET {offset} LIMIT {limit}
+        # ''',
+        #     distinct_key='rel',
+        #     save_partial=lambda partial: caching.put_in_cache(
+        #         CACHE_DIR,
+        #         cache_key + '-partial-' + str(time.time()),
+        #         partial
+        #     ))
+
+        caching.put_in_cache(CACHE_DIR, cache_key, result)
+        return result
+
+    def find_instances_of(self, _class):
+        cache_key = self.sparql_endpoint + '-instances-of-' + _class
+        if caching.in_cache(CACHE_DIR, cache_key):
+            result = caching.get_from_cache(CACHE_DIR, cache_key)
+        else:
+            result = self.run_query(f'''
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        
+        SELECT DISTINCT ?value
+        WHERE {{
+            {{
+            ?value a <{_class}>
+            }}
+            UNION 
+            {{
+                ?value rdf:type <{_class}>
+            }}
+        }}
+            ''')
+            caching.put_in_cache(CACHE_DIR, cache_key, result)
+
         return [
             value['value']['value']
-            for value in res
+            for value in result
             if ':' in value['value']['value']
+        ]
+
+    def find_relations_between_type_objects(self, from_class, to_class) -> list[str]:
+        res = self.run_query(f'''
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT ?pred
+WHERE {{
+    ?o1 rdf:type <{from_class}> .
+    ?o2 rdf:type <{to_class}> .
+    ?o1 ?pred ?o2 .
+}}
+        ''')
+        return [
+            pred['pred']['value']
+            for pred in res
         ]
 
     def find_relations_between_class_objects(self, from_class, to_class) -> list[str]:
         res = self.run_query(f'''
     SELECT DISTINCT ?pred
     WHERE {{
-    ?o1 a <{from_class}> .
-    ?o2 a <{to_class}> .
-    ?o1 ?pred ?o2 .
+        ?o1 a <{from_class}> .
+        ?o2 a <{to_class}> .
+        ?o1 ?pred ?o2 .
     }}
         ''')
         return [
@@ -170,16 +370,11 @@ class Ontology:
         print("\r\x1b[0K Reading classes...", end='\r', flush=True)
         classes = self.get_classes_in_kg()
 
-        print("\r\x1b[0K Reading types...", end='\r', flush=True)
-        types = self.run_query('''
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        print("\r\x1b[0K Reading relation types...", end='\r', flush=True)
+        relations = self.get_relation_types_in_kg()
 
-    SELECT DISTINCT ?type
-    WHERE {
-        [] rdf:type ?type
-        FILTER (!strstarts(str(?type), "http://dbpedia.org/class/yago/Wikicat")) # Skip internal DBPedia listings
-    }
-    ''')
+        print("\r\x1b[0K Reading types...", end='\r', flush=True)
+        types = self.get_types_in_kg()
 
         print("\r\x1b[0K Reading annotation properties...", end='\r', flush=True)
         annotation_properties = self.run_query('''
@@ -210,7 +405,8 @@ class Ontology:
             'object_properties': {prop['prop']['value']: {} for prop in object_properties },
             'datatype_properties': {prop['prop']['value']: {} for prop in datatype_properties },
             'classes': {},
-            'types': { t['type']['value']: {} for t in types }
+            'types': { t['type']['value']: {} for t in types },
+            'relations': { r['rel']['value']: {} for r in relations },
         }
 
         for col in (

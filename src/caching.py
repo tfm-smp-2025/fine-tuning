@@ -12,13 +12,31 @@ CACHE_ROOT_DIR = os.path.join(
 def _args_to_key(args: str) -> str:
     return base64.b64encode(hashlib.sha1(args).digest())
 
-def get_cache_path(cache_dir, cache_key):
+def get_naive_cache_path(cache_dir, cache_key):
+    """Get a cache path just based on dir and key."""
     return os.path.join(CACHE_ROOT_DIR, cache_dir, cache_key + '.json')
+
+def get_lighter_cache_path(cache_dir, cache_key):
+    """Generates a cache path that distributes the cache-keys in two additional hash-based levels."""
+    distributed_key = hashlib.md5(cache_key.encode()).hexdigest()
+    return os.path.join(CACHE_ROOT_DIR, cache_dir, distributed_key[:2], distributed_key[2:4], cache_key + '.json')
+
+def get_cache_path(cache_dir, cache_key):
+    light_path = get_lighter_cache_path(cache_dir, cache_key)
+    if os.path.exists(light_path):
+        return light_path
+
+    naive_path = get_naive_cache_path(cache_dir, cache_key)
+    if os.path.exists(naive_path):  # If lighter one is not found but naive is, use the naive one
+        return naive_path
+
+    # If none is found, prefer the lighter one
+    return light_path
 
 def in_cache(cache_dir, cache_key):
     return os.path.exists(get_cache_path(cache_dir, cache_key))
 
-def get_from_cache(cache_dir, cache_key): 
+def get_from_cache(cache_dir, cache_key):
     with open(get_cache_path(cache_dir, cache_key), 'rt') as f:
         return json.load(f)
 
