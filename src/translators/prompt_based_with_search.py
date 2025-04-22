@@ -112,6 +112,9 @@ class PromptWithSearchTranslator:
         singulars = elements_in_kg['singular']
         singular_mapping = {}
         full_listing = []
+
+        things_embeddings = None
+
         for _class in tqdm.tqdm(singulars, desc='Finding singular elements'):
             mapping = entity_mapping[_class]
             cutoffs = []
@@ -139,7 +142,16 @@ class PromptWithSearchTranslator:
                 # We rely on the previous step being cached so it has the same order 
                 #  so this has it too.
                 if class_embeddings_caching.in_cache(self.ontology.sparql_endpoint, alt['url']):
-                    preloaded_embeddings = class_embeddings_caching.get_from_cache(self.ontology.sparql_endpoint, alt['url'])
+                    # Special case for things embeddings, keep them on memory for this part of the process
+                    if alt['url'] == THINGS_URL:
+                        if things_embeddings is None:
+                            things_embeddings = preloaded_embeddings = class_embeddings_caching.get_from_cache(
+                                self.ontology.sparql_endpoint, alt['url'],
+                            )
+                        else:
+                            preloaded_embeddings = things_embeddings
+                    else:
+                        preloaded_embeddings = class_embeddings_caching.get_from_cache(self.ontology.sparql_endpoint, alt['url'])
                 else:
                     preloaded_embeddings = text_embeddings.load_text_embeddings(cleaned_listing)
                     class_embeddings_caching.put_in_cache(self.ontology.sparql_endpoint, alt['url'], preloaded_embeddings)
@@ -190,6 +202,8 @@ class PromptWithSearchTranslator:
                     }
                     for alt in cutoffs
                 ]}
+
+        del things_embeddings
 
         # 4. Find relations
         logging.info("Checking relations...")
