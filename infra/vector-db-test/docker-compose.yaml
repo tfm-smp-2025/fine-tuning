@@ -31,6 +31,8 @@ services:
       AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'adminkey'
       # List one or more user identities, separated by commas. Each identity corresponds to a specific key above.
       AUTHENTICATION_APIKEY_USERS: 'admin'
+      # This is an experimental feature. Use with caution.
+      ASYNC_INDEXING: 'true'
 
   t2v-transformers:  # Set the name of the inference container
     image: cr.weaviate.io/semitechnologies/transformers-inference:baai-bge-small-en-v1.5

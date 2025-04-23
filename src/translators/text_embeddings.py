@@ -10,7 +10,7 @@ import weaviate
 from weaviate.classes.config import Configure, Property, DataType
 from weaviate.classes.query import MetadataQuery
 from weaviate.classes.init import Auth
-
+from weaviate.util import generate_uuid5  # Generate a deterministic ID
 
 from .. import caching
 from ..structured_logger import get_context
@@ -20,6 +20,9 @@ from ..structured_logger import get_context
 MODEL_NAME = "BAAI/bge-small-en-v1.5"
 
 RankedTerm = collections.namedtuple('RankedTerm', ('clean', 'raw', 'distance'))
+
+IMPORT_BATCH_SIZE = 1024
+IMPORT_CONCURRENT_REQUESTS = 4
 
 MAX_TERMS_IN_CUTOFF = 10
 MAX_ERRORS_IN_IMPORT_BY_BATCH = 10
@@ -58,8 +61,9 @@ class Connection:
 
 def _serialize_name(name: str):
     """Convert name to one acceptable for Weaviate."""
-    assert len(name) < 64, \
-        'Max size for a Weaviate name is 64'
+    # assert len(name) < 64, \
+    #     'Max size for a Weaviate name is 64'
+    name = name[-63:]
     return re.sub(r'[^a-zA-Z0-9_-]', '_', name)
 
 
@@ -83,10 +87,12 @@ def _create_weaviate_collection(client: weaviate.client.WeaviateClient, name: st
                 name="clean_vector",
                 source_properties=["clean"],
             ),
-            Configure.NamedVectors.text2vec_transformers(
-                name="raw_vector",
-                source_properties=["raw"],
-            ),
+            # This makes the indexing of owl#Things take too long
+            #  and doesn't add anything of value
+            # Configure.NamedVectors.text2vec_transformers(
+            #     name="raw_vector",
+            #     source_properties=["raw"],
+            # ),
         ],
         multi_tenancy_config=Configure.multi_tenancy(
             enabled=True,
@@ -131,10 +137,12 @@ def load_collection(collection_group: str, collection_name: str, texts: IndexedE
             ))
 
         # Load data
-        with collection.batch.dynamic() as batch:
+        with collection.batch.fixed_size(batch_size=IMPORT_BATCH_SIZE, concurrent_requests=IMPORT_CONCURRENT_REQUESTS) as batch:
             for data_row in tqdm.tqdm(texts):
+                obj_uuid = generate_uuid5(data_row)
                 batch.add_object(
                     properties=data_row,
+                    uuid=obj_uuid,
                 )
                 if batch.number_errors > MAX_ERRORS_IN_IMPORT_BY_BATCH:
                     logging.error("Batch import stopped due to excessive errors.")
