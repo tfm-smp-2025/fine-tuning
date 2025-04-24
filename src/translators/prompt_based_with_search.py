@@ -304,16 +304,18 @@ Given that the entities being referenced are:
 {relevant_ontology.content}
 ```
 '''
-        query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConsider what are the necessary relations to solve this query and what are their directions."
+        query_for_llm += f"""
+Of the ones given, which predicates will be useful to solve it? In which direction do the predicates flow from subject to object? 
 
-        logging.info("Query for LLM (chain of though 1/2): {}".format(query_for_llm))
+Consider it's better to query directly on IRIs and avoid filtering whenever possible. DO NOT generate any query yet.
+"""
 
         get_context().log_operation(
             level='INFO',
-            message='Query LLM: {}'.format(query_for_llm),
+            message='Query LLM (CoT 1/3): {}'.format(query_for_llm),
             operation='query_llm_in',
             data={
-                'type': 'generate_sparql_query_cot_1_of_2',
+                'type': 'generate_sparql_query_cot_1_of_3',
                 'input': query_for_llm,
             }
         )
@@ -323,7 +325,7 @@ Given that the entities being referenced are:
             message='LLM response: {}'.format(result),
             operation='query_llm',
             data={
-                'type': 'generate_sparql_query_cot_1_of_2',
+                'type': 'generate_sparql_query_cot_1_of_3',
                 'input': query_for_llm,
                 'output': result,
             }
@@ -331,15 +333,45 @@ Given that the entities being referenced are:
 
         messages = messages + [query_for_llm, result]
 
-        query_for_llm = 'Construct a SPARQL to solve it on a single query, keep it simple:\n\n'
+        query_for_llm = 'What are the subject IRIs that will be handy to solve this query? STILL DO NOT generate any query yet.'
+        get_context().log_operation(
+            level='INFO',
+            message='Query LLM (CoT 2/3): {}'.format(query_for_llm),
+            operation='query_llm_in',
+            data={
+                'type': 'generate_sparql_query_cot_2_of_3',
+                'input': query_for_llm,
+            }
+        )
+        result = self.model.invoke(messages + [query_for_llm])
+        get_context().log_operation(
+            level='INFO',
+            message='LLM response: {}'.format(result),
+            operation='query_llm',
+            data={
+                'type': 'generate_sparql_query_cot_2_of_3',
+                'input': query_for_llm,
+                'output': result,
+            }
+        )
+
+        messages = messages + [query_for_llm, result]
+
+        query_for_llm = '''
+Construct a SPARQL query to solve it on a single query, keep it simple and avoid unnecessary conditions. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.
+
+Remember to avoid querying by label, use the IRIs and relations presented before, not others. DO NOT even use common types like `name` or `type` unless they were explicitly allowed.
+
+Query to solve:
+'''
         query_for_llm += f'> {nl_query}'
 
         get_context().log_operation(
             level='INFO',
-            message='Query LLM: {}'.format(query_for_llm),
+            message='Query LLM (CoT 3/3): {}'.format(query_for_llm),
             operation='query_llm_in',
             data={
-                'type': 'generate_sparql_query_cot_2_of_2',
+                'type': 'generate_sparql_query_cot_3_of_3',
                 'input': query_for_llm,
             }
         )
@@ -350,7 +382,7 @@ Given that the entities being referenced are:
             message='LLM response: {}'.format(result),
             operation='query_llm',
             data={
-                'type': 'generate_sparql_query_cot_2_of_2',
+                'type': 'generate_sparql_query_cot_3_of_3',
                 'input': query_for_llm,
                 'output': result,
             }
