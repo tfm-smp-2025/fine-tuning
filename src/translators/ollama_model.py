@@ -18,9 +18,9 @@ class OllamaModel(LLMModel):
         self.model_name = model_name
         self.model: Optional[OllamaLLM] = None
 
-    def invoke(self, messages: list[str], verbose=True) -> str:
+    def invoke(self, messages: list[str], verbose=True, temperature=0.0) -> str:
         if self.model is None:
-            self.model = OllamaLLM(model=self.model_name, verbose=verbose)
+            self.model = OllamaLLM(model=self.model_name, verbose=verbose, temperature=temperature)
 
         return self.model.invoke(input=messages)
 

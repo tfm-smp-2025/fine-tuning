@@ -17,9 +17,9 @@ class MistralModel(LLMModel):
         self.model_name = model_name
         self.model: Optional[ChatMistralAI] = None
 
-    def invoke(self, messages: list[str], verbose=True) -> str:
+    def invoke(self, messages: list[str], verbose=True, temperature=0.0) -> str:
         if self.model is None:
-            self.model = ChatMistralAI(model=self.model_name, verbose=verbose)
+            self.model = ChatMistralAI(model=self.model_name, verbose=verbose, temperature=temperature)
 
         input = []
         has_system = False
