@@ -23,7 +23,7 @@ from . import text_embeddings, nlp_utils
 from .types import LLMModel
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
-from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value, deduplicate, deduplicate_on_key
+from .utils import deindent_text, extract_code_blocks, CodeBlock, url_to_value, deduplicate, deduplicate_on_key, merge_mapping_dicts
 from ..structured_logger import get_context
 
 
@@ -282,7 +282,7 @@ class PromptWithSearchTranslator:
             messages,
             nl_query,
             mix_mapping(
-                dict(**singular_mapping, **entity_mapping),
+                merge_mapping_dicts(singular_mapping, entity_mapping),
                 relation_mapping,
                 outgoing_relations_from_nodes
             ),

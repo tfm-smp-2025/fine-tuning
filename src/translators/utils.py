@@ -59,3 +59,34 @@ def deduplicate_on_key(l: list[dict[str, Any]], key: str) -> list[dict[str, Any]
             results.append(val)
 
     return results
+
+def merge_mapping_dicts(d1, d2):
+    """Merges two dictionaries while handling duplicate keys."""
+    result = {}
+    for k in set(d1.keys()) | set(d2.keys()):
+        v1 = d1.get(k)
+        v2 = d2.get(k)
+
+        if v1 and not v2:
+            result[k] = v1
+        elif v2 and not v1:
+            result[k] = v2
+        else:
+            if 'alternatives' in v1:
+                v1_alts = v1['alternatives']
+            else:
+                v1_alts = [v1]
+
+            if 'alternatives' in v2:
+                v2_alts = v2['alternatives']
+            else:
+                v2_alts = [v2]
+
+            alts = []
+            known_urls = set()
+            for alt in v1_alts + v2_alts:
+                if alt['url'] not in known_urls:
+                    known_urls.add(alt['url'])
+                    alts.append(alt)
+            result[k] = { 'alternatives': alts }
+    return result
