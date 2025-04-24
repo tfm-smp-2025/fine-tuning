@@ -1,3 +1,4 @@
+import collections
 import datetime
 import time
 import string
@@ -16,6 +17,8 @@ from .structured_logger import get_context
 RDFProperty = Union[str, list[tuple[str, 'RDFProperty']]]
 CACHE_DIR = 'src/ontology'
 WAIT_BETWEEN_REMOTE_RETRIES = 3
+
+SubjectPredicateTuple = collections.namedtuple('SubjectPredicateTuple', ['subject', 'predicate'])
 
 class PropertyGraphClass(TypedDict):
     properties: list[tuple[str, RDFProperty]]
@@ -359,6 +362,48 @@ WHERE {{
         return [
             pred['pred']['value']
             for pred in res
+        ]
+
+    def find_relations_outgoing_from_nodes(self, nodes: list[str], predicates: list[str]) -> list[SubjectPredicateTuple]:
+        node_list = []
+        predicate_list = []
+
+        get_context().log_operation(
+            level='INFO',
+            message='Find relations outgoing from nodes: {} nodes & {} predicates'.format(len(nodes), len(predicates)),
+            operation='find_relations_outgoing_from_nodes',
+            data={
+                'predicates': predicates,
+                'nodes': nodes,
+            },
+        )
+
+        if len(nodes) == 0 or len(predicates) == 0:
+            return []
+
+        for node in nodes:
+            node_list.append(f'<{node}>')
+        for predicate in predicates:
+            predicate_list.append(f'<{predicate}>')
+
+        node_list_str = ', '.join(node_list)
+        predicate_list_str = ', '.join(predicate_list)
+
+        res = self.run_query(f'''
+        SELECT ?s ?p WHERE {{
+            ?s ?p [] .
+
+            FILTER (?s IN ({node_list_str})) .
+
+            FILTER (?p IN ({predicate_list_str}) )
+        }}
+        ''')
+        return [
+            SubjectPredicateTuple(
+                subject=row['s']['value'],
+                predicate=row['p']['value'],
+            )
+            for row in res
         ]
 
 

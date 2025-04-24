@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: cr.weaviate.io/semitechnologies/weaviate:1.30.1
+    ports:
+    - 8088:8080
+    - 50051:50051
+    volumes:
+    - ./weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_API_BASED_MODULES: 'true'
+      CLUSTER_HOSTNAME: 'node1'
+      ENABLE_MODULES: text2vec-transformers # Enable this module
+      TRANSFORMERS_INFERENCE_API: http://t2v-transformers:8080  # Set the inference API endpoint
+
+      # Disable anonymous access.
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'false'
+      # Enables API key authentication.
+      AUTHENTICATION_APIKEY_ENABLED: 'true'
+      # List one or more keys in plaintext separated by commas. Each key corresponds to a specific user identity below.
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'adminkey'
+      # List one or more user identities, separated by commas. Each identity corresponds to a specific key above.
+      AUTHENTICATION_APIKEY_USERS: 'admin'
+      # This is an experimental feature. Use with caution.
+      ASYNC_INDEXING: 'true'
+
+  t2v-transformers:  # Set the name of the inference container
+    image: cr.weaviate.io/semitechnologies/transformers-inference:baai-bge-small-en-v1.5
+    environment:
+      ENABLE_CUDA: 0  # Set to 1 to enable
+
