@@ -29,6 +29,12 @@ td details pre {
 .result_error {
     background-color: #faa;
 }
+.result_false {
+    background-color: #fca;
+}
+.result_true {
+    background-color: #cfa;
+}
 
 .result_cancelled {
     background-color: #aaa;

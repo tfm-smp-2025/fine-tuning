@@ -17,7 +17,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from ..ontology import property_graph_to_rdf, Ontology
+from ..ontology import property_graph_to_rdf, Ontology, mix_mapping_to_ontology
 from .. import class_embeddings_caching
 from . import text_embeddings, nlp_utils
 from .types import LLMModel
@@ -77,7 +77,7 @@ class PromptWithSearchTranslator:
             text_embeddings.load_collection(self.ontology.sparql_endpoint, 'classes', classes_on_kg)
             del classes_on_kg
 
-        for entity in tqdm.tqdm(entities, desc='Finding potential classes'):
+        for entity in entities:
             candidate_classes = text_embeddings.find_close_in_collection(
                 collection_group=self.ontology.sparql_endpoint,
                 collection_name='classes',
@@ -125,8 +125,6 @@ class PromptWithSearchTranslator:
             alts.insert(0, { "url": THINGS_URL })
 
             for alt in alts:
-                print("Checking instances of:", alt)
-
                 if not text_embeddings.exists_collection(self.ontology.sparql_endpoint, alt['url']):
                     if alt['url'] != THINGS_URL and SKIP_UNLOADED_VECTOR_COLLECTIONS:
                         continue
@@ -161,23 +159,6 @@ class PromptWithSearchTranslator:
                 logging.info("Found {} close value for class “{}”: “{}”".format(
                     len(candidate_instances), _class, candidate_instances))
 
-            # 3.5 Apply cutoff across all alternatives
-            class_instance_candidates_ranking = sorted(
-                class_instance_candidates,
-                key=lambda t: t.distance
-            )
-            prev_class_instance_candidates = class_instance_candidates
-            class_instance_candidates = text_embeddings.cutoff_on_max_difference(
-                class_instance_candidates_ranking,
-            )
-
-            logging.info("Reduced all-instance-candidates for class={}? {} - {} = {}".format(
-                _class,
-                len(class_instance_candidates),
-                len(prev_class_instance_candidates),
-                len(class_instance_candidates) - len(prev_class_instance_candidates)
-            ))
-
             if len(class_instance_candidates) == 1:
                 singular_mapping[_class] = {
                     'url': class_instance_candidates[0].raw,
@@ -206,19 +187,11 @@ class PromptWithSearchTranslator:
             text_embeddings.load_collection(self.ontology.sparql_endpoint, 'relations', relations_on_kg)
             del relations_on_kg
 
-        for entity in tqdm.tqdm(entities, desc='Finding potential relations'):
+        for entity in entities:
             candidate_relations = text_embeddings.find_close_in_collection(
                 collection_group=self.ontology.sparql_endpoint,
                 collection_name='relations',
                 reference=entity,
-            )
-            assert len(candidate_relations) > 0
-
-            logging.info("Found {} close relations for entity “{}”: “{}”".format(
-                len(candidate_relations), entity, candidate_relations))
-
-            candidate_relations = text_embeddings.cutoff_on_max_difference(
-                candidate_relations,
             )
             assert len(candidate_relations) > 0
 
@@ -278,14 +251,17 @@ class PromptWithSearchTranslator:
         )
 
         # 6. Generate SPARQL query
+        relevant_ontology, ontology_usage_examples = mix_mapping_to_ontology(
+            merge_mapping_dicts(singular_mapping, entity_mapping),
+            relation_mapping,
+            outgoing_relations_from_nodes
+        )
+
         final_query = self._generate_sparql_query(
             messages,
             nl_query,
-            mix_mapping(
-                merge_mapping_dicts(singular_mapping, entity_mapping),
-                relation_mapping,
-                outgoing_relations_from_nodes
-            ),
+            relevant_ontology,
+            ontology_usage_examples,
         )
 
         print("Final query:", final_query)
@@ -297,25 +273,39 @@ class PromptWithSearchTranslator:
         self,
         messages,
         nl_query, 
-        mixed_mapping,
+        relevant_ontology: Optional[CodeBlock],
+        ontology_usage_examples: list[str],
     ):
-        query_for_llm = f'''
+        query_for_llm = ''
+        if relevant_ontology:
+            query_for_llm += f'''
 Given that the entities being referenced are:
 
-```json
-{json.dumps(mixed_mapping, indent=4)}
+```{relevant_ontology.language}
+{relevant_ontology.content}
 ```
 '''
-        query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConsider what are the necessary relations to solve this query and what are their directions."
 
-        logging.info("Query for LLM (chain of though 1/2): {}".format(query_for_llm))
+        if len(ontology_usage_examples) > 0:
+            example_str = '\n\n'.join(ontology_usage_examples)
+            query_for_llm += f'''
+This are some examples on how the available properties can be used:
+
+{example_str}
+'''
+
+        query_for_llm += f"""
+Of the ones given, which predicates will be useful to solve it?
+
+Consider it's better to query directly on IRIs and avoid filtering whenever possible. DO NOT generate any query yet.
+"""
 
         get_context().log_operation(
             level='INFO',
-            message='Query LLM: {}'.format(query_for_llm),
+            message='Query LLM (CoT 1/3): {}'.format(query_for_llm),
             operation='query_llm_in',
             data={
-                'type': 'generate_sparql_query_cot_1_of_2',
+                'type': 'generate_sparql_query_cot_1_of_3',
                 'input': query_for_llm,
             }
         )
@@ -325,7 +315,7 @@ Given that the entities being referenced are:
             message='LLM response: {}'.format(result),
             operation='query_llm',
             data={
-                'type': 'generate_sparql_query_cot_1_of_2',
+                'type': 'generate_sparql_query_cot_1_of_3',
                 'input': query_for_llm,
                 'output': result,
             }
@@ -333,15 +323,45 @@ Given that the entities being referenced are:
 
         messages = messages + [query_for_llm, result]
 
-        query_for_llm = 'Construct a SPARQL to solve it on a single query, keep it simple:\n\n'
+        query_for_llm = 'What are the subject IRIs that will be handy to solve this query? STILL DO NOT generate any query yet.'
+        get_context().log_operation(
+            level='INFO',
+            message='Query LLM (CoT 2/3): {}'.format(query_for_llm),
+            operation='query_llm_in',
+            data={
+                'type': 'generate_sparql_query_cot_2_of_3',
+                'input': query_for_llm,
+            }
+        )
+        result = self.model.invoke(messages + [query_for_llm])
+        get_context().log_operation(
+            level='INFO',
+            message='LLM response: {}'.format(result),
+            operation='query_llm',
+            data={
+                'type': 'generate_sparql_query_cot_2_of_3',
+                'input': query_for_llm,
+                'output': result,
+            }
+        )
+
+        messages = messages + [query_for_llm, result]
+
+        query_for_llm = '''
+Construct a SPARQL query to solve it on a single query, keep it simple and avoid unnecessary conditions. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.
+
+Remember to avoid querying by label, use the IRIs and relations presented before, not others. DO NOT even use common types like `name` or `type` unless they were explicitly allowed.
+
+Query to solve:
+'''
         query_for_llm += f'> {nl_query}'
 
         get_context().log_operation(
             level='INFO',
-            message='Query LLM: {}'.format(query_for_llm),
+            message='Query LLM (CoT 3/3): {}'.format(query_for_llm),
             operation='query_llm_in',
             data={
-                'type': 'generate_sparql_query_cot_2_of_2',
+                'type': 'generate_sparql_query_cot_3_of_3',
                 'input': query_for_llm,
             }
         )
@@ -352,7 +372,7 @@ Given that the entities being referenced are:
             message='LLM response: {}'.format(result),
             operation='query_llm',
             data={
-                'type': 'generate_sparql_query_cot_2_of_2',
+                'type': 'generate_sparql_query_cot_3_of_3',
                 'input': query_for_llm,
                 'output': result,
             }
@@ -439,36 +459,6 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         return "{} + prompt & search".format(self.model)
 
 
-def mix_mapping(node_mapping, relation_mapping, outgoing_relations_from_nodes):
-    outgoing_relations_indexed_by_node = {}
-    for rel in outgoing_relations_from_nodes:
-        if rel.subject not in outgoing_relations_indexed_by_node:
-            outgoing_relations_indexed_by_node[rel.subject] = []
-        outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
-
-    mix = {}
-    for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
-        options = {'relations': [], 'nodes': []}
-        if k in node_mapping:
-            if 'alternatives' in node_mapping[k]:
-                options['nodes'] = node_mapping[k]['alternatives']
-            else:
-                options['nodes'] = [node_mapping[k]]
-            for node in options['nodes']:
-                if node['url'] in outgoing_relations_indexed_by_node:
-                    node['outgoing_predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
-
-        if k in relation_mapping:
-            if 'alternatives' in relation_mapping[k]:
-                options['relations'] = relation_mapping[k]['alternatives']
-            else:
-                options['relations'] = [relation_mapping[k]]
-
-        mix[k] = options
-
-    return mix
-
-
 translators = [
-    PromptWithSearchTranslator(model, None) for model in ollama_models + mistral_models
+    PromptWithSearchTranslator(model, None) for model in mistral_models # ollama_models + 
 ]

@@ -2,6 +2,7 @@ import collections
 import datetime
 import time
 import string
+import json
 import sys
 import re
 import logging
@@ -11,6 +12,7 @@ from typing import Any, TypedDict, Union
 import SPARQLWrapper
 import rdflib
 
+from .translators.utils import CodeBlock
 from . import caching
 from .structured_logger import get_context
 
@@ -554,3 +556,70 @@ def extract_ontology_to_file(args):
     pg = ont.get_all_properties_in_graph()
     rdf = property_graph_to_rdf(pg)
     args.output.write(rdf.serialize(format='pretty-xml'))
+
+
+def mix_mapping_to_ontology(
+    node_mapping,
+    relation_mapping,
+    outgoing_relations_from_nodes,
+) -> tuple[CodeBlock, list[str]]:
+    # Prepare mix
+    outgoing_relations_indexed_by_node = {}
+    for rel in outgoing_relations_from_nodes:
+        if rel.subject not in outgoing_relations_indexed_by_node:
+            outgoing_relations_indexed_by_node[rel.subject] = []
+        outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
+
+    mix = {}
+    logging.info("Input node mapping: {}\nInput rel mapping: {}\nOut relations: {}".format(
+        json.dumps(node_mapping),
+        json.dumps(relation_mapping),
+        json.dumps(outgoing_relations_from_nodes),
+    ))
+    for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
+        options = {'subjects': []}
+        if k in node_mapping:
+            if 'alternatives' in node_mapping[k]:
+                nodes_in_item = node_mapping[k]['alternatives']
+            else:
+                nodes_in_item = [node_mapping[k]]
+
+            for node in nodes_in_item:
+                node = { "iri": node['url'] }
+                if node['iri'] not in outgoing_relations_indexed_by_node:
+                    continue
+
+                node['predicates'] = list(set(outgoing_relations_indexed_by_node[node['iri']]))
+                options['subjects'].append(node)
+
+        # if k in relation_mapping:
+        #     if 'alternatives' in relation_mapping[k]:
+        #         options['relations'] = relation_mapping[k]['alternatives']
+        #     else:
+        #         options['relations'] = [relation_mapping[k]]
+
+        if len(options['subjects']) > 0:
+            mix[k] = options
+
+    if len(node_mapping) > 0:
+        assert len(mix) > 0, "All elements were discarded on mix"
+
+    # Generate examples
+    examples = []
+    for _term, values in mix.items():
+        for subject in values.get('subjects', []):
+            for predicate in subject.get('predicates', []):
+                examples.append(f'''### Subject: <{subject['iri']}> ; Predicate: <{predicate}>
+
+```sparql
+SELECT DISTINCT ?object WHERE {{ <{subject['iri']}> <{predicate}> ?object }}
+```
+'''.strip())
+
+    return (
+        CodeBlock(
+            language='json',
+            content=json.dumps(mix, indent=4),
+        ),
+        examples,
+    )
