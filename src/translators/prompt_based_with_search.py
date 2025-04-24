@@ -243,51 +243,50 @@ class PromptWithSearchTranslator:
         # 5. Find relations between classes
         logging.info("Checking relations between classes...")
         class_combinations = set()
-        class_relations = {}
-        # for k1_entities in tqdm.tqdm(entity_mapping.keys(), desc='Checking relations'):
-        #     for k2_entities in entity_mapping.keys():
-        #         if 'alternatives' not in entity_mapping[k1_entities]:
-        #             k1_alts = [entity_mapping[k1_entities]]
-        #         else:
-        #             k1_alts = entity_mapping[k1_entities]['alternatives']
 
-        #         if 'alternatives' not in entity_mapping[k2_entities]:
-        #             k2_alts = [entity_mapping[k2_entities]]
-        #         else:
-        #             k2_alts = entity_mapping[k2_entities]['alternatives']
+        all_nodes = set()
+        for k_entities in entity_mapping.keys() :
+            if 'alternatives' not in entity_mapping[k_entities]:
+                k_alts = [entity_mapping[k_entities]]
+            else:
+                k_alts = entity_mapping[k_entities]['alternatives']
 
-        #         for k1 in k1_alts:
-        #             for k2 in k2_alts:
-        #                 c1 = k1['url']
-        #                 c2 = k2['url']
+            for k in k_alts:
+                all_nodes.add(k['url'])
 
-        #                 if c1 == c2:
-        #                     continue
+        for k_entities in singular_mapping.keys() :
+            if 'alternatives' not in singular_mapping[k_entities]:
+                k_alts = [singular_mapping[k_entities]]
+            else:
+                k_alts = singular_mapping[k_entities]['alternatives']
 
-        #                 if (c1, c2) in class_combinations:
-        #                     continue
+            for k in k_alts:
+                all_nodes.add(k['url'])
 
-        #                 # Find relations
-        #                 if classes_are_types:
-        #                     c1_to_c2 = self.ontology.find_relations_between_type_objects(c1, c2)
-        #                 else:
-        #                     c1_to_c2 = self.ontology.find_relations_between_class_objects(c1, c2)
-        #                 class_relations[(c1, c2)] = c1_to_c2
+        all_relations = set()
+        for k_entities in relation_mapping.keys():
+            if 'alternatives' not in relation_mapping[k_entities]:
+                k_alts = [relation_mapping[k_entities]]
+            else:
+                k_alts = relation_mapping[k_entities]['alternatives']
 
-        #                 if classes_are_types:
-        #                     c2_to_c1 = self.ontology.find_relations_between_type_objects(c2, c1)
-        #                 else:
-        #                     c2_to_c1 = self.ontology.find_relations_between_class_objects(c2, c1)
-        #                 class_relations[(c2, c1)] = c2_to_c1
+            for k in k_alts:
+                all_relations.add(k['url'])
 
-        logging.info("Class relations: {}".format(class_relations))
+        outgoing_relations_from_nodes = self.ontology.find_relations_outgoing_from_nodes(
+            nodes=list(all_nodes),
+            predicates=list(all_relations),
+        )
 
         # 6. Generate SPARQL query
         final_query = self._generate_sparql_query(
             messages,
             nl_query,
-            mix_mapping(singular_mapping, relation_mapping),
-            class_relations,
+            mix_mapping(
+                dict(**singular_mapping, **entity_mapping),
+                relation_mapping,
+                outgoing_relations_from_nodes
+            ),
         )
 
         print("Final query:", final_query)
@@ -300,7 +299,6 @@ class PromptWithSearchTranslator:
         messages,
         nl_query, 
         mixed_mapping,
-        class_relations,
     ):
         query_for_llm = f'''
 Given that the entities being referenced are:
@@ -309,28 +307,6 @@ Given that the entities being referenced are:
 {json.dumps(mixed_mapping, indent=4)}
 ```
 '''
-        if sum([len(relations) for relations in class_relations.values()]) == 0:
-            # Skip this if there's not relation to be used
-            logging.warning("No useful relations found")
-        else:
-            query_for_llm += '\nAnd knowing that the following classes are related:\n'
-
-            known_combinations = set()
-            for classes, relations in class_relations.items():
-                c1, c2 = classes
-
-                if len(relations) == 0:
-                    continue  # Ignore this combination
-                if len(relations) == 1:
-                    via = relations[0]
-                else:
-                    via = '", "'.format(relations[:-1]) + '" and "' + relations[-1] + '"'
-
-                combination = (url_to_value(c1), url_to_value(c2), via)
-                if combination not in known_combinations:
-                    known_combinations.add(combination)
-                    query_for_llm += f'- ":{url_to_value(c1)}" to ":{url_to_value(c2)}" via "{via}"\n'
-
         query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConsider what are the necessary relations to solve this query and what are their directions."
 
         logging.info("Query for LLM (chain of though 1/2): {}".format(query_for_llm))
@@ -464,7 +440,13 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         return "{} + prompt & search".format(self.model)
 
 
-def mix_mapping(node_mapping, relation_mapping):
+def mix_mapping(node_mapping, relation_mapping, outgoing_relations_from_nodes):
+    outgoing_relations_indexed_by_node = {}
+    for rel in outgoing_relations_from_nodes:
+        if rel.subject not in outgoing_relations_indexed_by_node:
+            outgoing_relations_indexed_by_node[rel.subject] = []
+        outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
+
     mix = {}
     for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
         options = {'relations': [], 'nodes': []}
@@ -473,6 +455,9 @@ def mix_mapping(node_mapping, relation_mapping):
                 options['nodes'] = node_mapping[k]['alternatives']
             else:
                 options['nodes'] = [node_mapping[k]]
+            for node in options['nodes']:
+                if node['url'] in outgoing_relations_indexed_by_node:
+                    node['outgoing_predicates'] = outgoing_relations_indexed_by_node[node['url']]
 
         if k in relation_mapping:
             if 'alternatives' in relation_mapping[k]:
