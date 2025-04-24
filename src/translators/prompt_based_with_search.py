@@ -231,7 +231,6 @@ class PromptWithSearchTranslator:
                     'name': candidate_relations[0].clean,
                 }
             else:
-                # TODO: Query LLM?
                 relation_mapping[entity] = { 'alternatives': [
                     {
                         'url': alt.raw,
