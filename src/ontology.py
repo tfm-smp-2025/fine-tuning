@@ -558,7 +558,11 @@ def extract_ontology_to_file(args):
     args.output.write(rdf.serialize(format='pretty-xml'))
 
 
-def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_from_nodes) -> CodeBlock:
+def mix_mapping_to_ontology(
+    node_mapping,
+    relation_mapping,
+    outgoing_relations_from_nodes,
+) -> tuple[CodeBlock, list[str]]:
     # Prepare mix
     outgoing_relations_indexed_by_node = {}
     for rel in outgoing_relations_from_nodes:
@@ -567,6 +571,11 @@ def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_f
         outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
 
     mix = {}
+    logging.info("Input node mapping: {}\nInput rel mapping: {}\nOut relations: {}".format(
+        json.dumps(node_mapping),
+        json.dumps(relation_mapping),
+        json.dumps(outgoing_relations_from_nodes),
+    ))
     for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
         options = {'subjects': []}
         if k in node_mapping:
@@ -592,8 +601,25 @@ def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_f
         if len(options['subjects']) > 0:
             mix[k] = options
 
-    return CodeBlock(
-        language='json',
-        content=json.dumps(mix, indent=4),
-    )
+    if len(node_mapping) > 0:
+        assert len(mix) > 0, "All elements were discarded on mix"
 
+    # Generate examples
+    examples = []
+    for _term, values in mix.items():
+        for subject in values.get('subjects', []):
+            for predicate in subject.get('predicates', []):
+                examples.append(f'''### Subject: <{subject['iri']}> ; Predicate: <{predicate}>
+
+```sparql
+SELECT DISTINCT ?object WHERE {{ <{subject['iri']}> <{predicate}> ?object }}
+```
+'''.strip())
+
+    return (
+        CodeBlock(
+            language='json',
+            content=json.dumps(mix, indent=4),
+        ),
+        examples,
+    )

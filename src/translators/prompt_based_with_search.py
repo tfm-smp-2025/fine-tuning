@@ -251,14 +251,17 @@ class PromptWithSearchTranslator:
         )
 
         # 6. Generate SPARQL query
+        relevant_ontology, ontology_usage_examples = mix_mapping_to_ontology(
+            merge_mapping_dicts(singular_mapping, entity_mapping),
+            relation_mapping,
+            outgoing_relations_from_nodes
+        )
+
         final_query = self._generate_sparql_query(
             messages,
             nl_query,
-            mix_mapping_to_ontology(
-                merge_mapping_dicts(singular_mapping, entity_mapping),
-                relation_mapping,
-                outgoing_relations_from_nodes
-            ),
+            relevant_ontology,
+            ontology_usage_examples,
         )
 
         print("Final query:", final_query)
@@ -270,17 +273,29 @@ class PromptWithSearchTranslator:
         self,
         messages,
         nl_query, 
-        relevant_ontology: CodeBlock,
+        relevant_ontology: Optional[CodeBlock],
+        ontology_usage_examples: list[str],
     ):
-        query_for_llm = f'''
+        query_for_llm = ''
+        if relevant_ontology:
+            query_for_llm += f'''
 Given that the entities being referenced are:
 
 ```{relevant_ontology.language}
 {relevant_ontology.content}
 ```
 '''
+
+        if len(ontology_usage_examples) > 0:
+            example_str = '\n\n'.join(ontology_usage_examples)
+            query_for_llm += f'''
+This are some examples on how the available properties can be used:
+
+{example_str}
+'''
+
         query_for_llm += f"""
-Of the ones given, which predicates will be useful to solve it? In which direction do the predicates flow from subject to object? 
+Of the ones given, which predicates will be useful to solve it?
 
 Consider it's better to query directly on IRIs and avoid filtering whenever possible. DO NOT generate any query yet.
 """
