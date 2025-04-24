@@ -1,12 +1,23 @@
 import logging
 
+import enum
 import tqdm
 
 from .translators import all_translators
 from .datasets import dataset_loader
 from .translators.utils import extract_code_blocks, CodeBlock
 from .ontology import Ontology, property_graph_to_rdf
-from .structured_logger import StructuredLogger, get_logger
+from .structured_logger import StructuredLogger, get_logger, get_context
+
+class TestResultValue(enum.Enum):
+    SameValueAndType = 'same_value_and_type'
+    SameValue = 'same_value'
+    SameLength = 'same_length'
+    UnhandledTestCheck = 'unhandled_test_check'
+    NoMatch = 'no_match'
+    Error = 'error'
+    Cancelled = 'cancelled'
+
 
 def run_test(args):
     """Run some tests over the configured models."""
@@ -90,7 +101,7 @@ def run_test(args):
                             sparql_code_blocks = [result]
                         else:
                             sparql_code_blocks = [
-                                block.content
+                                block
                                 for block in extract_code_blocks(text=result)
                                 if block.language.lower() == 'sparql'
                             ]
@@ -98,6 +109,9 @@ def run_test(args):
                         if ontology:
                             logging.info("TESTING query: {}".format(sparql_code_blocks[-1]))
                             translator_result = ontology.run_query(sparql_code_blocks[-1].content)
+
+                            test_success = check_if_equivalent_result(translator_result, expected_result)
+
                             ctxt.log_operation(
                                 level='INFO',
                                 message='Translated query result: {}'.format(translator_result),
@@ -107,7 +121,7 @@ def run_test(args):
 
                             ctxt.log_operation(
                                 level='INFO',
-                                message="Test result: {}".format(translator_result == expected_result),
+                                message="Test result: {}".format(test_success.value),
                                 operation='test_result',
                                 data={
                                     'input': question.question,
@@ -115,7 +129,7 @@ def run_test(args):
                                     'expected_result': expected_result,
                                     'found_answer': result,
                                     'found_result': translator_result,
-                                    'result': translator_result == expected_result,
+                                    'result': test_success.value,
                                 }
                             )
                         else:
@@ -158,3 +172,54 @@ def run_test(args):
                                 'result': 'error',
                             }
                         )
+
+def check_if_equivalent_result(translator_result, expected_result) -> TestResultValue:
+    if len(translator_result) != len(expected_result):
+        result = TestResultValue.NoMatch
+
+    elif len(translator_result) == len(expected_result) == 0:
+        # Trivial case, but ...
+        result = TestResultValue.SameValueAndType
+
+    else:
+        result = TestResultValue.SameValueAndType
+        for idx in range(len(translator_result)):
+            translator_row = translator_result[idx]
+            expected_row = expected_result[idx]
+
+            if len(translator_row.keys()) != len(expected_row.keys()):
+                result = TestResultValue.NoMatch
+                break
+
+            if len(translator_row.keys()) == len(expected_row.keys()) == 1:
+                # Known case, 1 single key
+                v1 = translator_row[list(translator_row.keys())[0]]
+                v2 = expected_row[list(expected_row.keys())[0]]
+                if v1['value'] == v2['value']:
+                    # Same IRI, keep the highest score
+                    continue
+                elif url_to_value(v1['value']) == url_to_value(v1['value']):
+                    if result == TestResultValue.SameValueAndType:
+                        result = TestResultValue.SameValue
+                        # A later row might downgrade this further
+                else:
+                    result = TestResultValue.NoMatch
+                    break
+
+            else:
+                # TODO:
+                result = TestResultValue.UnhandledTestCheck
+                break
+
+    get_context().log_operation(
+        level='INFO',
+        message='Test result: {}'.format(result.value),
+        operation='test_result_check',
+        data={
+            "expected": expected_result,
+            "found": translator_result,
+            "result": result.value,
+        },
+    )
+
+    return result
