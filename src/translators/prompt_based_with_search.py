@@ -456,7 +456,7 @@ def mix_mapping(node_mapping, relation_mapping, outgoing_relations_from_nodes):
                 options['nodes'] = [node_mapping[k]]
             for node in options['nodes']:
                 if node['url'] in outgoing_relations_indexed_by_node:
-                    node['outgoing_predicates'] = outgoing_relations_indexed_by_node[node['url']]
+                    node['outgoing_predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
 
         if k in relation_mapping:
             if 'alternatives' in relation_mapping[k]:
