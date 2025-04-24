@@ -279,7 +279,7 @@ class PromptWithSearchTranslator:
         final_query = self._generate_sparql_query(
             messages,
             nl_query,
-            mix_mapping(
+            mix_mapping_to_ontology(
                 merge_mapping_dicts(singular_mapping, entity_mapping),
                 relation_mapping,
                 outgoing_relations_from_nodes
@@ -295,13 +295,13 @@ class PromptWithSearchTranslator:
         self,
         messages,
         nl_query, 
-        mixed_mapping,
+        relevant_ontology,
     ):
         query_for_llm = f'''
 Given that the entities being referenced are:
 
 ```json
-{json.dumps(mixed_mapping, indent=4)}
+{relevant_ontology}
 ```
 '''
         query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConsider what are the necessary relations to solve this query and what are their directions."
@@ -437,7 +437,8 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         return "{} + prompt & search".format(self.model)
 
 
-def mix_mapping(node_mapping, relation_mapping, outgoing_relations_from_nodes):
+def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_from_nodes):
+    # Prepare mix
     outgoing_relations_indexed_by_node = {}
     for rel in outgoing_relations_from_nodes:
         if rel.subject not in outgoing_relations_indexed_by_node:
@@ -446,27 +447,32 @@ def mix_mapping(node_mapping, relation_mapping, outgoing_relations_from_nodes):
 
     mix = {}
     for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
-        options = {'relations': [], 'nodes': []}
+        options = {'nodes': []}
         if k in node_mapping:
             if 'alternatives' in node_mapping[k]:
-                options['nodes'] = node_mapping[k]['alternatives']
+                nodes_in_item = node_mapping[k]['alternatives']
             else:
-                options['nodes'] = [node_mapping[k]]
-            for node in options['nodes']:
-                if node['url'] in outgoing_relations_indexed_by_node:
-                    node['outgoing_predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
+                nodes_in_item = [node_mapping[k]]
 
-        if k in relation_mapping:
-            if 'alternatives' in relation_mapping[k]:
-                options['relations'] = relation_mapping[k]['alternatives']
-            else:
-                options['relations'] = [relation_mapping[k]]
+            for node in nodes_in_item:
+                if node['url'] not in outgoing_relations_indexed_by_node:
+                    continue
 
-        mix[k] = options
+                node['outgoing_predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
+                options['nodes'].append(node)
 
-    return mix
+        # if k in relation_mapping:
+        #     if 'alternatives' in relation_mapping[k]:
+        #         options['relations'] = relation_mapping[k]['alternatives']
+        #     else:
+        #         options['relations'] = [relation_mapping[k]]
+
+        if len(options['nodes']) > 0:
+            mix[k] = options
+
+    return json.dumps(mix, indent=4)
 
 
 translators = [
-    PromptWithSearchTranslator(model, None) for model in ollama_models + mistral_models
+    PromptWithSearchTranslator(model, None) for model in mistral_models # ollama_models + 
 ]
