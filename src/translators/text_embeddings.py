@@ -193,3 +193,35 @@ def find_close_in_collection(collection_group: str, collection_name: str, refere
             )
             for o in response.objects
         ]
+
+
+def cutoff_on_max_difference(terms: list[RankedTerm]) -> list[RankedTerm]:
+    if len(terms) in (0, 1):
+        return terms
+
+    distance_differences_proportional_max = None
+    distance_differences_proportional_idx = None
+
+    for idx in range(len(terms) - 1):
+        distance_difference = terms[idx + 1].distance - terms[idx].distance
+        if distance_difference == 0:
+            logging.warn('Duplicated terms? {} vs {}'.format(terms[idx], terms[idx + 1]))
+        proportion = distance_difference / terms[idx].distance
+
+        if (
+            (distance_differences_proportional_idx is None)
+            or (proportion > distance_differences_proportional_max)
+        ):
+            distance_differences_proportional_idx = idx
+            distance_differences_proportional_max = proportion
+
+    selected_terms = terms[:distance_differences_proportional_idx + 1]
+
+    if len(selected_terms) > MAX_TERMS_IN_CUTOFF:
+        logging.warn('Selected {} terms, max cutoff: {}, artificially removing more of them'.format(
+            len(selected_terms),
+            MAX_TERMS_IN_CUTOFF,
+        ))
+        selected_terms = selected_terms[:MAX_TERMS_IN_CUTOFF]
+
+    return selected_terms
