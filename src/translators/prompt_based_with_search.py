@@ -17,7 +17,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from ..ontology import property_graph_to_rdf, Ontology
+from ..ontology import property_graph_to_rdf, Ontology, mix_mapping_to_ontology
 from .. import class_embeddings_caching
 from . import text_embeddings, nlp_utils
 from .types import LLMModel
@@ -435,42 +435,6 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
 
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
-
-
-def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_from_nodes):
-    # Prepare mix
-    outgoing_relations_indexed_by_node = {}
-    for rel in outgoing_relations_from_nodes:
-        if rel.subject not in outgoing_relations_indexed_by_node:
-            outgoing_relations_indexed_by_node[rel.subject] = []
-        outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
-
-    mix = {}
-    for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
-        options = {'nodes': []}
-        if k in node_mapping:
-            if 'alternatives' in node_mapping[k]:
-                nodes_in_item = node_mapping[k]['alternatives']
-            else:
-                nodes_in_item = [node_mapping[k]]
-
-            for node in nodes_in_item:
-                if node['url'] not in outgoing_relations_indexed_by_node:
-                    continue
-
-                node['outgoing_predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
-                options['nodes'].append(node)
-
-        # if k in relation_mapping:
-        #     if 'alternatives' in relation_mapping[k]:
-        #         options['relations'] = relation_mapping[k]['alternatives']
-        #     else:
-        #         options['relations'] = [relation_mapping[k]]
-
-        if len(options['nodes']) > 0:
-            mix[k] = options
-
-    return json.dumps(mix, indent=4)
 
 
 translators = [
