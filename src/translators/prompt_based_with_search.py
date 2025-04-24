@@ -28,6 +28,7 @@ from ..structured_logger import get_context
 
 
 THINGS_URL = "http://www.w3.org/2002/07/owl#Thing"
+SKIP_UNLOADED_VECTOR_COLLECTIONS = True
 
 class Entity(BaseModel):
     label: str
@@ -110,24 +111,26 @@ class PromptWithSearchTranslator:
         
         singulars = elements_in_kg['singular']
         singular_mapping = {}
-        full_listing = []
 
         things_embeddings = None
 
         for _class in tqdm.tqdm(singulars, desc='Finding singular elements'):
             mapping = entity_mapping[_class]
-            cutoffs = []
+            class_instance_candidates = []
             if 'alternatives' not in mapping:
                 alts = [mapping]
             else:
                 alts = entity_mapping[_class]['alternatives']
 
-            alts.append({ "url": THINGS_URL })
+            alts.insert(0, { "url": THINGS_URL })
 
             for alt in alts:
                 print("Checking instances of:", alt)
 
                 if not text_embeddings.exists_collection(self.ontology.sparql_endpoint, alt['url']):
+                    if alt['url'] != THINGS_URL and SKIP_UNLOADED_VECTOR_COLLECTIONS:
+                        continue
+
                     instances_of = self.ontology.find_instances_of(alt['url'])
                     instances_of = deduplicate_on_key([
                         {
@@ -139,102 +142,103 @@ class PromptWithSearchTranslator:
                     text_embeddings.load_collection(self.ontology.sparql_endpoint, alt['url'], instances_of)
                     del instances_of
 
-                continue
-                base_index = len(full_listing)
-                full_listing.extend(listing)
-                cleaned_listing = [
-                    url_to_value(value)
-                    for value in listing
-                ]
-
-                ranking = text_embeddings.rank_by_similarity(
-                    _class,
-                    cleaned_listing,
-                    embeddings=preloaded_embeddings,
+                candidate_instances = text_embeddings.find_close_in_collection(
+                    collection_group=self.ontology.sparql_endpoint,
+                    collection_name=alt['url'],
+                    reference=_class,
                 )
-                cutoff = text_embeddings.cutoff_on_max_difference(
-                    ranking,
-                )
-                assert len(cutoff) > 0
-                cutoffs.extend([
+                assert len(candidate_instances) > 0
+                class_instance_candidates.extend([
                         text_embeddings.RankedTerm(
-                            text=term.text,
-                            original_index=base_index + term.original_index,
+                            clean=term.clean,
+                            raw=term.raw,
                             distance=term.distance
                         )
-                        for term in cutoff
+                        for term in candidate_instances
                     ]
                 )
 
                 logging.info("Found {} close value for class “{}”: “{}”".format(
-                    len(cutoff), _class, cutoff))
-                del listing
+                    len(candidate_instances), _class, candidate_instances))
 
             # 3.5 Apply cutoff across all alternatives
-            cutoffs_ranking = sorted(cutoffs, key=lambda t: t.distance)
-            prev_cutoffs = cutoffs
-            cutoffs = text_embeddings.cutoff_on_max_difference(
-                cutoffs_ranking,
+            class_instance_candidates_ranking = sorted(
+                class_instance_candidates,
+                key=lambda t: t.distance
+            )
+            prev_class_instance_candidates = class_instance_candidates
+            class_instance_candidates = text_embeddings.cutoff_on_max_difference(
+                class_instance_candidates_ranking,
             )
 
-            logging.info(f"Reduced cutoffs for class={_class}? {len(cutoffs)} - {len(prev_cutoffs)} = {len(cutoffs) - len(prev_cutoffs)}")
+            logging.info("Reduced all-instance-candidates for class={}? {} - {} = {}".format(
+                _class,
+                len(class_instance_candidates),
+                len(prev_class_instance_candidates),
+                len(class_instance_candidates) - len(prev_class_instance_candidates)
+            ))
 
-            if len(cutoffs) == 1:
+            if len(class_instance_candidates) == 1:
                 singular_mapping[_class] = {
-                    'url': full_listing[cutoffs[0].original_index],
-                    'name': cutoffs[0].text,
+                    'url': class_instance_candidates[0].raw,
+                    'name': class_instance_candidates[0].clean,
                 }
             else:
-                # TODO: Query LLM?
                 singular_mapping[_class] = { 'alternatives': [
                     {
-                        'url': full_listing[alt.original_index],
-                        'name': alt.text,
+                        'url': alt.raw,
+                        'name': alt.clean,
                     }
-                    for alt in cutoffs
+                    for alt in class_instance_candidates
                 ]}
-
-        del things_embeddings
 
         # 4. Find relations
         logging.info("Checking relations...")
         relation_mapping = {}
-        relations_on_kg = [
-            r['rel']['value']
-            for r in self.ontology.get_relation_types_in_kg()
-        ]
-        cleaned_relations = [
-            url_to_value(relation)
-            for relation in relations_on_kg
-        ]
+        if not text_embeddings.exists_collection(self.ontology.sparql_endpoint, 'relations'):
+            relations_on_kg = deduplicate_on_key([
+                    {
+                        'raw': type['rel']['value'],
+                        'clean': url_to_value(type['rel']['value'],),
+                    }
+                    for type in self.ontology.get_relation_types_in_kg()
+                ], key='raw')
+            text_embeddings.load_collection(self.ontology.sparql_endpoint, 'relations', relations_on_kg)
+            del relations_on_kg
+
         for entity in tqdm.tqdm(entities, desc='Finding potential relations'):
-            relation_ranking = text_embeddings.rank_by_similarity(
-                entity,
-                cleaned_relations,
+            candidate_relations = text_embeddings.find_close_in_collection(
+                collection_group=self.ontology.sparql_endpoint,
+                collection_name='relations',
+                reference=entity,
             )
-            cutoff = text_embeddings.cutoff_on_max_difference(
-                relation_ranking,
+            assert len(candidate_relations) > 0
+
+            logging.info("Found {} close relations for entity “{}”: “{}”".format(
+                len(candidate_relations), entity, candidate_relations))
+
+            candidate_relations = text_embeddings.cutoff_on_max_difference(
+                candidate_relations,
             )
-            assert len(cutoff) > 0
+            assert len(candidate_relations) > 0
 
-            logging.info("Found {} close classes for entity “{}”: “{}”".format(
-                len(cutoff), entity, cutoff))
+            logging.info("Found {} close relations for entity “{}”: “{}”".format(
+                len(candidate_relations), entity, candidate_relations))
 
-            if len(cutoff) == 1:
+            if len(candidate_relations) == 1:
                 relation_mapping[entity] = {
-                    'url': relations_on_kg[cutoff[0].original_index],
-                    'name': cutoff[0].text,
+                    'url': candidate_relations[0].raw,
+                    'name': candidate_relations[0].clean,
                 }
             else:
                 # TODO: Query LLM?
                 relation_mapping[entity] = { 'alternatives': [
                     {
-                        'url': relations_on_kg[alt.original_index],
-                        'name': alt.text,
+                        'url': alt.raw,
+                        'name': alt.clean,
                     }
-                    for alt in cutoff
+                    for alt in candidate_relations
                 ]}
-
 
         # 5. Find relations between classes
         logging.info("Checking relations between classes...")
