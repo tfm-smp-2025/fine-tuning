@@ -159,23 +159,6 @@ class PromptWithSearchTranslator:
                 logging.info("Found {} close value for class “{}”: “{}”".format(
                     len(candidate_instances), _class, candidate_instances))
 
-            # 3.5 Apply cutoff across all alternatives
-            class_instance_candidates_ranking = sorted(
-                class_instance_candidates,
-                key=lambda t: t.distance
-            )
-            prev_class_instance_candidates = class_instance_candidates
-            class_instance_candidates = text_embeddings.cutoff_on_max_difference(
-                class_instance_candidates_ranking,
-            )
-
-            logging.info("Reduced all-instance-candidates for class={}? {} - {} = {}".format(
-                _class,
-                len(class_instance_candidates),
-                len(prev_class_instance_candidates),
-                len(class_instance_candidates) - len(prev_class_instance_candidates)
-            ))
-
             if len(class_instance_candidates) == 1:
                 singular_mapping[_class] = {
                     'url': class_instance_candidates[0].raw,
@@ -209,14 +192,6 @@ class PromptWithSearchTranslator:
                 collection_group=self.ontology.sparql_endpoint,
                 collection_name='relations',
                 reference=entity,
-            )
-            assert len(candidate_relations) > 0
-
-            logging.info("Found {} close relations for entity “{}”: “{}”".format(
-                len(candidate_relations), entity, candidate_relations))
-
-            candidate_relations = text_embeddings.cutoff_on_max_difference(
-                candidate_relations,
             )
             assert len(candidate_relations) > 0
 
