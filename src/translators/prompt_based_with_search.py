@@ -77,7 +77,7 @@ class PromptWithSearchTranslator:
             text_embeddings.load_collection(self.ontology.sparql_endpoint, 'classes', classes_on_kg)
             del classes_on_kg
 
-        for entity in tqdm.tqdm(entities, desc='Finding potential classes'):
+        for entity in entities:
             candidate_classes = text_embeddings.find_close_in_collection(
                 collection_group=self.ontology.sparql_endpoint,
                 collection_name='classes',
@@ -125,8 +125,6 @@ class PromptWithSearchTranslator:
             alts.insert(0, { "url": THINGS_URL })
 
             for alt in alts:
-                print("Checking instances of:", alt)
-
                 if not text_embeddings.exists_collection(self.ontology.sparql_endpoint, alt['url']):
                     if alt['url'] != THINGS_URL and SKIP_UNLOADED_VECTOR_COLLECTIONS:
                         continue
@@ -206,7 +204,7 @@ class PromptWithSearchTranslator:
             text_embeddings.load_collection(self.ontology.sparql_endpoint, 'relations', relations_on_kg)
             del relations_on_kg
 
-        for entity in tqdm.tqdm(entities, desc='Finding potential relations'):
+        for entity in entities:
             candidate_relations = text_embeddings.find_close_in_collection(
                 collection_group=self.ontology.sparql_endpoint,
                 collection_name='relations',
