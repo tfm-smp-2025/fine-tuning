@@ -576,10 +576,11 @@ def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_f
                 nodes_in_item = [node_mapping[k]]
 
             for node in nodes_in_item:
-                if node['url'] not in outgoing_relations_indexed_by_node:
+                node = { "iri": node['url'] }
+                if node['iri'] not in outgoing_relations_indexed_by_node:
                     continue
 
-                node['predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
+                node['predicates'] = list(set(outgoing_relations_indexed_by_node[node['iri']]))
                 options['subjects'].append(node)
 
         # if k in relation_mapping:
