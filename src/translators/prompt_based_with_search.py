@@ -295,13 +295,13 @@ class PromptWithSearchTranslator:
         self,
         messages,
         nl_query, 
-        relevant_ontology,
+        relevant_ontology: CodeBlock,
     ):
         query_for_llm = f'''
 Given that the entities being referenced are:
 
-```json
-{relevant_ontology}
+```{relevant_ontology.language}
+{relevant_ontology.content}
 ```
 '''
         query_for_llm += "\n\nConsider the type of answer to this natural language query. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.\n\nConsider what are the necessary relations to solve this query and what are their directions."

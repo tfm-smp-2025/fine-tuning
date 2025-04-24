@@ -2,6 +2,7 @@ import collections
 import datetime
 import time
 import string
+import json
 import sys
 import re
 import logging
@@ -11,6 +12,7 @@ from typing import Any, TypedDict, Union
 import SPARQLWrapper
 import rdflib
 
+from .translators.utils import CodeBlock
 from . import caching
 from .structured_logger import get_context
 
@@ -556,7 +558,7 @@ def extract_ontology_to_file(args):
     args.output.write(rdf.serialize(format='pretty-xml'))
 
 
-def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_from_nodes):
+def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_from_nodes) -> CodeBlock:
     # Prepare mix
     outgoing_relations_indexed_by_node = {}
     for rel in outgoing_relations_from_nodes:
@@ -566,7 +568,7 @@ def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_f
 
     mix = {}
     for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
-        options = {'nodes': []}
+        options = {'subjects': []}
         if k in node_mapping:
             if 'alternatives' in node_mapping[k]:
                 nodes_in_item = node_mapping[k]['alternatives']
@@ -577,8 +579,8 @@ def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_f
                 if node['url'] not in outgoing_relations_indexed_by_node:
                     continue
 
-                node['outgoing_predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
-                options['nodes'].append(node)
+                node['predicates'] = list(set(outgoing_relations_indexed_by_node[node['url']]))
+                options['subjects'].append(node)
 
         # if k in relation_mapping:
         #     if 'alternatives' in relation_mapping[k]:
@@ -586,8 +588,11 @@ def mix_mapping_to_ontology(node_mapping, relation_mapping, outgoing_relations_f
         #     else:
         #         options['relations'] = [relation_mapping[k]]
 
-        if len(options['nodes']) > 0:
+        if len(options['subjects']) > 0:
             mix[k] = options
 
-    return json.dumps(mix, indent=4)
+    return CodeBlock(
+        language='json',
+        content=json.dumps(mix, indent=4),
+    )
 
