@@ -39,7 +39,7 @@ def run_test(args):
 
         for translator in all_translators:
             if translator.model.model_name not in args.models:
-                logging.debug("SKIPPING, model not selected")
+                logging.info("SKIPPING, model {} not selected".format(translator.model.model_name))
                 continue
 
             if ontology:
@@ -61,12 +61,12 @@ def run_test(args):
                     }
                 ) as ctxt:
                     if question.lang not in ('en', None):
-                        logging.debug('SKIPPING question in non-english: {}'.format(question.lang))
+                        logging.info('SKIPPING question in non-english: {}'.format(question.lang))
                         continue
 
                     dataset_counter += 1
                     if sample_size is not None and dataset_counter > sample_size:
-                        logging.debug('Closing dataset after {} elements tested'.format(sample_size))
+                        logging.info('Closing dataset after {} elements tested'.format(sample_size))
 
                     ctxt.log_operation(
                         level='INFO',
