@@ -460,5 +460,5 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
 
 
 translators = [
-    PromptWithSearchTranslator(model, None) for model in mistral_models # ollama_models + 
+    PromptWithSearchTranslator(model, None) for model in ollama_models + mistral_models
 ]
