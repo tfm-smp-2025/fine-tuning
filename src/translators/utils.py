@@ -23,7 +23,7 @@ def deindent_text(text: str) -> str:
 
 CodeBlock = collections.namedtuple('CodeBlock', ('language', 'content'))
 CODE_BLOCK_RE = re.compile(
-    r'^\s*```([^\n]*)\s*\n((.|\n)*?)^```\s*$',
+    r'^\s*```([^\n]*)\s*\n((.|\n)*?)^\s*```\s*$',
     re.DOTALL | re.MULTILINE
 )
 
