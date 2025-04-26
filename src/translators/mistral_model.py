@@ -1,8 +1,9 @@
 import os
 from langchain_mistralai import ChatMistralAI
 from .types import LLMModel
+import logging
 
-MISTRAL_API_KEY = os.environ['MISTRAL_API_KEY']
+MISTRAL_API_KEY = os.getenv('MISTRAL_API_KEY')
 
 MODELS = [
     # See: https://docs.mistral.ai/getting-started/models/models_overview/
@@ -33,6 +34,10 @@ class MistralModel(LLMModel):
     def __repr__(self):
         return "{} on API".format(self.model_name)
 
-all_models = [
-    MistralModel(model_name) for model_name in MODELS
-]
+if MISTRAL_API_KEY:
+    all_models = [
+        MistralModel(model_name) for model_name in MODELS
+    ]
+else:
+    logging.warn('MISTRAL_API_KEY not defined, disabling models: {}'.format(MODELS))
+    all_models = []
