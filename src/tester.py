@@ -5,7 +5,7 @@ import tqdm
 
 from .translators import all_translators
 from .datasets import dataset_loader
-from .translators.utils import extract_code_blocks, CodeBlock
+from .translators.utils import extract_code_blocks, CodeBlock, url_to_value
 from .ontology import Ontology, property_graph_to_rdf
 from .structured_logger import StructuredLogger, get_logger, get_context
 
