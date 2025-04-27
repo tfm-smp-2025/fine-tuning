@@ -18,7 +18,6 @@ from typing import Optional
 from pydantic import BaseModel
 
 from ..ontology import property_graph_to_rdf, Ontology, mix_mapping_to_ontology
-from .. import class_embeddings_caching
 from . import text_embeddings, nlp_utils
 from .types import LLMModel
 from .ollama_model import all_models as ollama_models
