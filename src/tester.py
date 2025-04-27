@@ -50,6 +50,7 @@ def run_test(args):
             if ontology:
                 translator.set_ontology(ontology)
 
+            index_counter = 0
             dataset_counter = 0
             for question in tqdm.tqdm(ds.get_test_data()):
                 with logger.context(
@@ -73,6 +74,10 @@ def run_test(args):
                         logging.info(
                             "SKIPPING question in non-english: {}".format(question.lang)
                         )
+                        continue
+
+                    index_counter += 1
+                    if index_counter < args.sample_offset:
                         continue
 
                     dataset_counter += 1

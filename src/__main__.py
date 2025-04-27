@@ -20,6 +20,11 @@ def get_argparser():
         "--sample", type=int, help="Use only a sample of (n) queries to run the test"
     )
     set_test.add_argument(
+        "--sample-offset", type=int,
+        default=0,
+        help="Skip the first (n) queries from the test sample",
+    )
+    set_test.add_argument(
         "--full", action="store_true", help="Run the test with the full query set"
     )
 
