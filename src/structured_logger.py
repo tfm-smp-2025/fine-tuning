@@ -10,6 +10,7 @@ from typing import Optional, Union
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGGING_DIR = os.path.join(ROOT_DIR, 'experiment-viewer', 'logs')
+PRINT_DEBUG = os.getenv('PRINT_DEBUG', 'false') in ('1', 't', 'true', 'yes')
 
 class StructuredLoggerContext:
     def __init__(self, parent: 'StructuredLogger', context_name=None, context_params={}):
@@ -171,6 +172,9 @@ class StructuredLogger:
             f.write(json.dumps(data) + '\n')
 
     def _print_log(self, level, message, context, exception=None, data=None):
+        if level == 'DEBUG' and not PRINT_DEBUG:
+            continue
+
         stime = datetime.datetime.now().isoformat()
         ctxt = ''
         if context:
