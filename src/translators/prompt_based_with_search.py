@@ -29,6 +29,7 @@ from ..structured_logger import get_context
 
 THINGS_URL = "http://www.w3.org/2002/07/owl#Thing"
 SKIP_UNLOADED_VECTOR_COLLECTIONS = True
+EARLY_SKIP_AFTER_THINGS_RESULTS = True
 
 class Entity(BaseModel):
     label: str
@@ -158,6 +159,12 @@ class PromptWithSearchTranslator:
 
                 logging.info("Found {} close value for class “{}”: “{}”".format(
                     len(candidate_instances), _class, candidate_instances))
+
+                if len(candidate_instances) > 0 and alt['url'] == THINGS_URL:
+                    # "owl#Things" is populated, most probably the other classes are redundant
+                    if EARLY_SKIP_AFTER_THINGS_RESULTS:
+                        break
+
 
             if len(class_instance_candidates) == 1:
                 singular_mapping[_class] = {
