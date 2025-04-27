@@ -19,7 +19,7 @@ class PromptBasedTranslator:
 
     def set_ontology(self, ontology):
         self.ontology = ontology
-        self.ontology_description = property_graph_to_rdf(ontology.get_all_properties_in_graph()).serialize(format='pretty-xml')
+        # self.ontology_description = property_graph_to_rdf(ontology.get_all_properties_in_graph()).serialize(format='pretty-xml')
 
     def translate(self, nl_query: str) -> str:
         # Naïve test

@@ -408,8 +408,11 @@ WHERE {{
             for row in res
         ]
 
-
     def get_all_properties_in_graph(self) -> PropertyGraph:
+        raise Exception('This operation is too expensive, probably you want to not use it. If you really need it use `._get_all_properties_in_graph`')
+
+
+    def _get_all_properties_in_graph(self) -> PropertyGraph:
         # List all classes
         if caching.in_cache(CACHE_DIR, self.sparql_endpoint):
             return caching.get_from_cache(CACHE_DIR, self.sparql_endpoint)
@@ -553,7 +556,7 @@ def property_graph_to_rdf(pg: PropertyGraph):
 
 def extract_ontology_to_file(args):
     ont = Ontology(args.sparql_server, args.sparql_endpoint)
-    pg = ont.get_all_properties_in_graph()
+    pg = ont._get_all_properties_in_graph()
     rdf = property_graph_to_rdf(pg)
     args.output.write(rdf.serialize(format='pretty-xml'))
 
