@@ -638,6 +638,7 @@ def mix_mapping_to_ontology(
         outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
 
     mix = {}
+    not_ideal_mix = {}
     logging.info(
         "Input node mapping: {}\nInput rel mapping: {}\nOut relations: {}".format(
             json.dumps(node_mapping),
@@ -662,6 +663,7 @@ def mix_mapping_to_ontology(
                     set(outgoing_relations_indexed_by_node[node["iri"]])
                 )
                 options["subjects"].append(node)
+            not_ideal_mix[k] = options
 
         # if k in relation_mapping:
         #     if 'alternatives' in relation_mapping[k]:
@@ -673,7 +675,9 @@ def mix_mapping_to_ontology(
             mix[k] = options
 
     if len(node_mapping) > 0:
-        assert len(mix) > 0, "All elements were discarded on mix"
+        if len(mix) == 0:
+            logging.warn("All elements were discarded on mix, returning all elements, including ones without predicates")
+            return not_ideal_mix
 
     # Generate examples
     examples = []
