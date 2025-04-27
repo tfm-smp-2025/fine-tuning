@@ -7,6 +7,7 @@ from . import fine_tune_generator
 from . import ontology
 from .translators.ollama_model import all_models
 
+
 def get_argparser():
     parser = argparse.ArgumentParser("SPARQL LLM fine-tuner")
     parser.add_argument("--seed", type=int, help="Seed used to for random choices")
@@ -24,19 +25,16 @@ def get_argparser():
 
     test_subparser.add_argument(
         "--models",
-        nargs='+',
+        nargs="+",
         type=str,
-        default=[model.model_name for model in all_models]
+        default=[model.model_name for model in all_models],
     )
 
     test_subparser.add_argument(
-        "--datasets",
-        nargs='+',
-        type=str,
-        default=['beastiary', 'LC-QuAD 1.0']
+        "--datasets", nargs="+", type=str, default=["beastiary", "LC-QuAD 1.0"]
     )
     test_subparser.add_argument(
-        '--sparql-server',
+        "--sparql-server",
         required=False,
         type=str,
         help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
@@ -46,44 +44,44 @@ def get_argparser():
     fine_tune = subparser.add_parser("gen-fine-tuning-data")
     fine_tune.add_argument(
         "--datasets",
-        nargs='+',
+        nargs="+",
         type=str,
         default=[
-            'beastiary',
-            'qald-9',
-            'qald-10',
-            'lc-quad_1.0',
-            'vquanda',
-            'lc-quad_2.0',
-            'webquestions_sp',
-        ]
+            "beastiary",
+            "qald-9",
+            "qald-10",
+            "lc-quad_1.0",
+            "vquanda",
+            "lc-quad_2.0",
+            "webquestions_sp",
+        ],
     )
 
     fine_tune.add_argument(
         "--output",
         required=True,
         help="Name of the `.json` file to be generated",
-        type=argparse.FileType('w')
+        type=argparse.FileType("w"),
     )
 
     fine_tune.add_argument(
         "--split-test",
         required=False,
-        help='Generate as two files, this argument will point to the one with the test set',
-        type=argparse.FileType('w'),
+        help="Generate as two files, this argument will point to the one with the test set",
+        type=argparse.FileType("w"),
     )
 
     fine_tune.set_defaults(func=fine_tune_generator.generate)
 
     extract_ontology_subparser = subparser.add_parser("extract-ontology")
     extract_ontology_subparser.add_argument(
-        '--sparql-server',
+        "--sparql-server",
         required=True,
         type=str,
         help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
     )
     extract_ontology_subparser.add_argument(
-        '--sparql-endpoint',
+        "--sparql-endpoint",
         required=True,
         type=str,
         help='The address of the SPARQL server to test the queries on. In the format "beastiary".',
@@ -92,7 +90,7 @@ def get_argparser():
         "--output",
         required=True,
         help="Name of the `.rdf` file to be generated",
-        type=argparse.FileType('w')
+        type=argparse.FileType("w"),
     )
     extract_ontology_subparser.set_defaults(func=ontology.extract_ontology_to_file)
 
@@ -105,8 +103,8 @@ def main() -> int:
 
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S',
+        format="%(asctime)s.%(msecs)03d %(levelname)s:\t%(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
     if args.seed is not None:

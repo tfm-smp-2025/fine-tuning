@@ -6,6 +6,7 @@ from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
 from ..ontology import property_graph_to_rdf
 
+
 class PromptBasedTranslator:
     """
     Implementation of a class to translate natural language queries into SPARQL queries
@@ -23,13 +24,13 @@ class PromptBasedTranslator:
 
     def translate(self, nl_query: str) -> str:
         # Naïve test
-        prefix = ''
+        prefix = ""
         if self.ontology_description:
-            prefix = 'Consider this RDF ontology:\n\n'
+            prefix = "Consider this RDF ontology:\n\n"
             prefix += self.ontology_description
 
         query_for_llm = deindent_text(
-        f"""
+            f"""
 {prefix}
 
 Considering those properties, translate this natural language query into a SPARQL query:
