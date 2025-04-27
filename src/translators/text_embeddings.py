@@ -69,14 +69,25 @@ def _serialize_name(name: str):
     return re.sub(r"[^a-zA-Z0-9_-]", "_", name)
 
 
+KNOWN_COLLECTIONS = set()
+
+
 def exists_collection(collection_group: str, collection_name: str) -> bool:
+    if (collection_group, collection_name) in KNOWN_COLLECTIONS:
+        return True
+
     with Connection() as client:
         if not client.collections.exists(_serialize_name(collection_group)):
             return False
 
-        return client.collections.get(_serialize_name(collection_group)).tenants.exists(
+        collection_exists = client.collections.get(_serialize_name(collection_group)).tenants.exists(
             _serialize_name(collection_name)
         )
+
+        if collection_exists:
+            KNOWN_COLLECTIONS.add((collection_group, collection_name))
+
+        return collection_exists
 
 
 def _create_weaviate_collection(client: weaviate.client.WeaviateClient, name: str):
