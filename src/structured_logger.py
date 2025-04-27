@@ -173,7 +173,7 @@ class StructuredLogger:
 
     def _print_log(self, level, message, context, exception=None, data=None):
         if level == 'DEBUG' and not PRINT_DEBUG:
-            continue
+            return
 
         stime = datetime.datetime.now().isoformat()
         ctxt = ''
