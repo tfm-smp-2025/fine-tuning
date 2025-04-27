@@ -32,7 +32,7 @@ def to_qa_list(dataset: list | dict) -> list[QA]:
         elif "Questions" in dataset:
             dataset = dataset["Questions"]
         else:
-            raise NotImplemented(
+            raise NotImplementedError(
                 "Unknown dict dataset. Keys: {}".format(dataset.keys())
             )
 
@@ -83,9 +83,9 @@ def to_qa_list(dataset: list | dict) -> list[QA]:
                     lang=None,
                 )
             else:
-                raise NotImplemented("Unknown item type: {}".format(row))
+                raise NotImplementedError("Unknown item type: {}".format(row))
         else:
-            raise NotImplemented("Unknown item type: {}".format(row))
+            raise NotImplementedError("Unknown item type: {}".format(row))
 
 
 def get_sparql_endpoint_for_dataset(name: str) -> str:
@@ -94,7 +94,7 @@ def get_sparql_endpoint_for_dataset(name: str) -> str:
 
 class DatasetLoader:
     def get_split_dataset(self) -> tuple[list[QA], list[QA]]:
-        raise NotImplemented(
+        raise NotImplementedError(
             "This is an abstract class. You should use UnifiedDatasetLoader or SplitDatasetLoader."
         )
 
