@@ -67,6 +67,7 @@ def run_test(args):
                     dataset_counter += 1
                     if sample_size is not None and dataset_counter > sample_size:
                         logging.info('Closing dataset after {} elements tested'.format(sample_size))
+                        break
 
                     ctxt.log_operation(
                         level='INFO',
