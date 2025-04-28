@@ -32,6 +32,8 @@ do
         | uniq -c
     )
     echo -ne "$(basename "$fname")\t"
+
+    cat "$fname"| jq -r .data.parameters.translator.model_name 2>/dev/null |grep -v null|head -n1|tr -d '\n'
     echo -ne "\t" # Model
     
     head -n1 "$fname" |jq -r '.time'|tr -d '\n'
