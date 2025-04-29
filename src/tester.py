@@ -54,7 +54,7 @@ def run_test(args):
             dataset_counter = 0
             for question in tqdm.tqdm(ds.get_test_data()):
                 with logger.context(
-                    "[Q-{}]({}) DATASET: {}".format(index_counter, translator, ds.name),
+                    "[Q-{}]({}) DATASET: {}".format(index_counter + 1, translator, ds.name),
                     {
                         "translator": {
                             "model_name": translator.model.model_name,
