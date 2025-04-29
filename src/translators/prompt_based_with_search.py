@@ -74,6 +74,23 @@ class PromptWithSearchTranslator:
         print("Entities:", entities_str)
         entities = json.loads(entities_str[-1].content)
 
+        # 6. Generate SPARQL query
+        relevant_ontology, ontology_usage_examples = self.find_useful_kb_data_from_entities(entities)
+
+        final_query = self._generate_sparql_query(
+            messages,
+            nl_query,
+            relevant_ontology,
+            ontology_usage_examples,
+        )
+
+        print("Final query:", final_query)
+
+        # Done
+        return final_query
+
+
+    def find_useful_kb_data_from_entities(self, entities):
         # 2. Map entities to potential classes
         entity_mapping = {}
 
@@ -130,10 +147,8 @@ class PromptWithSearchTranslator:
                 }
 
         # 3. Find singular elements that are inside classes
-        messages, elements_in_kg = self._split_singular_and_plural(
-            messages,
+        elements_in_kg = self._split_singular_and_plural(
             entity_mapping,
-            nl_query=nl_query,
         )
 
         singulars = elements_in_kg["singular"]
@@ -311,24 +326,11 @@ class PromptWithSearchTranslator:
             )
         )
 
-        # 6. Generate SPARQL query
-        relevant_ontology, ontology_usage_examples = mix_mapping_to_ontology(
+        return mix_mapping_to_ontology(
             merge_mapping_dicts(singular_mapping, entity_mapping),
             relation_mapping,
             outgoing_relations_from_nodes,
         )
-
-        final_query = self._generate_sparql_query(
-            messages,
-            nl_query,
-            relevant_ontology,
-            ontology_usage_examples,
-        )
-
-        print("Final query:", final_query)
-
-        # Done
-        return final_query
 
 
     def _generate_sparql_query__prepare_query_1(
@@ -519,7 +521,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             result,
         ], [cb for cb in code_blocks if cb.language == "json"]
 
-    def _split_singular_and_plural(self, messages, entity_mapping, nl_query):
+    def _split_singular_and_plural(self, entity_mapping):
         singulars = []
         plurals = []
         for item in entity_mapping.keys():
@@ -538,7 +540,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             else:
                 plurals.append(item)
 
-        return messages, {"singular": singulars, "plural": plurals}
+        return {"singular": singulars, "plural": plurals}
 
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
