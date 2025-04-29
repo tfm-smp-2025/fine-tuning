@@ -74,7 +74,6 @@ def generate(args):
                             out.write(json.dumps(row) + "\n")
                         else:
                             sub_dataset.append(row)
-                    break
                 data[ds_name] = sub_dataset
 
         if not args.split_test:
