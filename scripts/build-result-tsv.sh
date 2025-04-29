@@ -41,7 +41,7 @@ do
 
     for lv in same_value_and_type same_value same_length unhandled_test_check no_match error;
     do
-        value=$(echo "$levels" |grep -P "\s*\d+\s+$lv"|awk '{ print $1;}'|tr -d '\n')
+        value=$(echo "$levels" |grep -P "\s*\d+\s+$lv"'$'|awk '{ print $1;}'|tr -d '\n')
         if [[ $(echo "$value"|grep .|wc -l) -eq 0 ]];then
             value=0
         fi
@@ -52,11 +52,11 @@ do
 done
 
 if [ -z "${KEEP_LOGS:-}" ];then
-    if [ ! -z "${TO_REMOVE_DIR}" ];then
+    if [ ! -z "${TO_REMOVE_DIR:-}" ];then
         rm -Rf "${TO_REMOVE_DIR}"
     fi
 else
-    if [ ! -z "${TO_REMOVE_DIR}" ];then
+    if [ ! -z "${TO_REMOVE_DIR:-}" ];then
         echo "Intermediate logs saved to '${TO_REMOVE_DIR}'" >&2
     fi
 fi
