@@ -15,14 +15,7 @@ else
     TO_REMOVE_DIR="${WORK_DIR}"
 fi
 
-echo -e 'File\tModel\tStart time\tEnd time\tTime diff (seconds)\tsame_value_and_type\tsame_value\tsame_length\tunhandled_test_check\tno_match\terror'
-
-# same_value_and_type
-# same_value
-# same_length
-# unhandled_test_check
-# no_match
-# error
+echo -e 'File\tModel\tStart time\tEnd time\tTime diff (seconds)\tsame_value_and_type\tsame_value\tsame_length\tunhandled_test_check\tno_match\terror\ttotal_tests'
 
 for fname in "${WORK_DIR}"/*;
 do
@@ -42,10 +35,9 @@ do
     tail -n1 "$fname" |jq -r '.time'|tr -d '\n'
     echo -ne "\t" # End time time (tab added by next echo)
 
-    # Timediff (tab added by next echo)
     tstart=$(head -n1 "$fname" |jq -r '.timestamp'|tr -d '\n')
     tend=$(tail -n1 "$fname" |jq -r '.timestamp'|tr -d '\n')
-    python3 -c "print('{:.3f}'.format($tend - $tstart), end='')"
+    python3 -c "print('{:.3f}\t'.format($tend - $tstart), end='')"
 
     for lv in same_value_and_type same_value same_length unhandled_test_check no_match error;
     do
@@ -54,11 +46,17 @@ do
             value=0
         fi
 
-        echo -ne "\t$value"
+        echo -ne "$value\t"
     done
-    echo
+    echo "$levels"|awk '{ t += $1 } END { print t }'
 done
 
-# if [ ! -z "${TO_REMOVE_DIR}" ];then
-#     rm -Rf "${TO_REMOVE_DIR}"
-# fi
+if [ -z "${KEEP_LOGS:-}" ];then
+    if [ ! -z "${TO_REMOVE_DIR}" ];then
+        rm -Rf "${TO_REMOVE_DIR}"
+    fi
+else
+    if [ ! -z "${TO_REMOVE_DIR}" ];then
+        echo "Intermediate logs saved to '${TO_REMOVE_DIR}'" >&2
+    fi
+fi
