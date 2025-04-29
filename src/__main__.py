@@ -54,11 +54,11 @@ def get_argparser():
         default=[
             "beastiary",
             "qald-9",
-            "qald-10",
-            "lc-quad_1.0",
-            "vquanda",
-            "lc-quad_2.0",
-            "webquestions_sp",
+            # "qald-10",
+            "LC-QuAD 1.0",  # No clear knowledge base
+            "VQuAnDA",
+            # "LC-QuAD 2.0",  # No clear knowledge base
+            "WebQuestions SP",
         ],
     )
 
