@@ -545,20 +545,28 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
 
-    def _get_train_predicates_useful_for_query(self, sparql_query, referenced_entities):
+    def _get_train_predicates_useful_for_query(self, sparql_query, examples):
         found_useful = []
-        for entity in set(referenced_entities):
-            if entity.lower() in sparql_query.lower():
-                found_useful.append(entity)
+
+        assert examples.language == 'json'
+        for name, data in json.loads(examples.content).items():
+            for subject in data.get('subjects', []):
+                subject_iri = subject.get('iri')
+                for predicate in subject.get('predicates', []):
+                    if (
+                            (predicate.lower() in sparql_query)
+                            and (subject_iri.lower() in sparql_query)
+                    ):
+                        found_useful.append((predicate, subject_iri))
 
         assert len(found_useful) > 0, \
             "No entities found to solve this query (from {} expected entities)".format(
-                referenced_entities,
+                examples.content,
             )
 
         result = 'These are the predicates useful to solve this query:\n'
         for entity in found_useful:
-            result += '- ' + entity + '\n'
+            result += f'- From subject <{entity[1]}>, through predicate <{entity[0]}>\n'
         return result
 
     def _get_train_iris_for_query(self, referenced_entities):
@@ -607,7 +615,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             },
             {
                 "actor": "assistant",
-                "text": self._get_train_predicates_useful_for_query(question.answer, referenced_entities),
+                "text": self._get_train_predicates_useful_for_query(question.answer, relevant_ontology),
             },
             {
                 "actor": "user",
