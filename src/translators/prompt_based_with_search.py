@@ -553,12 +553,18 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         for name, data in json.loads(examples.content).items():
             for subject in data.get('subjects', []):
                 subject_iri = subject.get('iri')
-                for predicate in subject.get('predicates', []):
+                for predicate in subject.get('outgoing_predicates', []):
                     if (
-                            (predicate.lower() in sparql_query)
-                            and (subject_iri.lower() in sparql_query)
+                            (predicate.lower() in sparql_query.lower())
+                            and (subject_iri.lower() in sparql_query.lower())
                     ):
-                        found_useful.append((predicate, subject_iri))
+                        found_useful.append(('out', predicate, subject_iri))
+                for predicate in subject.get('incoming_predicates', []):
+                    if (
+                            (predicate.lower() in sparql_query.lower())
+                            and (subject_iri.lower() in sparql_query.lower())
+                    ):
+                        found_useful.append(('in', predicate, subject_iri))
 
         if len(found_useful) == 0:
             raise FineTuneGenSpecificError(
@@ -569,7 +575,10 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
 
         result = 'These are the predicates useful to solve this query:\n'
         for entity in found_useful:
-            result += f'- From subject <{entity[1]}>, through predicate <{entity[0]}>\n'
+            if entity[0] == 'out':
+                result += f'- From subject <{entity[2]}>, through predicate <{entity[1]}>\n'
+            else:
+                result += f'- Through predicate <{entity[1]}> to object <{entity[2]}>\n'
         return result
 
     def _get_train_iris_for_query(self, referenced_entities):
