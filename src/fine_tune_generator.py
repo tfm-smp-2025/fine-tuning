@@ -72,6 +72,7 @@ def generate(args):
                             if ds_name == "test":
                                 out = args.split_test
                             out.write(json.dumps(row) + "\n")
+                            out.flush()
                         else:
                             sub_dataset.append(row)
                 data[ds_name] = sub_dataset
