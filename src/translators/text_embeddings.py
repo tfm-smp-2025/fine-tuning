@@ -182,11 +182,13 @@ def find_close_in_collection(
     Return a sorted list of tuples (string, original_index, cosine distance).
     """
     get_context().log_operation(
-        level="DEBUG",
-        message="Ranking by similarity to {}".format(len(reference)),
+        level="INFO",
+        message="Ranking by similarity to {}".format(reference),
         operation="rank_by_similarity",
         data={
             "reference": reference,
+            "collection_group": collection_group,
+            "collection_name": collection_name,
         },
     )
     with Connection() as client:

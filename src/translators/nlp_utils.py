@@ -25,7 +25,9 @@ def get_entities(text: str) -> list[str]:
                 result[-1] = result[-1] + ' ' + tok.text
             else:
                 result.append(tok.text)
-            last_is_nound = True
+            last_is_noun = True
+        else:
+            last_is_noun = False
     return result
 
 def is_singular(text: str) -> bool:

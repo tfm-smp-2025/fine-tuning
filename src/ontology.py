@@ -23,6 +23,9 @@ WAIT_BETWEEN_REMOTE_RETRIES = 3
 SubjectPredicateTuple = collections.namedtuple(
     "SubjectPredicateTuple", ["subject", "predicate"]
 )
+ObjectPredicateTuple = collections.namedtuple(
+    "ObjectPredicateTuple", ["object", "predicate"]
+)
 
 
 class PropertyGraphClass(TypedDict):
@@ -396,7 +399,7 @@ WHERE {{
         )
         return [pred["pred"]["value"] for pred in res]
 
-    def find_relations_outgoing_from_nodes(
+    def find_relations_around_nodes(
         self, nodes: list[str], predicates: list[str]
     ) -> list[SubjectPredicateTuple]:
         node_list = []
@@ -436,12 +439,30 @@ WHERE {{
         }}
         """
         )
+
+        object_res = self.run_query(
+            f"""
+        SELECT ?p ?o WHERE {{
+            [] ?p ?o .
+
+            FILTER (?o IN ({node_list_str})) .
+
+            FILTER (?p IN ({predicate_list_str}) )
+        }}
+        """
+        )
         return [
             SubjectPredicateTuple(
                 subject=row["s"]["value"],
                 predicate=row["p"]["value"],
             )
             for row in res
+        ] + [
+            ObjectPredicateTuple(
+                object=row["o"]["value"],
+                predicate=row["p"]["value"],
+            )
+            for row in object_res
         ]
 
     def get_all_properties_in_graph(self) -> PropertyGraph:
@@ -628,22 +649,30 @@ def extract_ontology_to_file(args):
 def mix_mapping_to_ontology(
     node_mapping,
     relation_mapping,
-    outgoing_relations_from_nodes,
+    relations_from_nodes,
 ) -> tuple[CodeBlock, list[str]]:
     # Prepare mix
     outgoing_relations_indexed_by_node = {}
-    for rel in outgoing_relations_from_nodes:
-        if rel.subject not in outgoing_relations_indexed_by_node:
-            outgoing_relations_indexed_by_node[rel.subject] = []
-        outgoing_relations_indexed_by_node[rel.subject].append(rel.predicate)
+    incoming_relations_indexed_by_node = {}
+    for rel in relations_from_nodes:
+        if isinstance(rel, SubjectPredicateTuple):
+            reference = rel.subject
+            if reference not in outgoing_relations_indexed_by_node:
+                outgoing_relations_indexed_by_node[reference] = []
+            outgoing_relations_indexed_by_node[reference].append(rel.predicate)
+        if isinstance(rel, ObjectPredicateTuple):
+            reference = rel.object
+            if reference not in incoming_relations_indexed_by_node:
+                incoming_relations_indexed_by_node[reference] = []
+            incoming_relations_indexed_by_node[reference].append(rel.predicate)
 
     mix = {}
     not_ideal_mix = {}
     logging.info(
-        "Input node mapping: {}\nInput rel mapping: {}\nOut relations: {}".format(
+        "Input node mapping: {}\nInput rel mapping: {}\nRelations: {}".format(
             json.dumps(node_mapping),
             json.dumps(relation_mapping),
-            json.dumps(outgoing_relations_from_nodes),
+            json.dumps(relations_from_nodes),
         )
     )
     for k in set(node_mapping.keys()) | set(relation_mapping.keys()):
@@ -659,8 +688,11 @@ def mix_mapping_to_ontology(
                 if node["iri"] not in outgoing_relations_indexed_by_node:
                     continue
 
-                node["predicates"] = list(
-                    set(outgoing_relations_indexed_by_node[node["iri"]])
+                node["outgoing_predicates"] = list(
+                    set(outgoing_relations_indexed_by_node.get(node["iri"], []))
+                )
+                node["incoming_predicates"] = list(
+                    set(incoming_relations_indexed_by_node.get(node["iri"], []))
                 )
                 options["subjects"].append(node)
             not_ideal_mix[k] = options
@@ -678,18 +710,30 @@ def mix_mapping_to_ontology(
         if len(mix) == 0:
             logging.warn("All elements were discarded on mix, returning all elements, including ones without predicates")
             # TODO: Generate examples
-            return not_ideal_mix, []
+            return (
+                CodeBlock(language='json', content=json.dumps(not_ideal_mix, indent=4)),
+                [],
+            )
 
     # Generate examples
     examples = []
     for _term, values in mix.items():
         for subject in values.get("subjects", []):
-            for predicate in subject.get("predicates", []):
+            for predicate in subject.get("outgoing_predicates", []):
                 examples.append(
                     f"""### Subject: <{subject['iri']}> ; Predicate: <{predicate}>
 
 ```sparql
 SELECT DISTINCT ?object WHERE {{ <{subject['iri']}> <{predicate}> ?object }}
+```
+""".strip()
+                )
+            for predicate in subject.get("incoming_predicates", []):
+                examples.append(
+                    f"""### Object: <{subject['iri']}> ; Predicate: <{predicate}>
+
+```sparql
+SELECT DISTINCT ?subject WHERE {{ ?subject <{predicate}> <{subject['iri']}> }}
 ```
 """.strip()
                 )

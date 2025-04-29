@@ -7,6 +7,7 @@ import tqdm
 from .datasets import dataset_loader
 from .translators.utils import deindent_text
 from .translators.prompt_based_with_search import trainer as fine_tuning_trainer
+from .translators.types import FineTuneGenSpecificError
 from .structured_logger import get_logger
 from .ontology import Ontology
 
@@ -25,6 +26,7 @@ def generate(args):
         for ds_name, ds_data in zip(("train", "test"), dataset.get_split_dataset()):
             sub_dataset = []
             if ds_name == 'test':
+                # TODO: Remove to generate testing data
                 logger.debug("SKIPPING {} dataset".format(ds_name))
                 continue
 
@@ -57,9 +59,13 @@ def generate(args):
                             "num_questions": num_rows,
                         }
                     ):
-                        row = trainer.gen_expected_conversation_data(
-                            item,
-                        )
+                        try:
+                            row = trainer.gen_expected_conversation_data(
+                                item,
+                            )
+                        except FineTuneGenSpecificError:
+                            logging.exception('Skipping this case')
+                            continue
 
                         if args.split_test:
                             out = args.output

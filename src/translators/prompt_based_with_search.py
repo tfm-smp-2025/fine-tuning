@@ -19,7 +19,7 @@ from pydantic import BaseModel
 
 from ..ontology import property_graph_to_rdf, Ontology, mix_mapping_to_ontology
 from . import text_embeddings, nlp_utils
-from .types import LLMModel
+from .types import FineTuneGenSpecificError, LLMModel
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
 from .utils import (
@@ -319,8 +319,8 @@ class PromptWithSearchTranslator:
             for k in k_alts:
                 all_relations.add(k["url"])
 
-        outgoing_relations_from_nodes = (
-            self.ontology.find_relations_outgoing_from_nodes(
+        relations_around_nodes = (
+            self.ontology.find_relations_around_nodes(
                 nodes=list(all_nodes),
                 predicates=list(all_relations),
             )
@@ -329,7 +329,7 @@ class PromptWithSearchTranslator:
         return mix_mapping_to_ontology(
             merge_mapping_dicts(singular_mapping, entity_mapping),
             relation_mapping,
-            outgoing_relations_from_nodes,
+            relations_around_nodes,
         )
 
 
@@ -547,8 +547,9 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
 
     def _get_train_predicates_useful_for_query(self, sparql_query, examples):
         found_useful = []
+        considered_predicates = []
 
-        assert examples.language == 'json'
+        assert examples.language == 'json', "Expected JSON example, found: {}".format(example)
         for name, data in json.loads(examples.content).items():
             for subject in data.get('subjects', []):
                 subject_iri = subject.get('iri')
@@ -559,10 +560,12 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
                     ):
                         found_useful.append((predicate, subject_iri))
 
-        assert len(found_useful) > 0, \
-            "No entities found to solve this query (from {} expected entities)".format(
-                examples.content,
-            )
+        if len(found_useful) == 0:
+            raise FineTuneGenSpecificError(
+                "No entities found to solve this query (from {} expected entities)(for {} query)".format(
+                    examples.content,
+                    sparql_query,
+                ))
 
         result = 'These are the predicates useful to solve this query:\n'
         for entity in found_useful:
