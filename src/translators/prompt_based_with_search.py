@@ -545,8 +545,21 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
 
-    def _get_train_predicates_useful_for_query(self, sparql_query):
-        return '__TODO__'
+    def _get_train_predicates_useful_for_query(self, sparql_query, referenced_entities):
+        found_useful = []
+        for entity in set(referenced_entities):
+            if entity.lower() in sparql_query.lower():
+                found_useful.append(entity)
+
+        assert len(found_useful) > 0, \
+            "No entities found to solve this query (from {} expected entities)".format(
+                referenced_entities,
+            )
+
+        result = 'These are the predicates useful to solve this query:\n'
+        for entity in found_useful:
+            result += '- ' + entity + '\n'
+        return result
 
     def _get_train_iris_for_query(self, referenced_entities):
         assert len(referenced_entities) > 0, "No entities found to solve this query"
@@ -594,7 +607,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             },
             {
                 "actor": "assistant",
-                "text": self._get_train_predicates_useful_for_query(question.answer),
+                "text": self._get_train_predicates_useful_for_query(question.answer, referenced_entities),
             },
             {
                 "actor": "user",
