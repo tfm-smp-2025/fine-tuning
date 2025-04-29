@@ -677,7 +677,8 @@ def mix_mapping_to_ontology(
     if len(node_mapping) > 0:
         if len(mix) == 0:
             logging.warn("All elements were discarded on mix, returning all elements, including ones without predicates")
-            return not_ideal_mix
+            # TODO: Generate examples
+            return not_ideal_mix, []
 
     # Generate examples
     examples = []
