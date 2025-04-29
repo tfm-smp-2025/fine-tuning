@@ -545,24 +545,35 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
 
+    def _get_train_predicates_useful_for_query(self, sparql_query):
+        return '__TODO__'
+
+    def _get_train_iris_for_query(self, referenced_entities):
+        assert len(referenced_entities) > 0, "No entities found to solve this query"
+        result = 'These are the IRIs useful to solve this query:\n'
+        for entity in referenced_entities:
+            result += '- ' + entity + '\n'
+        return result
+
     def gen_expected_conversation_data(self, question) -> list:
         expected_query = question.answer
-        print("Expected query: {}".format(expected_query))
+        logging.debug("Expected query: {}".format(expected_query))
         referenced_entities = sparql_decoder.get_entities(expected_query)
         referenced_entities_values = [
             url_to_value(iri).replace('_', ' ')
             for iri in referenced_entities
         ]
-        print("Rereferenced entities: {} -> {}".format(
+        logging.debug("Rereferenced entities: {} -> {}".format(
             referenced_entities,
             referenced_entities_values,
         ))
-        # expected_entities_in_original_query = 
 
-        # @TODO: <Replace>
-        entity_examples = expected_entities_in_original_query = referenced_entities_values
-        __TODO__ = '__TODO__'
-        # @TODO: </Replace>
+        entities_in_query = nlp_utils.get_entities(question.question)
+        logging.debug("Entities in query: {}".format(entities_in_query))
+
+        relevant_ontology, ontology_usage_examples = self.find_useful_kb_data_from_entities(
+            entities_in_query,
+        )
 
         return [
             {
@@ -573,17 +584,17 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
                 "actor": "assistant",
                 "text": (
                     "```json\n"
-                    + json.dumps(expected_entities_in_original_query, indent=4)
+                    + json.dumps(entities_in_query, indent=4)
                     + "\n```"
                 ),
             },
             {
                 "actor": "user",
-                "text": self._generate_sparql_query__prepare_query_1(entity_examples),
+                "text": self._generate_sparql_query__prepare_query_1(ontology_usage_examples),
             },
             {
                 "actor": "assistant",
-                "text": __TODO__,
+                "text": self._get_train_predicates_useful_for_query(question.answer),
             },
             {
                 "actor": "user",
@@ -591,7 +602,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             },
             {
                 "actor": "assistant",
-                "text": __TODO__,
+                "text": self._get_train_iris_for_query(referenced_entities),
             },
             {
                 "actor": "user",
@@ -600,7 +611,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             {
                 "actor": "assistant",
                 "text": '```sparql\n' + expected_query + '\n```',
-            },      
+            },
         ]
 
 

@@ -8,7 +8,7 @@ from .datasets import dataset_loader
 from .translators.utils import deindent_text
 from .translators.prompt_based_with_search import trainer as fine_tuning_trainer
 from .structured_logger import get_logger
-
+from .ontology import Ontology
 
 def generate(args):
     """Generate fine-tuning data."""
@@ -17,6 +17,10 @@ def generate(args):
     for dataset_name in args.datasets:
         dataset = dataset_loader.load_dataset(dataset_name, rand_seed=args.seed)
         data = {}
+
+        if args.sparql_server:
+            ontology = Ontology(args.sparql_server, dataset.sparql_endpoint)
+            trainer.set_ontology(ontology)
 
         for ds_name, ds_data in zip(("train", "test"), dataset.get_split_dataset()):
             sub_dataset = []
