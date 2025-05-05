@@ -441,7 +441,7 @@ Given that the entities being referenced are:
 
         messages = messages + [query_for_llm, result]
 
-        query_for_llm = _generate_sparql_query__prepare_query_3(nl_query)
+        query_for_llm = self._generate_sparql_query__prepare_query_3(nl_query)
 
         get_context().log_operation(
             level="INFO",
