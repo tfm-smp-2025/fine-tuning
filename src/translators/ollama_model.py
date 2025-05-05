@@ -10,6 +10,7 @@ MODELS_FILE = os.path.join(ROOT_DIR, "infra", "models.txt")
 with open(MODELS_FILE) as f:
     MODELS_NAMES = f.read().strip().split("\n")
 
+LLM_TEMPERATURE = float(os.getenv('LLM_TEMPERATURE', 0.2))
 
 class OllamaModel(LLMModel):
     """Class to unify invocation of models that are accessed through Ollama."""
@@ -18,8 +19,9 @@ class OllamaModel(LLMModel):
         self.model_name = model_name
         self.model: Optional[OllamaLLM] = None
 
-    def invoke(self, messages: list[str], verbose=True, temperature=0.0) -> str:
+    def invoke(self, messages: list[str], verbose=True, temperature=None) -> str:
         if self.model is None:
+            temperature = temperature or LLM_TEMPERATURE
             self.model = OllamaLLM(
                 model=self.model_name, verbose=verbose, temperature=temperature
             )
