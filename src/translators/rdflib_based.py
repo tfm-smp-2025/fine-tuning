@@ -1,3 +1,4 @@
+import os
 import logging
 from .types import LLMModel
 from .utils import deindent_text
@@ -18,9 +19,8 @@ LOCAL_COPY_DIR = os.path.join(
 
 def url_to_slug(ds_name: str) -> str:
     """Convert a URL to a format more adequate for directory name."""
-    # TODO: De-duplicate with the `pull_datasets` script and `dataset_loade r
-    assert ":" not in ds_name
-    return ds_name.lower().replace(" ", "_")
+    # TODO: De-duplicate with the `pull_datasets` script and `dataset_loader
+    return ds_name.lower().replace(":", "_").replace(" ", "_")
 
 
 class RdflibBasedTranslator:
@@ -41,10 +41,16 @@ class RdflibBasedTranslator:
             ontology.sparql_endpoint + '.ttl'
         )
         os.makedirs(os.path.dirname(local_copy), exist_ok=True)
+        store_kwargs = {}
+        if 'KB_PASSWORD' in os.environ:
+            store_kwargs = {"auth": ('admin', os.environ['KB_PASSWORD'])}
+
         self.graph = RdfGraph(
-            source_file=ontology.sparql_server.strip('/') + '/' + ontology.sparql_endpoint,
+            # source_file=ontology.sparql_server.strip('/') + '/' + ontology.sparql_endpoint,
+            query_endpoint=ontology.sparql_server.strip('/') + '/' + ontology.sparql_endpoint,
             standard="rdf",
             local_copy=local_copy,
+            store_kwargs=store_kwargs,
         )
         self.chain = GraphSparqlQAChain.from_llm(
             self.model,

@@ -31,3 +31,4 @@ class OllamaModel(LLMModel):
 
 
 all_models = [OllamaModel(model_name) for model_name in MODELS_NAMES]
+all_models = []
