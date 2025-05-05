@@ -26,7 +26,7 @@ class OllamaModel(LLMModel):
 
         result = []
         for chunk in self.model.stream(messages):
-            result.append(chunk.content)
+            result.append(chunk)
             print(chunk, end='', flush=True)
         return ''.join(result)
 
