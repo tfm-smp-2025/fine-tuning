@@ -48,17 +48,23 @@ def get_argparser():
 
     fine_tune = subparser.add_parser("gen-fine-tuning-data")
     fine_tune.add_argument(
+        "--sparql-server",
+        required=True,
+        type=str,
+        help='The address of the SPARQL server to test the queries on. In the format "http://127.0.0.1:3030".',
+    )
+    fine_tune.add_argument(
         "--datasets",
         nargs="+",
         type=str,
         default=[
             "beastiary",
             "qald-9",
-            "qald-10",
-            "lc-quad_1.0",
-            "vquanda",
-            "lc-quad_2.0",
-            "webquestions_sp",
+            # "qald-10",
+            "LC-QuAD 1.0",  # No clear knowledge base
+            "VQuAnDA",
+            # "LC-QuAD 2.0",  # No clear knowledge base
+            "WebQuestions SP",
         ],
     )
 

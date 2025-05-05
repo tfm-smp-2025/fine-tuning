@@ -9,13 +9,33 @@ def load_nlp_model():
     global NLP_MODEL
     NLP_MODEL = spacy.load("en_core_web_md")
 
+def get_entities(text: str) -> list[str]:
+    load_nlp_model()
+
+    analysis = list(NLP_MODEL(text))
+    result = []
+    last_is_noun = False
+    for tok in analysis:
+        if tok.tag_.startswith('V'):
+            last_is_noun = False
+            if not NLP_MODEL.vocab[tok.text].is_stop:
+                result.append(tok.text)
+        elif tok.tag_.startswith('N'):
+            if last_is_noun:
+                result[-1] = result[-1] + ' ' + tok.text
+            else:
+                result.append(tok.text)
+            last_is_noun = True
+        else:
+            last_is_noun = False
+    return result
 
 def is_singular(text: str) -> bool:
     load_nlp_model()
 
     analysis = list(NLP_MODEL(text))
     if len(analysis) != 1:
-        logging.warn(
+        logging.warning(
             'Expected 1 item from phrase: "{}", found:\n    {}'.format(
                 text,
                 "\n    ".join(
@@ -30,7 +50,7 @@ def is_singular(text: str) -> bool:
     any_plural = False
     for element in analysis:
         if not element.tag_.startswith("NN"):
-            logging.warn(
+            logging.warning(
                 'Expected "{}" to be recognized as NN* (noun). Recognized as: {} ({}); from text: {}'.format(
                     element.text,
                     element.tag_,

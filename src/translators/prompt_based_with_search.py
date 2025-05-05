@@ -19,7 +19,7 @@ from pydantic import BaseModel
 
 from ..ontology import property_graph_to_rdf, Ontology, mix_mapping_to_ontology
 from . import text_embeddings, nlp_utils
-from .types import LLMModel
+from .types import FineTuneGenSpecificError, LLMModel
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
 from .utils import (
@@ -32,6 +32,7 @@ from .utils import (
     merge_mapping_dicts,
 )
 from ..structured_logger import get_context
+from .. import sparql_decoder
 
 
 THINGS_URL = "http://www.w3.org/2002/07/owl#Thing"
@@ -73,6 +74,23 @@ class PromptWithSearchTranslator:
         print("Entities:", entities_str)
         entities = json.loads(entities_str[-1].content)
 
+        # 6. Generate SPARQL query
+        relevant_ontology, ontology_usage_examples = self.find_useful_kb_data_from_entities(entities)
+
+        final_query = self._generate_sparql_query(
+            messages,
+            nl_query,
+            relevant_ontology,
+            ontology_usage_examples,
+        )
+
+        print("Final query:", final_query)
+
+        # Done
+        return final_query
+
+
+    def find_useful_kb_data_from_entities(self, entities):
         # 2. Map entities to potential classes
         entity_mapping = {}
 
@@ -129,10 +147,8 @@ class PromptWithSearchTranslator:
                 }
 
         # 3. Find singular elements that are inside classes
-        messages, elements_in_kg = self._split_singular_and_plural(
-            messages,
+        elements_in_kg = self._split_singular_and_plural(
             entity_mapping,
-            nl_query=nl_query,
         )
 
         singulars = elements_in_kg["singular"]
@@ -303,31 +319,59 @@ class PromptWithSearchTranslator:
             for k in k_alts:
                 all_relations.add(k["url"])
 
-        outgoing_relations_from_nodes = (
-            self.ontology.find_relations_outgoing_from_nodes(
+        relations_around_nodes = (
+            self.ontology.find_relations_around_nodes(
                 nodes=list(all_nodes),
                 predicates=list(all_relations),
             )
         )
 
-        # 6. Generate SPARQL query
-        relevant_ontology, ontology_usage_examples = mix_mapping_to_ontology(
+        return mix_mapping_to_ontology(
             merge_mapping_dicts(singular_mapping, entity_mapping),
             relation_mapping,
-            outgoing_relations_from_nodes,
+            relations_around_nodes,
         )
 
-        final_query = self._generate_sparql_query(
-            messages,
-            nl_query,
-            relevant_ontology,
-            ontology_usage_examples,
-        )
 
-        print("Final query:", final_query)
+    def _generate_sparql_query__prepare_query_1(
+        self,
+        ontology_usage_examples: list[str],
+    ):
+        query_for_llm = ''
+        if len(ontology_usage_examples) > 0:
+            example_str = "\n\n".join(ontology_usage_examples)
+            query_for_llm += f"""
+This are some examples on how the available properties can be used:
 
-        # Done
-        return final_query
+{example_str}
+"""
+
+        query_for_llm += f"""
+Of the ones given, which predicates will be useful to solve it?
+
+Consider it's better to query directly on IRIs and avoid filtering whenever possible. DO NOT generate any query yet.
+"""
+        return query_for_llm
+
+
+    def _generate_sparql_query__prepare_query_2(
+        self,
+    ):
+        return "What are the subject IRIs that will be handy to solve this query? STILL DO NOT generate any query yet."
+
+    def _generate_sparql_query__prepare_query_3(
+        self,
+        nl_query,
+    ):
+        query_for_llm = """
+Construct a SPARQL query to solve it on a single query, keep it simple and avoid unnecessary conditions. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.
+
+Remember to avoid querying by label, use the IRIs and relations presented before, not others. DO NOT even use common types like `name` or `type` unless they were explicitly allowed.
+
+Query to solve:
+"""
+        query_for_llm += f"> {nl_query}"
+        return query_for_llm
 
     def _generate_sparql_query(
         self,
@@ -346,19 +390,9 @@ Given that the entities being referenced are:
 ```
 """
 
-        if len(ontology_usage_examples) > 0:
-            example_str = "\n\n".join(ontology_usage_examples)
-            query_for_llm += f"""
-This are some examples on how the available properties can be used:
-
-{example_str}
-"""
-
-        query_for_llm += f"""
-Of the ones given, which predicates will be useful to solve it?
-
-Consider it's better to query directly on IRIs and avoid filtering whenever possible. DO NOT generate any query yet.
-"""
+        query_for_llm += self._generate_sparql_query__prepare_query_1(
+            ontology_usage_examples=ontology_usage_examples,
+        )
 
         get_context().log_operation(
             level="INFO",
@@ -383,7 +417,7 @@ Consider it's better to query directly on IRIs and avoid filtering whenever poss
 
         messages = messages + [query_for_llm, result]
 
-        query_for_llm = "What are the subject IRIs that will be handy to solve this query? STILL DO NOT generate any query yet."
+        query_for_llm = self._generate_sparql_query__prepare_query_2()
         get_context().log_operation(
             level="INFO",
             message="Query LLM (CoT 2/3): {}".format(query_for_llm),
@@ -407,14 +441,7 @@ Consider it's better to query directly on IRIs and avoid filtering whenever poss
 
         messages = messages + [query_for_llm, result]
 
-        query_for_llm = """
-Construct a SPARQL query to solve it on a single query, keep it simple and avoid unnecessary conditions. If it's an item list just do a SELECT, but if it's numeric you might need to use a verb like COUNT(), and if it's boolean you might need to use ASK.
-
-Remember to avoid querying by label, use the IRIs and relations presented before, not others. DO NOT even use common types like `name` or `type` unless they were explicitly allowed.
-
-Query to solve:
-"""
-        query_for_llm += f"> {nl_query}"
+        query_for_llm = _generate_sparql_query__prepare_query_3(nl_query)
 
         get_context().log_operation(
             level="INFO",
@@ -445,8 +472,8 @@ Query to solve:
 
         return sparql_code_blocks[-1]
 
-    def _get_entities_in_query(self, query: str) -> list[CodeBlock]:
-        query_for_llm = deindent_text(
+    def _get_entities_in_query__prepare_query(self, query):
+        return deindent_text(
             f"""
 Extract the nouns from this natural language query.
 
@@ -462,7 +489,10 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
     "entityN"
 ]
 ```"""
-        )
+        )        
+
+    def _get_entities_in_query(self, query: str) -> list[CodeBlock]:
+        query_for_llm = self._get_entities_in_query__prepare_query(query)
 
         get_context().log_operation(
             level="INFO",
@@ -491,7 +521,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             result,
         ], [cb for cb in code_blocks if cb.language == "json"]
 
-    def _split_singular_and_plural(self, messages, entity_mapping, nl_query):
+    def _split_singular_and_plural(self, entity_mapping):
         singulars = []
         plurals = []
         for item in entity_mapping.keys():
@@ -510,12 +540,117 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
             else:
                 plurals.append(item)
 
-        return messages, {"singular": singulars, "plural": plurals}
+        return {"singular": singulars, "plural": plurals}
 
     def __repr__(self):
         return "{} + prompt & search".format(self.model)
+
+    def _get_train_predicates_useful_for_query(self, sparql_query, examples):
+        found_useful = []
+        considered_predicates = []
+
+        assert examples.language == 'json', "Expected JSON example, found: {}".format(example)
+        for name, data in json.loads(examples.content).items():
+            for subject in data.get('subjects', []):
+                subject_iri = subject.get('iri')
+                for predicate in subject.get('outgoing_predicates', []):
+                    if (
+                            (predicate.lower() in sparql_query.lower())
+                            and (subject_iri.lower() in sparql_query.lower())
+                    ):
+                        found_useful.append(('out', predicate, subject_iri))
+                for predicate in subject.get('incoming_predicates', []):
+                    if (
+                            (predicate.lower() in sparql_query.lower())
+                            and (subject_iri.lower() in sparql_query.lower())
+                    ):
+                        found_useful.append(('in', predicate, subject_iri))
+
+        if len(found_useful) == 0:
+            raise FineTuneGenSpecificError(
+                "No entities found to solve this query (from {} expected entities)(for {} query)".format(
+                    examples.content,
+                    sparql_query,
+                ))
+
+        result = 'These are the predicates useful to solve this query:\n'
+        for entity in found_useful:
+            if entity[0] == 'out':
+                result += f'- From subject <{entity[2]}>, through predicate <{entity[1]}>\n'
+            else:
+                result += f'- Through predicate <{entity[1]}> to object <{entity[2]}>\n'
+        return result
+
+    def _get_train_iris_for_query(self, referenced_entities):
+        assert len(referenced_entities) > 0, "No entities found to solve this query"
+        result = 'These are the IRIs useful to solve this query:\n'
+        for entity in referenced_entities:
+            result += '- ' + entity + '\n'
+        return result
+
+    def gen_expected_conversation_data(self, question) -> list:
+        expected_query = question.answer
+        logging.debug("Expected query: {}".format(expected_query))
+        referenced_entities = sparql_decoder.get_entities(expected_query)
+        referenced_entities_values = [
+            url_to_value(iri).replace('_', ' ')
+            for iri in referenced_entities
+        ]
+        logging.debug("Rereferenced entities: {} -> {}".format(
+            referenced_entities,
+            referenced_entities_values,
+        ))
+
+        entities_in_query = nlp_utils.get_entities(question.question)
+        logging.debug("Entities in query: {}".format(entities_in_query))
+
+        relevant_ontology, ontology_usage_examples = self.find_useful_kb_data_from_entities(
+            entities_in_query,
+        )
+
+        return [
+            {
+                "actor": "user",
+                "text": self._get_entities_in_query__prepare_query(question.question),
+            },
+            {
+                "actor": "assistant",
+                "text": (
+                    "```json\n"
+                    + json.dumps(entities_in_query, indent=4)
+                    + "\n```"
+                ),
+            },
+            {
+                "actor": "user",
+                "text": self._generate_sparql_query__prepare_query_1(ontology_usage_examples),
+            },
+            {
+                "actor": "assistant",
+                "text": self._get_train_predicates_useful_for_query(question.answer, relevant_ontology),
+            },
+            {
+                "actor": "user",
+                "text": self._generate_sparql_query__prepare_query_2(),
+            },
+            {
+                "actor": "assistant",
+                "text": self._get_train_iris_for_query(referenced_entities),
+            },
+            {
+                "actor": "user",
+                "text": self._generate_sparql_query__prepare_query_3(question.question),
+            },
+            {
+                "actor": "assistant",
+                "text": '```sparql\n' + expected_query + '\n```',
+            },
+        ]
+
 
 
 translators = [
     PromptWithSearchTranslator(model, None) for model in ollama_models + mistral_models
 ]
+
+trainer = PromptWithSearchTranslator('trainer', None)
