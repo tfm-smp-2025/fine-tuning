@@ -24,7 +24,11 @@ class OllamaModel(LLMModel):
                 model=self.model_name, verbose=verbose, temperature=temperature
             )
 
-        return self.model.invoke(input=messages)
+        result = []
+        for chunk in self.model.stream(messages):
+            result.append(chunk)
+            print(chunk, end='', flush=True)
+        return ''.join(result)
 
     def __repr__(self):
         return "{} on Ollama".format(self.model_name)
