@@ -15,6 +15,8 @@ def generate(args):
     """Generate fine-tuning data."""
     trainer = fine_tuning_trainer
     logger = get_logger()
+
+    found_anchor = True # False
     for dataset_name in args.datasets:
         dataset = dataset_loader.load_dataset(dataset_name, rand_seed=args.seed)
         data = {}
@@ -25,9 +27,9 @@ def generate(args):
 
         for ds_name, ds_data in zip(("train", "test"), dataset.get_split_dataset()):
             sub_dataset = []
-            if ds_name == 'test':
+            if ds_name != 'test':
                 # TODO: Remove to generate testing data
-                logger.debug("SKIPPING {} dataset".format(ds_name))
+                print("SKIPPING {} dataset".format(ds_name))
                 continue
 
             with logger.context(
@@ -44,6 +46,12 @@ def generate(args):
                         logger.debug(
                             "SKIPPING question in non-english: {}".format(item.lang)
                         )
+                        continue
+
+                    if item.question == 'List the popular works of the author of Luther: The Calling ?':
+                        found_anchor = True
+                        continue
+                    elif not found_anchor:
                         continue
 
                     with logger.context(

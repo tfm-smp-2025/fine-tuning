@@ -264,7 +264,7 @@ class PromptWithSearchTranslator:
             )
             assert len(candidate_relations) > 0
 
-            logging.info(
+            print(
                 "Found {} close relations for entity “{}”: “{}”".format(
                     len(candidate_relations), entity, candidate_relations
                 )
@@ -318,6 +318,8 @@ class PromptWithSearchTranslator:
 
             for k in k_alts:
                 all_relations.add(k["url"])
+
+        print("Rels:", all_relations)
 
         relations_around_nodes = (
             self.ontology.find_relations_around_nodes(
