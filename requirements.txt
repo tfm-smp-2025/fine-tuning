@@ -7,6 +7,7 @@ pydantic
 # LLM usage
 langchain-ollama
 langchain_mistralai
+langchain-community
 
 # NLP
 spacy
