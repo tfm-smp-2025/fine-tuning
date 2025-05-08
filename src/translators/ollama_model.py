@@ -6,6 +6,8 @@ ROOT_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 )
 
+MAX_STEP_TOKENS = int(os.getenv('MAX_STEP_TOKENS', -1))
+
 MODELS_FILE = os.path.join(ROOT_DIR, "infra", "models.txt")
 with open(MODELS_FILE) as f:
     MODELS_NAMES = f.read().strip().split("\n")
@@ -30,6 +32,11 @@ class OllamaModel(LLMModel):
         for chunk in self.model.stream(messages):
             result.append(chunk)
             print(chunk, end='', flush=True)
+
+            if MAX_STEP_TOKENS > 0 and len(result) > MAX_STEP_TOKENS:
+              result.append("\n{I think this is enough}\n")
+              print(f"\nForcing stop: {result[-1].strip()}", end='', flush=True)
+              break
         return ''.join(result)
 
     def __repr__(self):
