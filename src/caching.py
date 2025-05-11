@@ -7,7 +7,7 @@ CACHE_ROOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", 
 
 
 def _args_to_key(args: str) -> str:
-    return base64.b64encode(hashlib.sha1(args).digest())
+    return hashlib.sha1(args.encode()).hexdigest()
 
 
 def get_naive_cache_path(cache_dir, cache_key):
@@ -58,13 +58,17 @@ def put_in_cache(cache_dir, cache_key, data):
         json.dump(data, f)
 
 
-def function_cache(cache_dir):
+def function_cache(cache_dir, skip_self):
     """Cache the result of a function by a `cache_dir` and it's arguments."""
 
     def decorator(function):
         def wrapper(*args, **kwargs):
-            params = {"args": args, "kwargs": kwargs}
-            cache_key = _args_to_key(params)
+            if skip_self:
+                key_args = args[1:]
+            else:
+                key_args = args
+            params = {"args": key_args, "kwargs": kwargs}
+            cache_key = _args_to_key(json.dumps(params))
 
             if in_cache(cache_dir=cache_dir, cache_key=cache_key):
                 return get_from_cache(cache_dir, cache_key)["result"]
