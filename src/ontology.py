@@ -7,8 +7,10 @@ import sys
 import re
 import logging
 import traceback
+import os
 from typing import Any, TypedDict, Union
 
+import tqdm
 import SPARQLWrapper
 import rdflib
 
@@ -47,6 +49,7 @@ class Ontology:
         self.sparql_server = sparql_server
         self.sparql_endpoint = sparql_endpoint
 
+    @caching.function_cache(os.path.join(CACHE_DIR, "query_autocache"), skip_self=True)
     def run_query(self, query, quiet=False):
         sparql = SPARQLWrapper.SPARQLWrapper(
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
@@ -420,43 +423,53 @@ WHERE {{
         if len(nodes) == 0 or len(predicates) == 0:
             return []
 
-        for node in nodes:
-            node_list.append(f"<{node}>")
+        predicate_list = []
         for predicate in predicates:
             predicate_list.append(f"<{predicate}>")
+        predicate_list = sorted(predicate_list)
 
-        node_list_str = ", ".join(node_list)
-        predicate_list_str = ", ".join(predicate_list)
+        subject_res = []
+        object_res = []
+        for node in tqdm.tqdm(nodes, desc='Finding by node'):
+            node_list = [f"<{node}>"]
 
-        res = self.run_query(
+
+            node_list_str = ", ".join(node_list)
+            predicate_list_str = ", ".join(predicate_list)
+
+            subject_res.extend(self.run_query(
             f"""
         SELECT ?s ?p WHERE {{
+            BIND (<{node}> as ?s).
+
             ?s ?p [] .
 
-            FILTER (?s IN ({node_list_str})) .
+            # FILTER (?s IN ({node_list_str})) .
 
             FILTER (?p IN ({predicate_list_str}) )
         }}
         """
-        )
+        ))
 
-        object_res = self.run_query(
+            object_res.extend(self.run_query(
             f"""
         SELECT ?p ?o WHERE {{
-            [] ?p ?o .
+            BIND (<{node}> as ?o).
 
-            FILTER (?o IN ({node_list_str})) .
+            [] ?p ?o.
+
+            # FILTER (?o IN ({node_list_str})) .
 
             FILTER (?p IN ({predicate_list_str}) )
         }}
         """
-        )
+            ))
         return [
             SubjectPredicateTuple(
                 subject=row["s"]["value"],
                 predicate=row["p"]["value"],
             )
-            for row in res
+            for row in subject_res
         ] + [
             ObjectPredicateTuple(
                 object=row["o"]["value"],
