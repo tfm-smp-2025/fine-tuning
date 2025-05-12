@@ -60,6 +60,23 @@ class Connection:
     def __exit__(self, exc, exc_type, tb):
         self._disconnect()
 
+GLOBAL_CONNECTION = None
+
+class GlobalConnection:
+    def __init__(self):
+        pass
+
+    def __enter__(self):
+        global GLOBAL_CONNECTION
+        if GLOBAL_CONNECTION is None:
+            GLOBAL_CONNECTION = Connection()
+            GLOBAL_CONNECTION._connect()
+
+        return GLOBAL_CONNECTION.connection
+
+    def __exit__(self, exc, exc_type, tb):
+        # Ignoring
+        pass
 
 def _serialize_name(name: str):
     """Convert name to one acceptable for Weaviate."""
@@ -76,7 +93,7 @@ def exists_collection(collection_group: str, collection_name: str) -> bool:
     if (collection_group, collection_name) in KNOWN_COLLECTIONS:
         return True
 
-    with Connection() as client:
+    with GlobalConnection() as client:
         if not client.collections.exists(_serialize_name(collection_group)):
             return False
 
@@ -117,7 +134,7 @@ def _create_weaviate_collection(client: weaviate.client.WeaviateClient, name: st
 
 
 def load_collection(collection_group: str, collection_name: str, texts: IndexedEntries):
-    with Connection() as client:
+    with GlobalConnection() as client:
         if not client.collections.exists(_serialize_name(collection_group)):
             _create_weaviate_collection(client, _serialize_name(collection_group))
 
@@ -191,7 +208,7 @@ def find_close_in_collection(
             "collection_name": collection_name,
         },
     )
-    with Connection() as client:
+    with GlobalConnection() as client:
         collection = client.collections.get(
             _serialize_name(collection_group)
         ).with_tenant(_serialize_name(collection_name))
