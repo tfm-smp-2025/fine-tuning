@@ -16,15 +16,15 @@ from .. import caching
 from ..structured_logger import get_context
 
 # Originally used BAAI/bge-large-en-v1.5, like the following paper: https://arxiv.org/abs/2410.06062
-# Moved to BAAI/bge-small-en-v1.5 for faster tests
-MODEL_NAME = "BAAI/bge-small-en-v1.5"
+# Moved to BAAI/bge-base-en-v1.5 for support on Weaviate
+MODEL_NAME = "BAAI/bge-base-en-v1.5"
 
 RankedTerm = collections.namedtuple("RankedTerm", ("clean", "raw", "distance"))
 
 IMPORT_BATCH_SIZE = 1024
 IMPORT_CONCURRENT_REQUESTS = 4
 
-MAX_TERMS_IN_CUTOFF = 10
+MAX_TERMS_IN_CUTOFF = 30
 MAX_ERRORS_IN_IMPORT_BY_BATCH = 10
 
 WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY", "adminkey")

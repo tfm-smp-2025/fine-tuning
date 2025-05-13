@@ -58,13 +58,13 @@ def put_in_cache(cache_dir, cache_key, data):
         json.dump(data, f)
 
 
-def function_cache(cache_dir, skip_self):
+def function_cache(cache_dir, self_to_hashable):
     """Cache the result of a function by a `cache_dir` and it's arguments."""
 
     def decorator(function):
         def wrapper(*args, **kwargs):
-            if skip_self:
-                key_args = args[1:]
+            if self_to_hashable:
+                key_args = (self_to_hashable(args[0]),) + args[1:]
             else:
                 key_args = args
             params = {"args": key_args, "kwargs": kwargs}

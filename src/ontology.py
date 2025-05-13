@@ -44,24 +44,30 @@ class PropertyGraph(TypedDict):
     object_properties: dict[str, list[tuple[str, str]]]
 
 
+def ontology_to_hashable(ontology):
+    return {
+        # "server": ontology.sparql_server,
+        "endpoint": ontology.sparql_endpoint,
+    }
+
 class Ontology:
     def __init__(self, sparql_server, sparql_endpoint):
         self.sparql_server = sparql_server
         self.sparql_endpoint = sparql_endpoint
 
-    @caching.function_cache(os.path.join(CACHE_DIR, "query_autocache"), skip_self=True)
+    @caching.function_cache(os.path.join(CACHE_DIR, "query_autocache"), self_to_hashable=ontology_to_hashable)
     def run_query(self, query, quiet=False):
         sparql = SPARQLWrapper.SPARQLWrapper(
             f"{self.sparql_server.strip('/')}/{self.sparql_endpoint}/sparql"
         )
 
-        print(
-            "Querying: {}".format(
-                re.sub(".*?SELECT ", "SELECT ", re.sub(r"\s+", " ", query))[:70]
-            ),
-            end="",
-            flush=True,
-        )
+        # print(
+        #     "Querying: {}".format(
+        #         re.sub(".*?SELECT ", "SELECT ", re.sub(r"\s+", " ", query))[:70]
+        #     ),
+        #     end="\r",
+        #     flush=True,
+        # )
 
         sparql.setReturnFormat(SPARQLWrapper.JSON)
         sparql.setQuery(query)
@@ -716,8 +722,8 @@ def mix_mapping_to_ontology(
         #     else:
         #         options['relations'] = [relation_mapping[k]]
 
-        if len(options["subjects"]) > 0:
-            mix[k] = options
+        #if len(options["subjects"]) > 0:
+        mix[k] = options
 
     if len(node_mapping) > 0:
         if len(mix) == 0:
