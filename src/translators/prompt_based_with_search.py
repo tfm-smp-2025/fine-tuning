@@ -158,7 +158,7 @@ class PromptWithSearchTranslator:
 
         for _class in tqdm.tqdm(singulars, desc="Finding singular elements"):
             # mapping = entity_mapping[_class]
-            # class_instance_candidates = []
+            class_instance_candidates = []
             # if "alternatives" not in mapping:
             #     alts = [mapping]
             # else:
