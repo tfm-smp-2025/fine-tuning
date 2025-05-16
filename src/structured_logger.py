@@ -119,19 +119,19 @@ class StructuredLogger:
         )
 
     def debug(self, message, context=None):
-        self._log("debug", message, operation="log", context=context)
+        self._log("DEBUG", message, operation="log", context=context)
 
     def info(self, message, context=None):
-        self._log("info", message, operation="log", context=context)
+        self._log("INFO", message, operation="log", context=context)
 
     def warn(self, message, context=None):
-        self._log("warn", message, operation="log", context=context)
+        self._log("WARN", message, operation="log", context=context)
 
     def error(self, message, context=None):
-        self._log("error", message, operation="log", context=context)
+        self._log("ERROR", message, operation="log", context=context)
 
     def fatal(self, message, context=None):
-        self._log("fatal", message, operation="log", context=context)
+        self._log("FATAL", message, operation="log", context=context)
 
     def log_operation(
         self,
