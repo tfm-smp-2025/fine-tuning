@@ -12,6 +12,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGGING_DIR = os.path.join(ROOT_DIR, "experiment-viewer", "logs")
 PRINT_DEBUG = os.getenv("PRINT_DEBUG", "false") in ("1", "t", "true", "yes")
 PRINT_INFO = os.getenv("PRINT_INFO", "true") in ("1", "t", "true", "yes")
+PRINT_VERBOSE = os.getenv("PRINT_VERBOSE", "false") in ("1", "t", "true", "yes")
 
 
 class StructuredLoggerContext:
@@ -194,7 +195,7 @@ class StructuredLogger:
             print(exception)
             print("---------- >8 ----------")
 
-        if data:
+        if data and PRINT_VERBOSE:
             # Minor formatting to avoid overwhelming output with data
             MAX_DATALINES = 40
             MAX_DATALINE_WIDTH = 100

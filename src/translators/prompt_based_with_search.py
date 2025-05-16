@@ -71,7 +71,7 @@ class PromptWithSearchTranslator:
 
         # 1. Get entities
         messages, entities_str = self._get_entities_in_query(nl_query)
-        print("Entities:", entities_str)
+        logging.debug("Entities:", entities_str)
         entities = json.loads(entities_str[-1].content)
 
         # 6. Generate SPARQL query
@@ -84,7 +84,7 @@ class PromptWithSearchTranslator:
             ontology_usage_examples,
         )
 
-        print("Final query:", final_query)
+        logging.info("Final query:", final_query)
 
         # Done
         return final_query
@@ -264,7 +264,7 @@ class PromptWithSearchTranslator:
             )
             assert len(candidate_relations) > 0
 
-            logging.info(
+            logging.debug(
                 "Found {} close relations for entity “{}”: “{}”".format(
                     len(candidate_relations), entity, candidate_relations
                 )
@@ -318,6 +318,8 @@ class PromptWithSearchTranslator:
 
             for k in k_alts:
                 all_relations.add(k["url"])
+
+        logging.debug("Rels:", all_relations)
 
         relations_around_nodes = (
             self.ontology.find_relations_around_nodes(
@@ -395,7 +397,7 @@ Given that the entities being referenced are:
         )
 
         get_context().log_operation(
-            level="INFO",
+            level="DEBUG",
             message="Query LLM (CoT 1/3): {}".format(query_for_llm),
             operation="query_llm_in",
             data={
@@ -419,7 +421,7 @@ Given that the entities being referenced are:
 
         query_for_llm = self._generate_sparql_query__prepare_query_2()
         get_context().log_operation(
-            level="INFO",
+            level="DEBUG",
             message="Query LLM (CoT 2/3): {}".format(query_for_llm),
             operation="query_llm_in",
             data={
@@ -444,7 +446,7 @@ Given that the entities being referenced are:
         query_for_llm = self._generate_sparql_query__prepare_query_3(nl_query)
 
         get_context().log_operation(
-            level="INFO",
+            level="DEBUG",
             message="Query LLM (CoT 3/3): {}".format(query_for_llm),
             operation="query_llm_in",
             data={
@@ -495,7 +497,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         query_for_llm = self._get_entities_in_query__prepare_query(query)
 
         get_context().log_operation(
-            level="INFO",
+            level="DEBUG",
             message="Query LLM: {}".format(query_for_llm),
             operation="query_llm_in",
             data={
@@ -527,7 +529,7 @@ Let's reason step by step. Identify the nouns on the query, skip the ones that c
         for item in entity_mapping.keys():
             sing = nlp_utils.is_singular(item)
             get_context().log_operation(
-                level="INFO",
+                level="DEBUG",
                 message='Checking if "{}" is singular'.format(item),
                 operation="checking_singular_plural",
                 data={
