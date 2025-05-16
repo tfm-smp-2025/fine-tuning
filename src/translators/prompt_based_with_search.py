@@ -157,14 +157,14 @@ class PromptWithSearchTranslator:
         things_embeddings = None
 
         for _class in tqdm.tqdm(singulars, desc="Finding singular elements"):
-            mapping = entity_mapping[_class]
-            class_instance_candidates = []
-            if "alternatives" not in mapping:
-                alts = [mapping]
-            else:
-                alts = entity_mapping[_class]["alternatives"]
+            # mapping = entity_mapping[_class]
+            # class_instance_candidates = []
+            # if "alternatives" not in mapping:
+            #     alts = [mapping]
+            # else:
+            #     alts = entity_mapping[_class]["alternatives"]
 
-            alts.insert(0, {"url": THINGS_URL})
+            alts = [{"url": THINGS_URL}]
 
             for alt in alts:
                 if not text_embeddings.exists_collection(
