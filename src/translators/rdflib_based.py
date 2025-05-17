@@ -1,7 +1,7 @@
 import os
 import logging
 from .types import LLMModel
-from .utils import deindent_text
+from .utils import deindent_text, CodeBlock
 
 from .ollama_model import all_models as ollama_models
 from .mistral_model import all_models as mistral_models
@@ -52,16 +52,18 @@ class RdflibBasedTranslator:
             local_copy=local_copy,
             store_kwargs=store_kwargs,
         )
+        self.model.load()
         self.chain = GraphSparqlQAChain.from_llm(
-            self.model,
+            self.model.model,
             graph=self.graph,
             verbose=True,
             return_sparql_query=True,
+            allow_dangerous_requests=True,
         )
 
     def translate(self, nl_query: str) -> str:
         assert self.chain, "Chain not initialized, call `.set_ontology()`"
-        result = self.chain.run(nl_query)
+        result = self.chain(nl_query)
         get_context().log_operation(
             level="INFO",
             message="Rdflib answer: {}".format(result),
@@ -72,10 +74,11 @@ class RdflibBasedTranslator:
                 "result": result,
             },
         )
-        return result['sparql_query']
+        print("Result:", result)
+        return CodeBlock(language='sparql', content=result['sparql_query'].split('```sparql',1)[-1].split('```', 1)[0])
 
     def __repr__(self):
-        return "{} + prompt".format(self.model)
+        return "{} + rdflib".format(self.model)
 
 
 translators = [RdflibBasedTranslator(model) for model in ollama_models + mistral_models]

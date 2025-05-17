@@ -18,12 +18,14 @@ class OllamaModel(LLMModel):
         self.model_name = model_name
         self.model: Optional[OllamaLLM] = None
 
-    def invoke(self, messages: list[str], verbose=True, temperature=0.0) -> str:
+    def load(self, temperature=0.0):
         if self.model is None:
             self.model = OllamaLLM(
-                model=self.model_name, verbose=verbose, temperature=temperature
+                model=self.model_name, verbose=True, temperature=temperature
             )
 
+    def invoke(self, messages: list[str], verbose=True, temperature=0.0) -> str:
+        self.load(temperature)
         return self.model.invoke(input=messages)
 
     def __repr__(self):
@@ -31,4 +33,4 @@ class OllamaModel(LLMModel):
 
 
 all_models = [OllamaModel(model_name) for model_name in MODELS_NAMES]
-all_models = []
+# all_models = []
